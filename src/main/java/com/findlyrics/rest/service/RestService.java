@@ -15,6 +15,7 @@ import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Padonag on 10.08.2014.
@@ -72,8 +73,8 @@ public class RestService {
         return responseBody;
     }
 
-    public ArrayList<SongPojo> jsonToPojo(String json) {
-        ArrayList<SongPojo> result = new ArrayList<SongPojo>();
+    public List<SongPojo> jsonToPojo(String json) {
+        List<SongPojo> result = new ArrayList<SongPojo>();
         ObjectMapper mapper = new ObjectMapper();
         try {
 

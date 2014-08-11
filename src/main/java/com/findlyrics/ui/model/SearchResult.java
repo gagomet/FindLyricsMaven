@@ -1,5 +1,8 @@
-package com.findlyrics.db.model;
+package com.findlyrics.ui.model;
 
+
+import com.findlyrics.db.model.Artist;
+import com.findlyrics.db.model.Song;
 
 /**
  * Created by Padonag on 19.07.2014.
