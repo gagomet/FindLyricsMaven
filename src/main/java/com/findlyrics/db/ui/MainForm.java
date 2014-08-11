@@ -32,12 +32,14 @@ public class MainForm extends JFrame {
         this.connectionManager = new ConnectionManager(new PropertiesManager(properties));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 //        this.setSize(640, 480);
+        this.setLocationRelativeTo(null);
         createForm(this);
         pack();
         setVisible(true);
     }
 
     private void createForm(Container pane) {
+        pane.setSize(640, 480);
         FlowLayout fl = new FlowLayout();
         pane.setLayout(fl);
         queryField = new JTextField(50);
@@ -54,10 +56,11 @@ public class MainForm extends JFrame {
                 showTable();
                 queryField.setText("");
                 refreshForm();
+                revalidate();
+                validate();
             }
         });
         pane.add(searchButton);
-
 
     }
 
@@ -77,34 +80,9 @@ public class MainForm extends JFrame {
             resultTable.getColumnModel().getColumn(1).setPreferredWidth(200);
             resultTable.getColumnModel().getColumn(2).setPreferredWidth(300);
             resultTable.setShowGrid(false);
+            addButtons();
             this.add(resultTable);
 
-            if (tableModel.getPageCount() > 1) {
-                previousPage = new JButton("Prev.Page");
-                previousPage.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        System.out.println("Button Previous Pressed!");
-                        tableModel.previousPage();
-                        tableModel.fireTableDataChanged();
-                    }
-                });
-
-                this.add(previousPage);
-
-                nextPage = new JButton("Next Page");
-                nextPage.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        System.out.println("Button Next Pressed!");
-                        tableModel.nextPage();
-                        tableModel.fireTableDataChanged();
-
-                    }
-                });
-                this.add(nextPage);
-
-            }
 
             resultTable.addMouseListener(new MouseAdapter() {
                 @Override
@@ -120,9 +98,41 @@ public class MainForm extends JFrame {
                 }
             });
         }
+
+
     }
 
     public void refreshForm() {
         this.repaint();
     }
+
+    private void addButtons() {
+        if (previousPage == null && nextPage == null && tableModel.getPageCount() > 1) {
+            previousPage = new JButton("Prev.Page");
+            previousPage.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    System.out.println("Button Previous Pressed!");
+                    tableModel.previousPage();
+                    tableModel.fireTableDataChanged();
+                }
+            });
+
+            this.add(previousPage);
+
+            nextPage = new JButton("Next Page");
+            nextPage.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    System.out.println("Button Next Pressed!");
+                    tableModel.nextPage();
+                    tableModel.fireTableDataChanged();
+
+                }
+            });
+            this.add(nextPage);
+
+        }
+    }
+
 }
