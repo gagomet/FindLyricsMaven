@@ -10,13 +10,13 @@ import java.util.List;
 /**
  * Created by Padonag on 06.08.2014.
  */
-public class DBEntryDTO {
+public class LyricsDTO {
     private List<SearchResult> searchResults = new ArrayList<SearchResult>();
 
-    public DBEntryDTO() {
+    public LyricsDTO() {
     }
 
-    public DBEntryDTO(List<Artist> inputData) {
+    public LyricsDTO(List<Artist> inputData) {
         for (Artist currentArtist : inputData) {
             for (Song currentSong : currentArtist.getRepertoir()) {
                 SearchResult tempResult = new SearchResult(currentArtist, currentSong);
@@ -26,7 +26,7 @@ public class DBEntryDTO {
     }
 
 
-    public DBEntryDTO(ArrayList<SongPojo> inputData) {
+    public LyricsDTO(ArrayList<SongPojo> inputData) {
         for (SongPojo currentSong : inputData) {
             Artist newArtist = new Artist(currentSong.getArtist().getName());
             Song newSong = new Song(currentSong.getTitle(), currentSong.getUrl());

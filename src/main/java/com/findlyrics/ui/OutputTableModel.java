@@ -1,7 +1,7 @@
 package com.findlyrics.ui;
 
-import com.findlyrics.ui.model.DBEntryDTO;
 import com.findlyrics.ui.model.SearchResult;
+import com.findlyrics.ui.model.LyricsDTO;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ public class OutputTableModel extends AbstractTableModel {
     private boolean isMiddlePage = true;
     private List<SearchResult> results;
 
-    public OutputTableModel(DBEntryDTO dto){
+    public OutputTableModel(LyricsDTO dto){
         this.results = dto.getSearchResults();
 
         if(results.size() == 0){

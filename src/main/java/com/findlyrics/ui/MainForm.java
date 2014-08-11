@@ -5,7 +5,7 @@ import com.findlyrics.db.PropertiesManager;
 import com.findlyrics.db.dao.implementations.ArtistDAO;
 import com.findlyrics.db.dao.implementations.SongDAO;
 import com.findlyrics.db.service.implementetions.LyricsService;
-import com.findlyrics.ui.model.DBEntryDTO;
+import com.findlyrics.ui.model.LyricsDTO;
 
 import javax.swing.*;
 import java.awt.*;
@@ -50,7 +50,7 @@ public class MainForm extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 SongDAO songDAO = new SongDAO(connectionManager);
                 ArtistDAO artistDAO = new ArtistDAO(connectionManager);
-                DBEntryDTO lyricsDTO = new DBEntryDTO(new LyricsService(artistDAO, songDAO).getArtist(queryField.getText()));
+                LyricsDTO lyricsDTO = new LyricsDTO(new LyricsService(artistDAO, songDAO).getArtist(queryField.getText()));
                 OutputTableModel model = new OutputTableModel(lyricsDTO);
                 if (model.getPageCount() == 0) {
 
