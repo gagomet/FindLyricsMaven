@@ -1,0 +1,14 @@
+/.settings/
+/.classpath
+/.project
+/.idea/
+/*.iml
+/*.ipr
+/*.iws
+/target/
+/*.roo
+/*.diff
+/*.log
+/bin/
+/*.buildpath
+/.tmp
