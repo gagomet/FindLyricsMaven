@@ -31,15 +31,15 @@ public class MainForm extends JFrame {
 
         this.connectionManager = new ConnectionManager(new PropertiesManager(properties));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        this.setSize(640, 480);
         this.setLocationRelativeTo(null);
         createForm(this);
         pack();
+        this.setSize(640, 480);
         setVisible(true);
     }
 
     private void createForm(Container pane) {
-        pane.setSize(640, 480);
+
         FlowLayout fl = new FlowLayout();
         pane.setLayout(fl);
         queryField = new JTextField(50);
@@ -56,8 +56,7 @@ public class MainForm extends JFrame {
                 showTable();
                 queryField.setText("");
                 refreshForm();
-                revalidate();
-                validate();
+
             }
         });
         pane.add(searchButton);
@@ -82,6 +81,7 @@ public class MainForm extends JFrame {
             resultTable.setShowGrid(false);
             addButtons();
             this.add(resultTable);
+            validate();
 
 
             resultTable.addMouseListener(new MouseAdapter() {

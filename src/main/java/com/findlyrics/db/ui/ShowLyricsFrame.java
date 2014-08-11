@@ -11,7 +11,6 @@ import java.awt.event.ActionListener;
 public class ShowLyricsFrame extends JFrame {
     private String lyrics;
     private JTextArea textArea;
-    private JButton close;
     private JScrollPane scrollPane;
 
     public ShowLyricsFrame(String lyrics) {
@@ -24,25 +23,17 @@ public class ShowLyricsFrame extends JFrame {
     private void createFrame() {
         this.setDefaultCloseOperation(HIDE_ON_CLOSE);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        this.setSize(screenSize.width/2, screenSize.height/2);
+        getContentPane().setSize(screenSize.width/2, screenSize.height/2);
         JPanel textPanel = new JPanel();
         textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
-
         textArea = new JTextArea(lyrics);
         textArea.setEditable(false);
         textArea.setCaretPosition(0);
         scrollPane = new JScrollPane(textArea);
         textPanel.add(scrollPane);
-        close = new JButton("Close window");
-        close.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                closeFrame();
-            }
-        });
-        textPanel.add(close);
         this.add(textPanel);
         this.add(scrollPane);
+
 
 
 
