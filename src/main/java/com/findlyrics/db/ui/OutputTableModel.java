@@ -20,25 +20,12 @@ public class OutputTableModel extends AbstractTableModel {
     private int lastPageEntry;
     private int currentPage = 1;
     private int pageStartNumber = 0;
-    private boolean isMiddlePage = true;
+    private boolean isMiddlePage = false;
     private List<SearchResult> results;
-
-    /*public OutputTableModel(List<SearchResult> incomingResult) {
-        this.results = incomingResult;
-        if (results.size() < VISIBLE_ON_PAGE) {
-            this.pageCount = 1;
-        }
-        else{
-        this.pageCount = results.size() / VISIBLE_ON_PAGE;
-        }
-        this.pageData = createPageData(0, VISIBLE_ON_PAGE);
-        this.lastPageEntry = results.size() % VISIBLE_ON_PAGE;
-        System.out.println("number of pages = " + pageCount);
-
-    }*/
 
     public OutputTableModel(LyricsDTO dto){
         this.results = dto.getSearchResults();
+
         if (results.size() < VISIBLE_ON_PAGE) {
             this.pageCount = 1;
         }
@@ -110,6 +97,9 @@ public class OutputTableModel extends AbstractTableModel {
     }
 
     private ArrayList<String[]> createPageData(int begin, int end) {
+        if(results.size() == 0){
+            return new ArrayList<String[]>();
+        }
         if (results.size() < VISIBLE_ON_PAGE) {
             end = results.size();
         }
