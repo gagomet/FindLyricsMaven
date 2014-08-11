@@ -5,6 +5,8 @@ import com.findlyrics.db.dao.implementations.SongDAO;
 import com.findlyrics.db.model.Artist;
 import com.findlyrics.db.model.Song;
 import com.findlyrics.db.service.ILyricsService;
+import com.findlyrics.ui.model.DBEntryDTO;
+import com.findlyrics.ui.model.LyricsDTO;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,6 +43,20 @@ public class LyricsService implements ILyricsService {
             }
         }
         return new ArrayList<Artist>(resultMap.values());
+    }
+
+    public LyricsDTO getDTOFromDB(List<Artist> inputData){
+        LyricsDTO dto = new LyricsDTO();
+        List<DBEntryDTO> dbEntryDTOs = new ArrayList<DBEntryDTO>();
+
+            for (Artist currentArtist : inputData) {
+                for (Song currentSong : currentArtist.getRepertoir()) {
+                    DBEntryDTO tempResult = new DBEntryDTO(currentArtist, currentSong);
+                    dbEntryDTOs.add(tempResult);
+                }
+            }
+        dto.setSearchResults(dbEntryDTOs);
+        return dto;
     }
 
     @Override

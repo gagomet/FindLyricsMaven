@@ -7,19 +7,19 @@ import com.findlyrics.db.model.Song;
 /**
  * Created by Padonag on 19.07.2014.
  */
-public class SearchResult {
+public class DBEntryDTO {
     private String artistName;
     private String songName;
     private String lyrics;
 
-    public SearchResult(Artist artist, Song song){
+    public DBEntryDTO(Artist artist, Song song){
         this.artistName = artist.getName();
         this.songName = song.getTitle();
         this.lyrics = song.getLyrics();
 
     }
 
-    public SearchResult(String artist, String song, String lyrics) {
+    public DBEntryDTO(String artist, String song, String lyrics) {
         this.artistName = artist;
         this.songName = song;
         this.lyrics = lyrics;

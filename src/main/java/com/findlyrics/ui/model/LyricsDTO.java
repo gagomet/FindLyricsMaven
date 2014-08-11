@@ -11,32 +11,31 @@ import java.util.List;
  * Created by Padonag on 06.08.2014.
  */
 public class LyricsDTO {
-    private List<SearchResult> searchResults = new ArrayList<SearchResult>();
+    private List<DBEntryDTO> searchResults = new ArrayList<DBEntryDTO>();
 
     public LyricsDTO() {
     }
 
-    public LyricsDTO(List<Artist> inputData) {
-        for (Artist currentArtist : inputData) {
-            for (Song currentSong : currentArtist.getRepertoir()) {
-                SearchResult tempResult = new SearchResult(currentArtist, currentSong);
-                searchResults.add(tempResult);
-            }
-        }
-    }
+
 
 
     public LyricsDTO(ArrayList<SongPojo> inputData) {
         for (SongPojo currentSong : inputData) {
             Artist newArtist = new Artist(currentSong.getArtist().getName());
             Song newSong = new Song(currentSong.getTitle(), currentSong.getUrl());
-            SearchResult tempResult = new SearchResult(newArtist, newSong);
+            DBEntryDTO tempResult = new DBEntryDTO(newArtist, newSong);
             searchResults.add(tempResult);
         }
 
     }
 
-    public List<SearchResult> getSearchResults() {
+    public List<DBEntryDTO> getSearchResults() {
         return searchResults;
     }
+
+    public void setSearchResults(List<DBEntryDTO> searchResults) {
+        this.searchResults = searchResults;
+    }
 }
+
+

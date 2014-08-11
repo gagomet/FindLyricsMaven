@@ -50,7 +50,8 @@ public class MainForm extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 SongDAO songDAO = new SongDAO(connectionManager);
                 ArtistDAO artistDAO = new ArtistDAO(connectionManager);
-                LyricsDTO lyricsDTO = new LyricsDTO(new LyricsService(artistDAO, songDAO).getArtist(queryField.getText()));
+                LyricsService service = new LyricsService(artistDAO, songDAO);
+                LyricsDTO lyricsDTO = service.getDTOFromDB(service.getArtist(queryField.getText()));
                 OutputTableModel model = new OutputTableModel(lyricsDTO);
                 if (model.getPageCount() == 0) {
 
