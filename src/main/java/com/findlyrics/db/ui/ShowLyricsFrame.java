@@ -14,16 +14,17 @@ public class ShowLyricsFrame extends JFrame {
     private JScrollPane scrollPane;
 
     public ShowLyricsFrame(String lyrics) {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         this.lyrics = lyrics;
         createFrame();
         pack();
+        this.setLocationRelativeTo(null);
+        this.setSize(screenSize.width/2, screenSize.height/2);
         setVisible(true);
     }
 
     private void createFrame() {
         this.setDefaultCloseOperation(HIDE_ON_CLOSE);
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        getContentPane().setSize(screenSize.width/2, screenSize.height/2);
         JPanel textPanel = new JPanel();
         textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
         textArea = new JTextArea(lyrics);
