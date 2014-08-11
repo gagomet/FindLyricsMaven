@@ -1,4 +1,4 @@
-package com.findlyrics.db.ui.model;
+package com.findlyrics.ui.model;
 
 import com.findlyrics.db.model.Artist;
 import com.findlyrics.db.model.SearchResult;

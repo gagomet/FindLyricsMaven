@@ -1,9 +1,7 @@
-package com.findlyrics.db.ui;
+package com.findlyrics.ui;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * Created by Padonag on 02.08.2014.
@@ -19,7 +17,7 @@ public class ShowLyricsFrame extends JFrame {
         createFrame();
         pack();
         this.setLocationRelativeTo(null);
-        this.setSize(screenSize.width/2, screenSize.height/2);
+        this.setSize(screenSize.width / 2, screenSize.height / 2);
         setVisible(true);
     }
 

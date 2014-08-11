@@ -1,11 +1,11 @@
-package com.findlyrics.db.ui;
+package com.findlyrics.ui;
 
 import com.findlyrics.db.ConnectionManager;
 import com.findlyrics.db.PropertiesManager;
 import com.findlyrics.db.dao.implementations.ArtistDAO;
 import com.findlyrics.db.dao.implementations.SongDAO;
 import com.findlyrics.db.service.implementetions.LyricsService;
-import com.findlyrics.db.ui.model.LyricsDTO;
+import com.findlyrics.ui.model.LyricsDTO;
 
 import javax.swing.*;
 import java.awt.*;
@@ -38,7 +38,7 @@ public class MainForm extends JFrame {
         setVisible(true);
     }
 
-    private void createForm(Container pane) {
+    private void createForm(final Container pane) {
 
         FlowLayout fl = new FlowLayout();
         pane.setLayout(fl);
@@ -52,8 +52,12 @@ public class MainForm extends JFrame {
                 ArtistDAO artistDAO = new ArtistDAO(connectionManager);
                 LyricsDTO lyricsDTO = new LyricsDTO(new LyricsService(artistDAO, songDAO).getArtist(queryField.getText()));
                 OutputTableModel model = new OutputTableModel(lyricsDTO);
-                setTableModel(model);
-                showTable();
+                if (model.getPageCount() == 0) {
+
+                } else {
+                    setTableModel(model);
+                    showTable();
+                }
                 queryField.setText("");
                 refreshForm();
 

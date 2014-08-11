@@ -1,7 +1,7 @@
-package com.findlyrics.db.ui;
+package com.findlyrics.ui;
 
 import com.findlyrics.db.model.SearchResult;
-import com.findlyrics.db.ui.model.LyricsDTO;
+import com.findlyrics.ui.model.LyricsDTO;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
@@ -25,6 +25,10 @@ public class OutputTableModel extends AbstractTableModel {
 
     public OutputTableModel(LyricsDTO dto){
         this.results = dto.getSearchResults();
+
+        if(results.size() == 0){
+            this.pageCount = 0;
+        }
 
         if (results.size() < VISIBLE_ON_PAGE) {
             this.pageCount = 1;

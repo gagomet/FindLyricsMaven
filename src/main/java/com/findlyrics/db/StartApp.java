@@ -1,7 +1,6 @@
 package com.findlyrics.db;
 
-import com.findlyrics.db.ui.MainForm;
-import com.findlyrics.rest.service.RestService;
+import com.findlyrics.ui.MainForm;
 
 /**
  * Created by Padonag on 21.07.2014.
