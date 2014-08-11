@@ -20,7 +20,7 @@ public class OutputTableModel extends AbstractTableModel {
     private int lastPageEntry;
     private int currentPage = 1;
     private int pageStartNumber = 0;
-    private boolean isMiddlePage = false;
+    private boolean isMiddlePage = true;
     private List<SearchResult> results;
 
     public OutputTableModel(LyricsDTO dto){
@@ -101,6 +101,7 @@ public class OutputTableModel extends AbstractTableModel {
             return new ArrayList<String[]>();
         }
         if (results.size() < VISIBLE_ON_PAGE) {
+            isMiddlePage = false;
             end = results.size();
         }
         ArrayList<String[]> pageData = new ArrayList<String[]>();
