@@ -34,8 +34,9 @@ public class OutputTableModel extends AbstractTableModel {
             }
             this.pageCount = results.size() / VISIBLE_ON_PAGE + 1;
         }
-        this.pageData = createPageData(0, VISIBLE_ON_PAGE);
+        this.pageData = createPageData(pageStartNumber, VISIBLE_ON_PAGE);
         this.lastPageEntry = results.size() % VISIBLE_ON_PAGE;
+        this.pageStartNumber = VISIBLE_ON_PAGE;
         System.out.println("number of pages = " + pageCount);
     }
 
@@ -65,7 +66,7 @@ public class OutputTableModel extends AbstractTableModel {
 
     public void nextPage() {
         if (isMiddlePage) {
-            if (currentPage < pageCount) {
+            if (currentPage < pageCount && (pageStartNumber + lastPageEntry) < results.size()) {
                 pageData = createPageData(pageStartNumber, pageStartNumber + VISIBLE_ON_PAGE);
                 pageStartNumber += VISIBLE_ON_PAGE;
                 currentPage++;
@@ -79,7 +80,7 @@ public class OutputTableModel extends AbstractTableModel {
     }
 
     public void previousPage() {
-        if (currentPage != 1) {
+        if (currentPage != 0) {
             pageData = createPageData(pageStartNumber - VISIBLE_ON_PAGE, pageStartNumber);
             pageStartNumber -= VISIBLE_ON_PAGE;
             currentPage--;
