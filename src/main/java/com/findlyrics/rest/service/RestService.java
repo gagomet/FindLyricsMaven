@@ -3,7 +3,11 @@ package com.findlyrics.rest.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.findlyrics.db.model.Artist;
+import com.findlyrics.db.model.Song;
 import com.findlyrics.rest.model.SongPojo;
+import com.findlyrics.ui.model.LyricItemDTO;
+import com.findlyrics.ui.model.LyricsDTO;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -85,6 +89,19 @@ public class RestService {
             e.printStackTrace();
         }
         return result;
+    }
+
+    public LyricsDTO getDTOFromRest (List<SongPojo> inputData) {
+        LyricsDTO dto = new LyricsDTO();
+        List<LyricItemDTO> entries = new ArrayList<LyricItemDTO>();
+        for (SongPojo currentSong : inputData) {
+            Artist newArtist = new Artist(currentSong.getArtist().getName());
+            Song newSong = new Song(currentSong.getTitle(), currentSong.getUrl());
+            LyricItemDTO tempResult = new LyricItemDTO(newArtist, newSong);
+            entries.add(tempResult);
+        }
+        dto.setSearchResults(entries);
+        return dto;
     }
 
 }

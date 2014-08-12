@@ -1,9 +1,5 @@
 package com.findlyrics.ui.model;
 
-import com.findlyrics.db.model.Artist;
-import com.findlyrics.db.model.Song;
-import com.findlyrics.rest.model.SongPojo;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,29 +7,15 @@ import java.util.List;
  * Created by Padonag on 06.08.2014.
  */
 public class LyricsDTO {
-    private List<DBEntryDTO> searchResults = new ArrayList<DBEntryDTO>();
+    private List<LyricItemDTO> searchResults = new ArrayList<LyricItemDTO>();
 
     public LyricsDTO() {
     }
-
-
-
-
-    public LyricsDTO(ArrayList<SongPojo> inputData) {
-        for (SongPojo currentSong : inputData) {
-            Artist newArtist = new Artist(currentSong.getArtist().getName());
-            Song newSong = new Song(currentSong.getTitle(), currentSong.getUrl());
-            DBEntryDTO tempResult = new DBEntryDTO(newArtist, newSong);
-            searchResults.add(tempResult);
-        }
-
-    }
-
-    public List<DBEntryDTO> getSearchResults() {
+    public List<LyricItemDTO> getSearchResults() {
         return searchResults;
     }
 
-    public void setSearchResults(List<DBEntryDTO> searchResults) {
+    public void setSearchResults(List<LyricItemDTO> searchResults) {
         this.searchResults = searchResults;
     }
 }

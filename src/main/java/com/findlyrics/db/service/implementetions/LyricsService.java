@@ -5,7 +5,7 @@ import com.findlyrics.db.dao.implementations.SongDAO;
 import com.findlyrics.db.model.Artist;
 import com.findlyrics.db.model.Song;
 import com.findlyrics.db.service.ILyricsService;
-import com.findlyrics.ui.model.DBEntryDTO;
+import com.findlyrics.ui.model.LyricItemDTO;
 import com.findlyrics.ui.model.LyricsDTO;
 
 import java.util.ArrayList;
@@ -47,11 +47,11 @@ public class LyricsService implements ILyricsService {
 
     public LyricsDTO getDTOFromDB(List<Artist> inputData){
         LyricsDTO dto = new LyricsDTO();
-        List<DBEntryDTO> dbEntryDTOs = new ArrayList<DBEntryDTO>();
+        List<LyricItemDTO> dbEntryDTOs = new ArrayList<LyricItemDTO>();
 
             for (Artist currentArtist : inputData) {
                 for (Song currentSong : currentArtist.getRepertoir()) {
-                    DBEntryDTO tempResult = new DBEntryDTO(currentArtist, currentSong);
+                    LyricItemDTO tempResult = new LyricItemDTO(currentArtist, currentSong);
                     dbEntryDTOs.add(tempResult);
                 }
             }

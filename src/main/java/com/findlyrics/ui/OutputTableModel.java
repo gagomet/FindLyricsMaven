@@ -1,6 +1,6 @@
 package com.findlyrics.ui;
 
-import com.findlyrics.ui.model.DBEntryDTO;
+import com.findlyrics.ui.model.LyricItemDTO;
 import com.findlyrics.ui.model.LyricsDTO;
 
 import javax.swing.table.AbstractTableModel;
@@ -21,7 +21,7 @@ public class OutputTableModel extends AbstractTableModel {
     private int currentPage = 1;
     private int pageStartNumber = 0;
     private boolean isMiddlePage = true;
-    private List<DBEntryDTO> results;
+    private List<LyricItemDTO> results;
 
     public OutputTableModel(LyricsDTO dto){
         this.results = dto.getSearchResults();
@@ -110,7 +110,7 @@ public class OutputTableModel extends AbstractTableModel {
         }
         ArrayList<String[]> pageData = new ArrayList<String[]>();
         for (int i = begin; i < end; i++) {
-            DBEntryDTO currentResult = results.get(i);
+            LyricItemDTO currentResult = results.get(i);
             String[] currentEntry = {currentResult.getArtistName(), currentResult.getSongName(), currentResult.getLyrics()};
             pageData.add(currentEntry);
         }
