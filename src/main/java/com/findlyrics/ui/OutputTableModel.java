@@ -16,25 +16,23 @@ public class OutputTableModel extends AbstractTableModel {
     private final int NUMBER_OF_COLUMNS = 3;
     private final String[] namesOfColumns = {"Artist", "Song name", "Lyrics"};
     private List<String[]> pageData;
-    private int pageCount;
+    private int pageCount = 0;
     private int lastPageEntry;
     private int currentPage = 1;
     private int pageStartNumber = 0;
     private boolean isMiddlePage = true;
     private List<LyricItemDTO> results;
 
-    public OutputTableModel(LyricsDTO dto){
+    public OutputTableModel(LyricsDTO dto) {
         this.results = dto.getSearchResults();
 
-        if(results.size() == 0){
-            this.pageCount = 0;
-        }
-
-        if (results.size() < VISIBLE_ON_PAGE) {
+        if (results.size() <= VISIBLE_ON_PAGE) {
             this.pageCount = 1;
-        }
-        else{
-            this.pageCount = results.size() / VISIBLE_ON_PAGE;
+        } else {
+            if (results.size() % VISIBLE_ON_PAGE == 0) {
+                this.pageCount = results.size() / VISIBLE_ON_PAGE;
+            }
+            this.pageCount = results.size() / VISIBLE_ON_PAGE + 1;
         }
         this.pageData = createPageData(0, VISIBLE_ON_PAGE);
         this.lastPageEntry = results.size() % VISIBLE_ON_PAGE;
@@ -68,7 +66,6 @@ public class OutputTableModel extends AbstractTableModel {
     public void nextPage() {
         if (isMiddlePage) {
             if (currentPage < pageCount) {
-//                pageData = new ArrayList<String[]>();
                 pageData = createPageData(pageStartNumber, pageStartNumber + VISIBLE_ON_PAGE);
                 pageStartNumber += VISIBLE_ON_PAGE;
                 currentPage++;
@@ -83,7 +80,6 @@ public class OutputTableModel extends AbstractTableModel {
 
     public void previousPage() {
         if (currentPage != 1) {
-//            pageData = new ArrayList<String[]>();
             pageData = createPageData(pageStartNumber - VISIBLE_ON_PAGE, pageStartNumber);
             pageStartNumber -= VISIBLE_ON_PAGE;
             currentPage--;
@@ -101,7 +97,7 @@ public class OutputTableModel extends AbstractTableModel {
     }
 
     private ArrayList<String[]> createPageData(int begin, int end) {
-        if(results.size() == 0){
+        if (results.size() == 0) {
             return new ArrayList<String[]>();
         }
         if (results.size() < VISIBLE_ON_PAGE) {

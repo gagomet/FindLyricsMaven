@@ -77,7 +77,7 @@ public class RestService {
         return responseBody;
     }
 
-    public List<SongPojo> jsonToPojo(String json) {
+    private List<SongPojo> jsonToPojo(String json) {
         List<SongPojo> result = new ArrayList<SongPojo>();
         ObjectMapper mapper = new ObjectMapper();
         try {
@@ -91,7 +91,8 @@ public class RestService {
         return result;
     }
 
-    public LyricsDTO getDTOFromRest (List<SongPojo> inputData) {
+    public LyricsDTO getDTOFromRest (String query) {
+        List<SongPojo> inputData = jsonToPojo(getJsonFromRest(query));
         LyricsDTO dto = new LyricsDTO();
         List<LyricItemDTO> entries = new ArrayList<LyricItemDTO>();
         for (SongPojo currentSong : inputData) {

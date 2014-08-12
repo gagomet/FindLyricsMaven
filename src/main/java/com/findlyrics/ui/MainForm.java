@@ -5,6 +5,7 @@ import com.findlyrics.db.PropertiesManager;
 import com.findlyrics.db.dao.implementations.ArtistDAO;
 import com.findlyrics.db.dao.implementations.SongDAO;
 import com.findlyrics.db.service.implementetions.LyricsService;
+import com.findlyrics.rest.service.RestService;
 import com.findlyrics.ui.model.LyricsDTO;
 
 import javax.swing.*;
@@ -24,7 +25,9 @@ public class MainForm extends JFrame {
     protected JTable resultTable;
     private JButton previousPage;
     private JButton nextPage;
+    private JButton restButton;
     private ConnectionManager connectionManager;
+    String currentQuery;
 
 
     public MainForm(String properties) {
@@ -48,20 +51,25 @@ public class MainForm extends JFrame {
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                SongDAO songDAO = new SongDAO(connectionManager);
-                ArtistDAO artistDAO = new ArtistDAO(connectionManager);
-                LyricsService service = new LyricsService(artistDAO, songDAO);
-                LyricsDTO lyricsDTO = service.getDTOFromDB(service.getArtist(queryField.getText()));
-                OutputTableModel model = new OutputTableModel(lyricsDTO);
-                if (model.getPageCount() == 0) {
-
+                if (queryField.getText().equals("")) {
+                    ErrorSplashForm noQuery = new ErrorSplashForm("Enter the query first!");
                 } else {
-                    setTableModel(model);
-                    showTable();
-                }
-                queryField.setText("");
-                refreshForm();
+                    currentQuery = queryField.getText();
+                    SongDAO songDAO = new SongDAO(connectionManager);
+                    ArtistDAO artistDAO = new ArtistDAO(connectionManager);
+                    LyricsService service = new LyricsService(artistDAO, songDAO);
+                    LyricsDTO lyricsDTO = service.getDTOFromDB(service.getArtist(currentQuery));
+                    OutputTableModel model = new OutputTableModel(lyricsDTO);
+                    if (model.getPageCount() == 0) {
 
+                    } else {
+                        setTableModel(model);
+                        showTable();
+                    }
+                    queryField.setText("");
+                    refreshForm();
+
+                }
             }
         });
         pane.add(searchButton);
@@ -112,7 +120,7 @@ public class MainForm extends JFrame {
     }
 
     private void addButtons() {
-        if (previousPage == null && nextPage == null && tableModel.getPageCount() > 1) {
+        if (previousPage == null && nextPage == null && tableModel.getPageCount() >= 1) {
             previousPage = new JButton("Prev.Page");
             previousPage.addActionListener(new ActionListener() {
                 @Override
@@ -132,11 +140,37 @@ public class MainForm extends JFrame {
                     System.out.println("Button Next Pressed!");
                     tableModel.nextPage();
                     tableModel.fireTableDataChanged();
+                    addRestButton();
 
                 }
             });
             this.add(nextPage);
 
+        }
+    }
+
+    private void addRestButton() {
+        if (restButton == null && tableModel.getCurrentPage() == tableModel.getPageCount()) {
+            restButton = new JButton("Search more");
+            restButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    RestService restService = new RestService();
+                    LyricsDTO lyricsDTO = restService.getDTOFromRest(currentQuery);
+                    OutputTableModel model = new OutputTableModel(lyricsDTO);
+                    if (model.getPageCount() == 0) {
+
+                    } else {
+                        setTableModel(model);
+                        showTable();
+                    }
+                    queryField.setText("");
+                    refreshForm();
+
+                }
+            });
+            this.add(restButton);
+            refreshForm();
         }
     }
 
