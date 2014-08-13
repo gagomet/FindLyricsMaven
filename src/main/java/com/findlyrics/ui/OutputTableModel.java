@@ -5,7 +5,7 @@ import com.findlyrics.ui.model.LyricsDTO;
 import org.apache.log4j.Logger;
 
 import javax.swing.table.AbstractTableModel;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -14,38 +14,25 @@ import java.util.List;
 public class OutputTableModel extends AbstractTableModel {
 
     public static final Logger log = Logger.getLogger(OutputTableModel.class);
-    private final int VISIBLE_ON_PAGE = 20;
-    private final String[] namesOfColumns = {"Artist", "Song name", "Lyrics"};
+    private static final int VISIBLE_ON_PAGE = 20;
+    private static final String[] namesOfColumns = {"Artist", "Song name", "Lyrics"};
+
     private List<String[]> pageData;
     private int pageCount = 0;
-    private int lastPageEntry;
-    private int currentPage = 1;
-    private int pageStartNumber = 0;
-    private boolean isMiddlePage = true;
+    private int currentPage = 0;
     private List<LyricItemDTO> results;
 
     public OutputTableModel(LyricsDTO dto) {
         this.results = dto.getSearchResults();
 
-        if (results.size() <= VISIBLE_ON_PAGE) {
-            this.pageCount = 1;
-        } else {
-            this.pageCount = results.size() / VISIBLE_ON_PAGE;
-        }
-        this.pageData = createPageData(pageStartNumber, VISIBLE_ON_PAGE);
+        this.pageCount = (results.size() + VISIBLE_ON_PAGE - 1) / VISIBLE_ON_PAGE;
+        this.pageData = createPageData();
         log.info("Creating Page Data in Constructor : " + pageData.toString());
-        this.lastPageEntry = results.size() % VISIBLE_ON_PAGE;
-        this.pageStartNumber += VISIBLE_ON_PAGE;
-        System.out.println("number of pages = " + pageCount);
     }
 
     @Override
     public int getRowCount() {
-
-        if (isMiddlePage) {
-            return VISIBLE_ON_PAGE;
-        }
-        return lastPageEntry;
+        return Math.min(VISIBLE_ON_PAGE, pageData.size());
     }
 
     @Override
@@ -64,34 +51,17 @@ public class OutputTableModel extends AbstractTableModel {
     }
 
     public void nextPage() {
-//        if (isMiddlePage) {
-        if (currentPage < pageCount && (pageStartNumber + lastPageEntry) < results.size()) {
-            pageData = createPageData(pageStartNumber, pageStartNumber + VISIBLE_ON_PAGE);
-            log.info("Creating Page Data in nextPage : " + pageData.toString());
-            pageStartNumber += VISIBLE_ON_PAGE;
+        if (currentPage < (pageCount - 1)) {
             currentPage++;
-
-        } else {
-            isMiddlePage = !isMiddlePage;
-            System.out.println(pageData.toString());
-            createPageData(pageStartNumber, pageStartNumber + lastPageEntry);
-            System.out.println(pageData.toString());
-
+            pageData = createPageData();
         }
-//        }
-        System.out.println("pageStartNumber= " + pageStartNumber + " current page = " + currentPage);
-        System.out.println("songs = " + results.size());
     }
 
     public void previousPage() {
-        if (currentPage != 0) {
-            pageData = createPageData(pageStartNumber - VISIBLE_ON_PAGE, pageStartNumber);
-            log.info("Creating Page Data in PreviousPage : " + pageData.toString());
-            pageStartNumber -= VISIBLE_ON_PAGE;
+        if (currentPage > 0) {
             currentPage--;
-            isMiddlePage = true;
+            pageData = createPageData();
         }
-        System.out.println("pageStartNumber= " + pageStartNumber + " current page = " + currentPage);
     }
 
     public int getPageCount() {
@@ -102,23 +72,16 @@ public class OutputTableModel extends AbstractTableModel {
         return currentPage;
     }
 
-    private ArrayList<String[]> createPageData(int begin, int end) {
-        if (results.size() == 0) {
-            return new ArrayList<String[]>();
-        }
-        if (results.size() < VISIBLE_ON_PAGE) {
-            isMiddlePage = false;
-            end = results.size();
-        }
+    private List<String[]> createPageData() {
+        List<String[]> pageData = new LinkedList<String[]>();
 
-        ArrayList<String[]> pageData = new ArrayList<String[]>();
-        for (int i = begin; i < end; ++i) {
-            LyricItemDTO currentResult = results.get(i);
-            String[] currentEntry = {currentResult.getArtistName(), currentResult.getSongName(), currentResult.getLyrics()};
-            pageData.add(currentEntry);
+        int fromIndex = currentPage * VISIBLE_ON_PAGE;
+        int toIndex = Math.min((currentPage + 1) * VISIBLE_ON_PAGE, results.size());
+
+        List<LyricItemDTO> itemDTOs = results.subList(fromIndex, toIndex);
+        for (LyricItemDTO dto : itemDTOs) {
+            pageData.add(new String[]{dto.getArtistName(), dto.getSongName(), dto.getLyrics()});
         }
         return pageData;
     }
-
-
 }
