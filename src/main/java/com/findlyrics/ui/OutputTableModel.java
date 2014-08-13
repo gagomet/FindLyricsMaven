@@ -15,7 +15,6 @@ public class OutputTableModel extends AbstractTableModel {
 
     public static final Logger log = Logger.getLogger(OutputTableModel.class);
     private final int VISIBLE_ON_PAGE = 20;
-    private final int NUMBER_OF_COLUMNS = 3;
     private final String[] namesOfColumns = {"Artist", "Song name", "Lyrics"};
     private List<String[]> pageData;
     private int pageCount = 0;
@@ -31,15 +30,12 @@ public class OutputTableModel extends AbstractTableModel {
         if (results.size() <= VISIBLE_ON_PAGE) {
             this.pageCount = 1;
         } else {
-            if (results.size() % VISIBLE_ON_PAGE == 0) {
-                this.pageCount = results.size() / VISIBLE_ON_PAGE;
-            }
-            this.pageCount = results.size() / VISIBLE_ON_PAGE + 1;
+            this.pageCount = results.size() / VISIBLE_ON_PAGE;
         }
         this.pageData = createPageData(pageStartNumber, VISIBLE_ON_PAGE);
         log.info("Creating Page Data in Constructor : " + pageData.toString());
         this.lastPageEntry = results.size() % VISIBLE_ON_PAGE;
-        this.pageStartNumber = VISIBLE_ON_PAGE;
+        this.pageStartNumber += VISIBLE_ON_PAGE;
         System.out.println("number of pages = " + pageCount);
     }
 
@@ -54,7 +50,7 @@ public class OutputTableModel extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        return NUMBER_OF_COLUMNS;
+        return namesOfColumns.length;
     }
 
     @Override
@@ -68,17 +64,21 @@ public class OutputTableModel extends AbstractTableModel {
     }
 
     public void nextPage() {
-        if (isMiddlePage) {
-            if (currentPage < pageCount && (pageStartNumber + lastPageEntry) < results.size()) {
-                pageData = createPageData(pageStartNumber, pageStartNumber + VISIBLE_ON_PAGE);
-                log.info("Creating Page Data in nextPage : " + pageData.toString());
-                pageStartNumber += VISIBLE_ON_PAGE;
-                currentPage++;
-            } else {
-                createPageData(pageStartNumber, pageStartNumber + lastPageEntry);
-                isMiddlePage = !isMiddlePage;
-            }
+//        if (isMiddlePage) {
+        if (currentPage < pageCount && (pageStartNumber + lastPageEntry) < results.size()) {
+            pageData = createPageData(pageStartNumber, pageStartNumber + VISIBLE_ON_PAGE);
+            log.info("Creating Page Data in nextPage : " + pageData.toString());
+            pageStartNumber += VISIBLE_ON_PAGE;
+            currentPage++;
+
+        } else {
+            isMiddlePage = !isMiddlePage;
+            System.out.println(pageData.toString());
+            createPageData(pageStartNumber, pageStartNumber + lastPageEntry);
+            System.out.println(pageData.toString());
+
         }
+//        }
         System.out.println("pageStartNumber= " + pageStartNumber + " current page = " + currentPage);
         System.out.println("songs = " + results.size());
     }
@@ -110,8 +110,9 @@ public class OutputTableModel extends AbstractTableModel {
             isMiddlePage = false;
             end = results.size();
         }
+
         ArrayList<String[]> pageData = new ArrayList<String[]>();
-        for (int i = begin; i < end; i++) {
+        for (int i = begin; i < end; ++i) {
             LyricItemDTO currentResult = results.get(i);
             String[] currentEntry = {currentResult.getArtistName(), currentResult.getSongName(), currentResult.getLyrics()};
             pageData.add(currentEntry);

@@ -101,8 +101,8 @@ public class MainForm extends JFrame {
             this.add(resultTable);
             validate();
 
-
-            resultTable.addMouseListener(new MouseAdapter() {
+            resultTable.addMouseListener(adapter);
+           /*resultTable.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     super.mouseClicked(e);
@@ -114,7 +114,7 @@ public class MainForm extends JFrame {
 //                        JOptionPane.showMessageDialog(resultTable, text);
                     }
                 }
-            });
+            });*/
         }
 
 
@@ -124,8 +124,22 @@ public class MainForm extends JFrame {
         this.repaint();
     }
 
+    MouseAdapter adapter = new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            super.mouseClicked(e);
+            int row = resultTable.rowAtPoint(e.getPoint());
+            int column = resultTable.columnAtPoint(e.getPoint());
+            if (row >= 0 && column >= 2) {
+                String text = (String) tableModel.getValueAt(resultTable.getSelectedRow(), resultTable.getSelectedColumn());
+                ShowLyricsFrame currentLyrics = new ShowLyricsFrame(text);
+//                        JOptionPane.showMessageDialog(resultTable, text);
+            }
+        }
+    };
+
     private void addButtons() {
-        if (previousPage == null && nextPage == null && tableModel.getPageCount() >= 1) {
+        if (previousPage == null && nextPage == null && tableModel.getPageCount() > 1) {
             previousPage = new JButton(messages.getString("pagedown.button.name"));
             previousPage.addActionListener(new ActionListener() {
                 @Override
