@@ -3,6 +3,7 @@ package com.findlyrics.db.dao.implementations;
 import com.findlyrics.db.ConnectionManager;
 import com.findlyrics.db.dao.ISongDAO;
 import com.findlyrics.db.model.Song;
+import org.apache.log4j.Logger;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,6 +16,7 @@ import java.util.List;
  * Created by Padonag on 04.08.2014.
  */
 public class SongDAO implements ISongDAO {
+    private static final Logger log = Logger.getLogger(SongDAO.class);
     private ConnectionManager connectionManager;
     public static final String getSongsFromDBQuery = "SELECT * FROM songs WHERE songs.lyrics LIKE ?";
     public static final String addSongsToDBQuery = "INSERT INTO songs(idArtist, SongName, Lyrics) VALUES(?, ?, ?)";
@@ -36,15 +38,18 @@ public class SongDAO implements ISongDAO {
 
         } catch (SQLException e) {
             e.printStackTrace();
+            log.debug("Throwing exception", e);
         } finally {
             try {
                 resultSet.close();
                 preparedStatement.close();
             } catch (SQLException e) {
                 e.printStackTrace();
+                log.debug("Throwing exception", e);
             }
 
         }
+        log.info("Creating List<Song> object" + result.toString());
         return result;
     }
 
@@ -60,11 +65,13 @@ public class SongDAO implements ISongDAO {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+            log.debug("Throwing exception", e);
         } finally {
             try {
                 preparedStatement.close();
             } catch (SQLException e) {
                 e.printStackTrace();
+                log.debug("Throwing exception", e);
             }
         }
 

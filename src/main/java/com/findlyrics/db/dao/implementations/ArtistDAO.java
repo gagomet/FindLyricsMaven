@@ -3,19 +3,22 @@ package com.findlyrics.db.dao.implementations;
 import com.findlyrics.db.ConnectionManager;
 import com.findlyrics.db.dao.IArtistDAO;
 import com.findlyrics.db.model.Artist;
+import org.apache.log4j.Logger;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+
 /**
  * Created by Padonag on 04.08.2014.
  */
 public class ArtistDAO implements IArtistDAO {
+    private static final Logger log = Logger.getLogger(ArtistDAO.class);
     private ConnectionManager connectionManager;
-    private SongDAO songDAO;
     public static final String getArtistFromDBQuery = "SELECT * FROM artists WHERE artists.id = ?";
     public static final String addArtistToDBQuery = "INSERT INTO artists (name) VALUES (?)";
+
 
     public ArtistDAO(ConnectionManager connectionManager) {
         this.connectionManager = connectionManager;
@@ -34,16 +37,19 @@ public class ArtistDAO implements IArtistDAO {
             artist = parseResultSet(resultSet);
         } catch (SQLException e) {
             e.printStackTrace();
+            log.debug("Throwing exception", e);
         } finally {
             try {
                 resultSet.close();
                 preparedStatement.close();
             } catch (SQLException e) {
                 e.printStackTrace();
+                log.debug("Throwing exception", e);
             }
 
 
         }
+        log.info("Creating Artist object " + artist.toString());
         return artist;
     }
 
@@ -56,11 +62,13 @@ public class ArtistDAO implements IArtistDAO {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+            log.debug("Throwing exception", e);
         } finally {
             try {
                 preparedStatement.close();
             } catch (SQLException e) {
                 e.printStackTrace();
+                log.debug("Throwing exception", e);
             }
         }
 

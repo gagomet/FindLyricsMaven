@@ -47,15 +47,15 @@ public class LyricsService implements ILyricsService {
 
     public LyricsDTO getDTOFromDB(List<Artist> inputData){
         LyricsDTO dto = new LyricsDTO();
-        List<LyricItemDTO> dbEntryDTOs = new ArrayList<LyricItemDTO>();
+        List<LyricItemDTO> lyricItemDTOs = new ArrayList<LyricItemDTO>();
 
             for (Artist currentArtist : inputData) {
                 for (Song currentSong : currentArtist.getRepertoir()) {
                     LyricItemDTO tempResult = new LyricItemDTO(currentArtist, currentSong);
-                    dbEntryDTOs.add(tempResult);
+                    lyricItemDTOs.add(tempResult);
                 }
             }
-        dto.setSearchResults(dbEntryDTOs);
+        dto.setSearchResults(lyricItemDTOs);
         return dto;
     }
 

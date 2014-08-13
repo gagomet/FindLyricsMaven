@@ -37,6 +37,35 @@ public class LyricItemDTO {
         return lyrics;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof LyricItemDTO)) return false;
 
+        LyricItemDTO that = (LyricItemDTO) o;
+
+        if (!artistName.equals(that.artistName)) return false;
+        if (!lyrics.equals(that.lyrics)) return false;
+        if (!songName.equals(that.songName)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = artistName.hashCode();
+        result = 31 * result + songName.hashCode();
+        result = 31 * result + lyrics.hashCode();
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "LyricItemDTO{" +
+                "artistName='" + artistName + '\'' +
+                ", songName='" + songName + '\'' +
+                ", lyrics='" + lyrics + '\'' +
+                '}';
+    }
 }
 

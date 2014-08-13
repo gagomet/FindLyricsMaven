@@ -1,9 +1,13 @@
 package com.findlyrics.db.model;
 
+import com.findlyrics.db.dao.implementations.SongDAO;
+import org.apache.log4j.Logger;
+
 /**
  * Created by Padonag on 04.08.2014.
  */
 public class Song {
+    private static final Logger log = Logger.getLogger(SongDAO.class);
     private Long id;
     private Long artistId;
     private String title;
@@ -76,8 +80,7 @@ public class Song {
     @Override
     public String toString() {
         return "Song{" +
-                "title='" + title + '\'' +
-                ", lyrics='" + lyrics + '\'' +
+                "title='" + title + '\''+
                 '}';
     }
 }

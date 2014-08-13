@@ -2,6 +2,7 @@ package com.findlyrics.ui;
 
 import com.findlyrics.ui.model.LyricItemDTO;
 import com.findlyrics.ui.model.LyricsDTO;
+import org.apache.log4j.Logger;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.List;
  */
 public class OutputTableModel extends AbstractTableModel {
 
+    public static final Logger log = Logger.getLogger(OutputTableModel.class);
     private final int VISIBLE_ON_PAGE = 20;
     private final int NUMBER_OF_COLUMNS = 3;
     private final String[] namesOfColumns = {"Artist", "Song name", "Lyrics"};
@@ -35,6 +37,7 @@ public class OutputTableModel extends AbstractTableModel {
             this.pageCount = results.size() / VISIBLE_ON_PAGE + 1;
         }
         this.pageData = createPageData(pageStartNumber, VISIBLE_ON_PAGE);
+        log.info("Creating Page Data in Constructor : " + pageData.toString());
         this.lastPageEntry = results.size() % VISIBLE_ON_PAGE;
         this.pageStartNumber = VISIBLE_ON_PAGE;
         System.out.println("number of pages = " + pageCount);
@@ -68,6 +71,7 @@ public class OutputTableModel extends AbstractTableModel {
         if (isMiddlePage) {
             if (currentPage < pageCount && (pageStartNumber + lastPageEntry) < results.size()) {
                 pageData = createPageData(pageStartNumber, pageStartNumber + VISIBLE_ON_PAGE);
+                log.info("Creating Page Data in nextPage : " + pageData.toString());
                 pageStartNumber += VISIBLE_ON_PAGE;
                 currentPage++;
             } else {
@@ -82,6 +86,7 @@ public class OutputTableModel extends AbstractTableModel {
     public void previousPage() {
         if (currentPage != 0) {
             pageData = createPageData(pageStartNumber - VISIBLE_ON_PAGE, pageStartNumber);
+            log.info("Creating Page Data in PreviousPage : " + pageData.toString());
             pageStartNumber -= VISIBLE_ON_PAGE;
             currentPage--;
             isMiddlePage = true;
