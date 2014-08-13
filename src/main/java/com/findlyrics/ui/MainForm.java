@@ -169,7 +169,7 @@ public class MainForm extends JFrame {
     }
 
     private void addRestButton() {
-        if (restButton == null && tableModel.getCurrentPage() == tableModel.getPageCount()) {
+        if (restButton == null && tableModel.getCurrentPage() == tableModel.getPageCount()-1) {
             restButton = new JButton(messages.getString("rest.button.name"));
             restButton.addActionListener(new ActionListener() {
                 @Override

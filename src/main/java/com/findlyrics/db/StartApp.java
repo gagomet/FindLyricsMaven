@@ -12,9 +12,6 @@ public class StartApp {
     public static void main(String[] args) {
     MainForm guiForm = new MainForm("/db.properties");
 
-    /*    RestService restClient = new RestService();
-       String json = restClient.getJsonFromRest("love");
-        restClient.jsonToPojo(json);*/
     }
 }
 
