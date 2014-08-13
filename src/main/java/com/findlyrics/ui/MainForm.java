@@ -14,6 +14,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 /**
  * Created by Padonag on 27.07.2014.
@@ -28,10 +30,13 @@ public class MainForm extends JFrame {
     private JButton restButton;
     private ConnectionManager connectionManager;
     String currentQuery;
+    Locale currentLocale = Locale.ENGLISH;
+    ResourceBundle messages;
 
 
     public MainForm(String properties) {
 
+        messages = ResourceBundle.getBundle("text", currentLocale);
         this.connectionManager = new ConnectionManager(new PropertiesManager(properties));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
@@ -47,12 +52,12 @@ public class MainForm extends JFrame {
         pane.setLayout(fl);
         queryField = new JTextField(50);
         pane.add(queryField);
-        searchButton = new JButton("Search!");
+        searchButton = new JButton(messages.getString("search.button.name"));
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (queryField.getText().equals("")) {
-                    ErrorSplashForm noQuery = new ErrorSplashForm("Enter the query first!");
+                    ErrorSplashForm noQuery = new ErrorSplashForm(messages.getString("error.message"));
                 } else {
                     currentQuery = queryField.getText();
                     SongDAO songDAO = new SongDAO(connectionManager);
@@ -121,7 +126,7 @@ public class MainForm extends JFrame {
 
     private void addButtons() {
         if (previousPage == null && nextPage == null && tableModel.getPageCount() >= 1) {
-            previousPage = new JButton("Prev.Page");
+            previousPage = new JButton(messages.getString("pagedown.button.name"));
             previousPage.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -133,7 +138,7 @@ public class MainForm extends JFrame {
 
             this.add(previousPage);
 
-            nextPage = new JButton("Next Page");
+            nextPage = new JButton(messages.getString("pageup.button.name"));
             nextPage.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -151,7 +156,7 @@ public class MainForm extends JFrame {
 
     private void addRestButton() {
         if (restButton == null && tableModel.getCurrentPage() == tableModel.getPageCount()) {
-            restButton = new JButton("Search more");
+            restButton = new JButton(messages.getString("rest.button.name"));
             restButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
