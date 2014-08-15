@@ -2,7 +2,6 @@ package com.findlyrics.db;
 
 import org.apache.log4j.Logger;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,11 +39,11 @@ public class PropertiesManager {
         return properties.getProperty(propertyKey);
     }
 
-    public static PropertiesManager getInstance(){
-        if(instance==null){
-            synchronized (PropertiesManager.class){
-                if(instance==null)
-                    instance=new PropertiesManager();
+    public static PropertiesManager getInstance() {
+        if (instance == null) {
+            synchronized (PropertiesManager.class) {
+                if (instance == null)
+                    instance = new PropertiesManager();
             }
         }
         return instance;

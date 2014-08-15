@@ -26,8 +26,8 @@ import java.util.List;
  * Created by Padonag on 10.08.2014.
  */
 public class RestService {
-    public static final Logger log = Logger.getLogger(RestService.class);
-    public static final String REST_URL = "http://api.lyricsnmusic.com/songs?api_key=3699a6ba6f1ecdc9b9e208123fd382&lyrics=";
+    private static final Logger log = Logger.getLogger(RestService.class);
+    private static final String REST_URL = "http://api.lyricsnmusic.com/songs?api_key=3699a6ba6f1ecdc9b9e208123fd382&lyrics=";
 
     public RestService() {
     }
@@ -82,7 +82,6 @@ public class RestService {
 
     private List<SongPojo> jsonToPojo(String json) {
         List<SongPojo> result = new ArrayList<SongPojo>();
-        ObjectMapper mapper = new ObjectMapper();
         try {
 
             result = new ObjectMapper().readValue(json, new TypeReference<ArrayList<SongPojo>>() {

@@ -1,6 +1,6 @@
 package com.findlyrics.db;
 
-import com.mchange.v2.c3p0.*;
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.apache.log4j.Logger;
 
 import java.beans.PropertyVetoException;
@@ -16,10 +16,10 @@ public class ConnectionManager {
     private ComboPooledDataSource c3p0Pool;
     public static volatile ConnectionManager instance;
 
-    private ConnectionManager(){
+    private ConnectionManager() {
         try {
             PropertiesManager manager = PropertiesManager.getInstance();
-            this.c3p0Pool  = new ComboPooledDataSource();
+            this.c3p0Pool = new ComboPooledDataSource();
             c3p0Pool.setDriverClass(manager.getProperty("db.driver"));
             c3p0Pool.setJdbcUrl(manager.getProperty("db.url"));
             c3p0Pool.setUser(manager.getProperty("db.login"));
@@ -40,11 +40,11 @@ public class ConnectionManager {
         return connection;
     }
 
-    public static ConnectionManager getInstance(){
-        if(instance==null){
-            synchronized (ConnectionManager.class){
-                if(instance==null)
-                    instance=new ConnectionManager();
+    public static ConnectionManager getInstance() {
+        if (instance == null) {
+            synchronized (ConnectionManager.class) {
+                if (instance == null)
+                    instance = new ConnectionManager();
             }
         }
         return instance;

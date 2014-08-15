@@ -21,8 +21,6 @@ public class SongPojo {
     private String url;
     @JsonProperty("artist")
     private ArtistPojo artist;
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     public SongPojo(){}
 
