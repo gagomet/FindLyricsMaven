@@ -37,7 +37,7 @@ public class RestService {
         return httpString;
     }
 
-    public String getJsonFromRest(String query) {
+    private String getJsonFromRest(String query) {
         String fullUrl = queryToHttp(query);
         CloseableHttpClient httpclient = HttpClients.createDefault();
         String responseBody = null;
