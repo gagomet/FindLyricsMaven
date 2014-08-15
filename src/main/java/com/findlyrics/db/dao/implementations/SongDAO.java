@@ -1,8 +1,9 @@
 package com.findlyrics.db.dao.implementations;
 
-import com.findlyrics.db.ConnectionManager;
+import com.findlyrics.util.ConnectionManager;
 import com.findlyrics.db.dao.ISongDAO;
 import com.findlyrics.db.model.Song;
+import com.findlyrics.util.SqlCloserUtil;
 import org.apache.log4j.Logger;
 
 import java.sql.PreparedStatement;
@@ -32,7 +33,7 @@ public class SongDAO implements ISongDAO {
         ResultSet resultSet = null;
         try {
             preparedStatement = connectionManager.getConnection().prepareStatement(getSongsFromDBQuery);
-            preparedStatement.setString(1, "%"+lyrics+"%");
+            preparedStatement.setString(1, "%" + lyrics + "%");
             resultSet = preparedStatement.executeQuery();
             result = parseResultSet(resultSet);
 
@@ -40,13 +41,7 @@ public class SongDAO implements ISongDAO {
             e.printStackTrace();
             log.debug("Throwing exception", e);
         } finally {
-            try {
-                resultSet.close();
-                preparedStatement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-                log.debug("Throwing exception", e);
-            }
+            SqlCloserUtil.closeSQL(resultSet, preparedStatement);
 
         }
         log.info("Creating List<Song> object" + result.toString());
@@ -67,12 +62,7 @@ public class SongDAO implements ISongDAO {
             e.printStackTrace();
             log.debug("Throwing exception", e);
         } finally {
-            try {
-                preparedStatement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-                log.debug("Throwing exception", e);
-            }
+            SqlCloserUtil.closePreparedStatement(preparedStatement);
         }
 
 
@@ -80,10 +70,10 @@ public class SongDAO implements ISongDAO {
 
     private List<Song> parseResultSet(ResultSet resultSet) throws SQLException {
         List<Song> result = new ArrayList<Song>();
-        if(resultSet == null){
+        if (resultSet == null) {
             return Collections.EMPTY_LIST;
         }
-        while(resultSet.next()){
+        while (resultSet.next()) {
             Song currentSong = new Song(resultSet.getString("SongName"), resultSet.getString("Lyrics"));
             currentSong.setArtistId(resultSet.getLong("idArtist"));
             currentSong.setId(resultSet.getLong("idSongs"));

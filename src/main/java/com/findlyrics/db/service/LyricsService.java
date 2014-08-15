@@ -1,6 +1,6 @@
 package com.findlyrics.db.service;
 
-import com.findlyrics.db.ConnectionManager;
+import com.findlyrics.util.ConnectionManager;
 import com.findlyrics.db.dao.implementations.ArtistDAO;
 import com.findlyrics.db.dao.implementations.SongDAO;
 import com.findlyrics.db.model.Artist;

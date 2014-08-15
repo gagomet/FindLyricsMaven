@@ -1,8 +1,9 @@
 package com.findlyrics.db.dao.implementations;
 
-import com.findlyrics.db.ConnectionManager;
+import com.findlyrics.util.ConnectionManager;
 import com.findlyrics.db.dao.IArtistDAO;
 import com.findlyrics.db.model.Artist;
+import com.findlyrics.util.SqlCloserUtil;
 import org.apache.log4j.Logger;
 
 import java.sql.PreparedStatement;
@@ -39,14 +40,7 @@ public class ArtistDAO implements IArtistDAO {
             e.printStackTrace();
             log.debug("Throwing exception", e);
         } finally {
-            try {
-                resultSet.close();
-                preparedStatement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-                log.debug("Throwing exception", e);
-            }
-
+            SqlCloserUtil.closeSQL(resultSet, preparedStatement);
 
         }
         return artist;
@@ -63,12 +57,7 @@ public class ArtistDAO implements IArtistDAO {
             e.printStackTrace();
             log.debug("Throwing exception", e);
         } finally {
-            try {
-                preparedStatement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-                log.debug("Throwing exception", e);
-            }
+           SqlCloserUtil.closePreparedStatement(preparedStatement);
         }
 
 

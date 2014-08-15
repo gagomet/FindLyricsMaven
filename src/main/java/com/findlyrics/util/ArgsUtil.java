@@ -1,4 +1,4 @@
-package com.findlyrics.db;
+package com.findlyrics.util;
 
 /**
  * Created by Padonag on 15.08.2014.

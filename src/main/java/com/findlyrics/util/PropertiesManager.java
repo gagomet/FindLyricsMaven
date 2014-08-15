@@ -1,4 +1,4 @@
-package com.findlyrics.db;
+package com.findlyrics.util;
 
 import org.apache.log4j.Logger;
 
