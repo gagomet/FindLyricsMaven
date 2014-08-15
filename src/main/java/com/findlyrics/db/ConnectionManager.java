@@ -16,7 +16,7 @@ public class ConnectionManager {
     private ComboPooledDataSource c3p0Pool;
     public static volatile ConnectionManager instance;
 
-    public ConnectionManager(){
+    private ConnectionManager(){
         try {
             PropertiesManager manager = PropertiesManager.getInstance();
             this.c3p0Pool  = new ComboPooledDataSource();
