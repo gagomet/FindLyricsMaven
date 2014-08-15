@@ -9,11 +9,11 @@ public class ArgsUtil {
     private ArgsUtil() {
     }
 
-    public static String getparameters() {
+    public static String getParameters() {
         return parameters;
     }
 
-    public static void setparameters(String parameters) {
+    public static void setParameters(String parameters) {
         ArgsUtil.parameters = parameters;
     }
 }
