@@ -10,7 +10,7 @@ public class StartApp {
     public static final String[] args = {"/db.properties"};
 
     public static void main(String[] args) {
-    MainForm guiForm = new MainForm("/db.properties");
+    MainForm guiForm = new MainForm();
 
     }
 }

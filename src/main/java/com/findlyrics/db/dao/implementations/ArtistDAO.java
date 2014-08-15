@@ -49,7 +49,6 @@ public class ArtistDAO implements IArtistDAO {
 
 
         }
-        log.info("Creating Artist object " + artist.toString());
         return artist;
     }
 

@@ -15,12 +15,12 @@ import java.util.Properties;
 public class PropertiesManager {
     private static final Logger log = Logger.getLogger(PropertiesManager.class);
     private static Properties properties = new Properties();
-    private String propertyFile;
+    private static final String propertyFile = "/db.properties";
+    public static volatile PropertiesManager instance;
 
-    public PropertiesManager(String propertyFileString) {
+    private PropertiesManager() {
         try {
-            InputStream in = getClass().getResourceAsStream(propertyFileString);
-//            FileInputStream in = new FileInputStream(propertyFileString);
+            InputStream in = getClass().getResourceAsStream(propertyFile);
             properties.load(in);
             in.close();
         } catch (FileNotFoundException e) {
@@ -35,8 +35,19 @@ public class PropertiesManager {
         }
     }
 
+
     public static String getProperty(String propertyKey) {
         return properties.getProperty(propertyKey);
+    }
+
+    public static PropertiesManager getInstance(){
+        if(instance==null){
+            synchronized (PropertiesManager.class){
+                if(instance==null)
+                    instance=new PropertiesManager();
+            }
+        }
+        return instance;
     }
 
 }

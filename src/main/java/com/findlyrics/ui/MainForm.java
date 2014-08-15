@@ -1,10 +1,6 @@
 package com.findlyrics.ui;
 
-import com.findlyrics.db.ConnectionManager;
-import com.findlyrics.db.PropertiesManager;
-import com.findlyrics.db.dao.implementations.ArtistDAO;
-import com.findlyrics.db.dao.implementations.SongDAO;
-import com.findlyrics.db.service.implementetions.LyricsService;
+import com.findlyrics.db.service.LyricsService;
 import com.findlyrics.rest.service.RestService;
 import com.findlyrics.ui.model.LyricsDTO;
 
@@ -28,22 +24,22 @@ public class MainForm extends JFrame {
     private JButton previousPage;
     private JButton nextPage;
     private JButton restButton;
-    private ConnectionManager connectionManager;
     String currentQuery;
     Locale currentLocale = Locale.ENGLISH;
     ResourceBundle messages;
 
 
-    public MainForm(String properties) {
+    public MainForm() {
 
         messages = ResourceBundle.getBundle("text", currentLocale);
-        this.connectionManager = new ConnectionManager(new PropertiesManager(properties));
+
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
         createForm(this);
         pack();
         this.setSize(640, 480);
         setVisible(true);
+
     }
 
     private void createForm(final Container pane) {
@@ -60,10 +56,8 @@ public class MainForm extends JFrame {
                     ErrorSplashForm noQuery = new ErrorSplashForm(messages.getString("error.message"));
                 } else {
                     currentQuery = queryField.getText();
-                    SongDAO songDAO = new SongDAO(connectionManager);
-                    ArtistDAO artistDAO = new ArtistDAO(connectionManager);
-                    LyricsService service = new LyricsService(artistDAO, songDAO);
-                    LyricsDTO lyricsDTO = service.getDTOFromDB(service.getArtist(currentQuery));
+                    LyricsService service = new LyricsService();
+                    LyricsDTO lyricsDTO = service.getDTOFromDB(currentQuery);
                     OutputTableModel model = new OutputTableModel(lyricsDTO);
                     if (model.getPageCount() == 0) {
 
