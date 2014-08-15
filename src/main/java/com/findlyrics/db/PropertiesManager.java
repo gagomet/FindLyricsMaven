@@ -14,12 +14,12 @@ import java.util.Properties;
 public class PropertiesManager {
     private static final Logger log = Logger.getLogger(PropertiesManager.class);
     private static Properties properties = new Properties();
-    private static final String propertyFile = "/db.properties";
-    public static volatile PropertiesManager instance;
+//    private static final String propertyFile = "/db.properties";
+    private static volatile PropertiesManager instance;
 
     private PropertiesManager() {
         try {
-            InputStream in = getClass().getResourceAsStream(propertyFile);
+            InputStream in = getClass().getResourceAsStream(ArgsUtil.getparameters());
             properties.load(in);
             in.close();
         } catch (FileNotFoundException e) {

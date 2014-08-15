@@ -14,7 +14,7 @@ public class ConnectionManager {
     private static final Logger log = Logger.getLogger(ConnectionManager.class);
     private static Connection connection;
     private ComboPooledDataSource c3p0Pool;
-    public static volatile ConnectionManager instance;
+    private static volatile ConnectionManager instance;
 
     private ConnectionManager() {
         try {

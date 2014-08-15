@@ -7,9 +7,9 @@ import com.findlyrics.ui.MainForm;
  */
 public class StartApp {
 
-    public static final String[] args = {"/db.properties"};
 
     public static void main(String[] args) {
+    ArgsUtil.setparameters(args[0]);
     MainForm guiForm = new MainForm();
 
     }
