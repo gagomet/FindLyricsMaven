@@ -10,6 +10,7 @@ import com.findlyrics.ui.model.LyricItemDTO;
 import com.findlyrics.ui.model.LyricsDTO;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
@@ -32,9 +33,22 @@ public class RestService {
     public RestService() {
     }
 
+    public LyricsDTO getDTOFromRest(String query) {
+        List<SongPojo> inputData = jsonToPojo(getJsonFromRest(query));
+        LyricsDTO dto = new LyricsDTO();
+        List<LyricItemDTO> entries = new ArrayList<LyricItemDTO>();
+        for (SongPojo currentSong : inputData) {
+            Artist newArtist = new Artist(currentSong.getArtist().getName());
+            Song newSong = new Song(currentSong.getTitle(), currentSong.getUrl());
+            LyricItemDTO tempResult = new LyricItemDTO(newArtist, newSong);
+            entries.add(tempResult);
+        }
+        dto.setSearchResults(entries);
+        return dto;
+    }
+
     private String queryToHttp(String query) {
-        String httpString = REST_URL + query.replace(" ", "%20");
-        return httpString;
+        return REST_URL + query.replace(" ", "%20");
     }
 
     private String getJsonFromRest(String query) {
@@ -49,10 +63,9 @@ public class RestService {
             // Create a custom response handler
             ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
 
-                public String handleResponse(
-                        final HttpResponse response) throws ClientProtocolException, IOException {
+                public String handleResponse(final HttpResponse response) throws /*ClientProtocolException,*/ IOException {
                     int status = response.getStatusLine().getStatusCode();
-                    if (status >= 200 && status < 300) {
+                    if (status >= HttpStatus.SC_OK && status < HttpStatus.SC_MULTIPLE_CHOICES) {
                         HttpEntity entity = response.getEntity();
                         return entity != null ? EntityUtils.toString(entity) : null;
                     } else {
@@ -92,20 +105,6 @@ public class RestService {
             log.debug("Throwing exception", e);
         }
         return result;
-    }
-
-    public LyricsDTO getDTOFromRest(String query) {
-        List<SongPojo> inputData = jsonToPojo(getJsonFromRest(query));
-        LyricsDTO dto = new LyricsDTO();
-        List<LyricItemDTO> entries = new ArrayList<LyricItemDTO>();
-        for (SongPojo currentSong : inputData) {
-            Artist newArtist = new Artist(currentSong.getArtist().getName());
-            Song newSong = new Song(currentSong.getTitle(), currentSong.getUrl());
-            LyricItemDTO tempResult = new LyricItemDTO(newArtist, newSong);
-            entries.add(tempResult);
-        }
-        dto.setSearchResults(entries);
-        return dto;
     }
 
 }

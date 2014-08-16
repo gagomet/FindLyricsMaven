@@ -9,17 +9,18 @@ import java.sql.SQLException;
 /**
  * Created by Padonag on 15.08.2014.
  */
-public class SqlCloserUtil {
-    private static final Logger log = Logger.getLogger(SqlCloserUtil.class);
+public class SqlCloser {
+    private static final Logger log = Logger.getLogger(SqlCloser.class);
 
-    private SqlCloserUtil() {
+    private SqlCloser() {
     }
 
+    //TODO change signature method instead void to boolean!!!
     public static void closeSQL(ResultSet resultSet, PreparedStatement preparedStatement) {
         if (resultSet != null && preparedStatement != null) {
             try {
                 resultSet.close();
-                preparedStatement.close();
+                closePreparedStatement(preparedStatement);
             } catch (SQLException e) {
                 e.printStackTrace();
                 log.debug("Throwing exception", e);

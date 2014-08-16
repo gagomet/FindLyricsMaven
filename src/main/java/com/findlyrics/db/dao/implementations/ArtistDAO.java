@@ -3,7 +3,7 @@ package com.findlyrics.db.dao.implementations;
 import com.findlyrics.util.ConnectionManager;
 import com.findlyrics.db.dao.IArtistDAO;
 import com.findlyrics.db.model.Artist;
-import com.findlyrics.util.SqlCloserUtil;
+import com.findlyrics.util.SqlCloser;
 import org.apache.log4j.Logger;
 
 import java.sql.PreparedStatement;
@@ -15,14 +15,14 @@ import java.sql.SQLException;
  * Created by Padonag on 04.08.2014.
  */
 public class ArtistDAO implements IArtistDAO {
+
     private static final Logger log = Logger.getLogger(ArtistDAO.class);
-    private ConnectionManager connectionManager;
-    public static final String getArtistFromDBQuery = "SELECT * FROM artists WHERE artists.id = ?";
-    public static final String addArtistToDBQuery = "INSERT INTO artists (name) VALUES (?)";
+    private static final String getArtistFromDBQuery = "SELECT * FROM artists WHERE artists.id = ?";
+    private static final String addArtistToDBQuery = "INSERT INTO artists (name) VALUES (?)";
 
 
-    public ArtistDAO(ConnectionManager connectionManager) {
-        this.connectionManager = connectionManager;
+    public ArtistDAO() {
+
     }
 
 
@@ -32,7 +32,7 @@ public class ArtistDAO implements IArtistDAO {
         ResultSet resultSet = null;
         PreparedStatement preparedStatement = null;
         try {
-            preparedStatement = connectionManager.getConnection().prepareStatement(getArtistFromDBQuery);
+            preparedStatement = ConnectionManager.getConnection().prepareStatement(getArtistFromDBQuery);
             preparedStatement.setLong(1, id);
             resultSet = preparedStatement.executeQuery();
             artist = parseResultSet(resultSet);
@@ -40,7 +40,7 @@ public class ArtistDAO implements IArtistDAO {
             e.printStackTrace();
             log.debug("Throwing exception", e);
         } finally {
-            SqlCloserUtil.closeSQL(resultSet, preparedStatement);
+            SqlCloser.closeSQL(resultSet, preparedStatement);
 
         }
         return artist;
@@ -50,17 +50,15 @@ public class ArtistDAO implements IArtistDAO {
     public void addArtist(Artist artist) {
         PreparedStatement preparedStatement = null;
         try {
-            preparedStatement = connectionManager.getConnection().prepareStatement(addArtistToDBQuery);
+            preparedStatement = ConnectionManager.getConnection().prepareStatement(addArtistToDBQuery);
             preparedStatement.setString(1, artist.getName());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
             log.debug("Throwing exception", e);
         } finally {
-           SqlCloserUtil.closePreparedStatement(preparedStatement);
+            SqlCloser.closePreparedStatement(preparedStatement);
         }
-
-
     }
 
     private Artist parseResultSet(ResultSet resultSet) throws SQLException {
@@ -70,8 +68,5 @@ public class ArtistDAO implements IArtistDAO {
         }
 
         return artist;
-
     }
-
-
 }

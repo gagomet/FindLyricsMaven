@@ -32,10 +32,6 @@ public class ShowLyricsFrame extends JFrame {
         textPanel.add(scrollPane);
         this.add(textPanel);
         this.add(scrollPane);
-
-
-
-
     }
 
     private void closeFrame(){

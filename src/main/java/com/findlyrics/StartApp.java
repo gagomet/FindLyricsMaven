@@ -1,4 +1,4 @@
-package com.findlyrics.db;
+package com.findlyrics;
 
 import com.findlyrics.ui.MainForm;
 import com.findlyrics.util.ArgsUtil;
@@ -10,7 +10,7 @@ public class StartApp {
 
 
     public static void main(String[] args) {
-    ArgsUtil.setparameters(args[0]);
+    ArgsUtil.setParameters(args[0]);
     MainForm guiForm = new MainForm();
 
     }

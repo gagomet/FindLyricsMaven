@@ -17,23 +17,19 @@ import java.util.ResourceBundle;
  * Created by Padonag on 27.07.2014.
  */
 public class MainForm extends JFrame {
-    protected OutputTableModel tableModel;
-    protected JTextField queryField;
-    protected JButton searchButton;
-    protected JTable resultTable;
+
+    private OutputTableModel tableModel;
+    private JTextField queryField;
+    private JTable resultTable;
     private JButton previousPage;
     private JButton nextPage;
     private JButton restButton;
-    String currentQuery;
-    Locale currentLocale = Locale.ENGLISH;
-    ResourceBundle messages;
-
+    private String currentQuery;
+    private ResourceBundle messages;
 
     public MainForm() {
-
-        messages = ResourceBundle.getBundle("text", currentLocale);
-
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        messages = ResourceBundle.getBundle("text", Locale.ENGLISH);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
         createForm(this);
         pack();
@@ -48,7 +44,7 @@ public class MainForm extends JFrame {
         pane.setLayout(fl);
         queryField = new JTextField(50);
         pane.add(queryField);
-        searchButton = new JButton(messages.getString("search.button.name"));
+        JButton searchButton = new JButton(messages.getString("search.button.name"));
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -59,9 +55,7 @@ public class MainForm extends JFrame {
                     LyricsService service = new LyricsService();
                     LyricsDTO lyricsDTO = service.getDTOFromDB(currentQuery);
                     OutputTableModel model = new OutputTableModel(lyricsDTO);
-                    if (model.getPageCount() == 0) {
-
-                    } else {
+                    if (model.getPageCount() != 0) {
                         setTableModel(model);
                         showTable();
                     }
@@ -114,8 +108,7 @@ public class MainForm extends JFrame {
             int column = resultTable.columnAtPoint(e.getPoint());
             if (row >= 0 && column >= 2) {
                 String text = (String) tableModel.getValueAt(resultTable.getSelectedRow(), resultTable.getSelectedColumn());
-                ShowLyricsFrame currentLyrics = new ShowLyricsFrame(text);
-//
+                new ShowLyricsFrame(text);
             }
         }
     };
@@ -151,7 +144,7 @@ public class MainForm extends JFrame {
     }
 
     private void addRestButton() {
-        if (restButton == null && tableModel.getCurrentPage() == tableModel.getPageCount()-1) {
+        if (restButton == null && tableModel.getCurrentPage() == tableModel.getPageCount() - 1) {
             restButton = new JButton(messages.getString("rest.button.name"));
             restButton.addActionListener(new ActionListener() {
                 @Override
@@ -159,9 +152,7 @@ public class MainForm extends JFrame {
                     RestService restService = new RestService();
                     LyricsDTO lyricsDTO = restService.getDTOFromRest(currentQuery);
                     OutputTableModel model = new OutputTableModel(lyricsDTO);
-                    if (model.getPageCount() == 0) {
-
-                    } else {
+                    if (model.getPageCount() != 0) {
                         setTableModel(model);
                         showTable();
                     }

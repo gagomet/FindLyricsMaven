@@ -19,14 +19,13 @@ import java.util.Map;
  */
 public class LyricsService {
     private static final Logger log = Logger.getLogger(ArtistDAO.class);
+
     private ArtistDAO artistDAO;
     private SongDAO songDAO;
-    private ConnectionManager connectionManager;
 
     public LyricsService() {
-        this.connectionManager = ConnectionManager.getInstance();
-        this.artistDAO = new ArtistDAO(connectionManager);
-        this.songDAO = new SongDAO(connectionManager);
+        this.artistDAO = new ArtistDAO();
+        this.songDAO = new SongDAO();
     }
 
     private List<Artist> getArtist(String text) {
