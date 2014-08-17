@@ -8,8 +8,6 @@ import java.awt.*;
  */
 public class ShowLyricsFrame extends JFrame {
     private String lyrics;
-    private JTextArea textArea;
-    private JScrollPane scrollPane;
 
     public ShowLyricsFrame(String lyrics) {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -25,10 +23,10 @@ public class ShowLyricsFrame extends JFrame {
         this.setDefaultCloseOperation(HIDE_ON_CLOSE);
         JPanel textPanel = new JPanel();
         textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
-        textArea = new JTextArea(lyrics);
+        JTextArea textArea = new JTextArea(lyrics);
         textArea.setEditable(false);
         textArea.setCaretPosition(0);
-        scrollPane = new JScrollPane(textArea);
+        JScrollPane scrollPane = new JScrollPane(textArea);
         textPanel.add(scrollPane);
         this.add(textPanel);
         this.add(scrollPane);

@@ -1,7 +1,8 @@
 package com.findlyrics.ui;
 
-import com.findlyrics.db.service.LyricsService;
-import com.findlyrics.rest.service.RestService;
+import com.findlyrics.service.ILyricService;
+import com.findlyrics.service.implementations.DBLyricsService;
+import com.findlyrics.service.implementations.RestLyricsService;
 import com.findlyrics.ui.model.LyricsDTO;
 
 import javax.swing.*;
@@ -24,7 +25,6 @@ public class MainForm extends JFrame {
     private JButton previousPage;
     private JButton nextPage;
     private JButton restButton;
-    private String currentQuery;
     private ResourceBundle messages;
 
     public MainForm() {
@@ -45,26 +45,8 @@ public class MainForm extends JFrame {
         queryField = new JTextField(50);
         pane.add(queryField);
         JButton searchButton = new JButton(messages.getString("search.button.name"));
-        searchButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (queryField.getText().equals("")) {
-                    ErrorSplashForm noQuery = new ErrorSplashForm(messages.getString("error.message"));
-                } else {
-                    currentQuery = queryField.getText();
-                    LyricsService service = new LyricsService();
-                    LyricsDTO lyricsDTO = service.getDTOFromDB(currentQuery);
-                    OutputTableModel model = new OutputTableModel(lyricsDTO);
-                    if (model.getPageCount() != 0) {
-                        setTableModel(model);
-                        showTable();
-                    }
-                    queryField.setText("");
-                    refreshForm();
-
-                }
-            }
-        });
+        ILyricService dbService = new DBLyricsService();
+        searchButton.addActionListener(listener(dbService));
         pane.add(searchButton);
 
     }
@@ -74,7 +56,7 @@ public class MainForm extends JFrame {
         this.tableModel = tableModel;
     }
 
-    public void showTable() {
+    private void showTable() {
         if (this.resultTable != null) {
             remove(resultTable);
         }
@@ -96,7 +78,7 @@ public class MainForm extends JFrame {
 
     }
 
-    public void refreshForm() {
+    private void refreshForm() {
         this.repaint();
     }
 
@@ -114,6 +96,9 @@ public class MainForm extends JFrame {
     };
 
     private void addButtons() {
+        if (tableModel.getPageCount() == 1) {
+            addRestButton();
+        }
         if (previousPage == null && nextPage == null && tableModel.getPageCount() > 1) {
             previousPage = new JButton(messages.getString("pagedown.button.name"));
             previousPage.addActionListener(new ActionListener() {
@@ -146,24 +131,31 @@ public class MainForm extends JFrame {
     private void addRestButton() {
         if (restButton == null && tableModel.getCurrentPage() == tableModel.getPageCount() - 1) {
             restButton = new JButton(messages.getString("rest.button.name"));
-            restButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    RestService restService = new RestService();
-                    LyricsDTO lyricsDTO = restService.getDTOFromRest(currentQuery);
-                    OutputTableModel model = new OutputTableModel(lyricsDTO);
-                    if (model.getPageCount() != 0) {
-                        setTableModel(model);
-                        showTable();
-                    }
-                    queryField.setText("");
-                    refreshForm();
-
-                }
-            });
+            ILyricService restService = new RestLyricsService();
+            restButton.addActionListener(listener(restService));
             this.add(restButton);
             refreshForm();
         }
+    }
+
+    private ActionListener listener(final ILyricService service) {
+        return new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                if (queryField.getText().equals("")) {
+                    ErrorSplashForm noQuery = new ErrorSplashForm(messages.getString("error.message"));
+                }
+                LyricsDTO lyricsDTO = service.getDTO(queryField.getText());
+                OutputTableModel model = new OutputTableModel(lyricsDTO);
+                if (model.getPageCount() != 0) {
+                    setTableModel(model);
+                    showTable();
+                }
+//                queryField.setText("");
+                refreshForm();
+            }
+        };
     }
 
 }

@@ -33,7 +33,7 @@ public class SongDAO implements ISongDAO {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
-            preparedStatement = ConnectionManager.getConnection().prepareStatement(getSongsFromDBQuery);
+            preparedStatement = ConnectionManager.getInstance().getConnection().prepareStatement(getSongsFromDBQuery);
             preparedStatement.setString(1, "%" + lyrics + "%");
             resultSet = preparedStatement.executeQuery();
             result = parseResultSet(resultSet);
@@ -42,7 +42,8 @@ public class SongDAO implements ISongDAO {
             e.printStackTrace();
             log.debug("Throwing exception", e);
         } finally {
-            SqlCloser.closeSQL(resultSet, preparedStatement);
+            SqlCloser.closeResultSet(resultSet);
+            SqlCloser.closePreparedStatement(preparedStatement);
 
         }
         log.info("Creating List<Song> object" + result.toString());
@@ -54,7 +55,7 @@ public class SongDAO implements ISongDAO {
         PreparedStatement preparedStatement = null;
 
         try {
-            preparedStatement = ConnectionManager.getConnection().prepareStatement(addSongsToDBQuery);
+            preparedStatement = ConnectionManager.getInstance().getConnection().prepareStatement(addSongsToDBQuery);
             preparedStatement.setLong(1, song.getArtistId());
             preparedStatement.setString(2, song.getTitle());
             preparedStatement.setString(3, song.getLyrics());

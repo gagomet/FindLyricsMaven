@@ -1,13 +1,14 @@
 package com.findlyrics.ui.model;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
  * Created by Padonag on 06.08.2014.
  */
 public class LyricsDTO {
-    private List<LyricItemDTO> searchResults = new ArrayList<LyricItemDTO>();
+    private List<LyricItemDTO> searchResults = new LinkedList<LyricItemDTO>();
 
     public LyricsDTO() {
     }

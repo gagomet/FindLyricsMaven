@@ -32,7 +32,7 @@ public class ArtistDAO implements IArtistDAO {
         ResultSet resultSet = null;
         PreparedStatement preparedStatement = null;
         try {
-            preparedStatement = ConnectionManager.getConnection().prepareStatement(getArtistFromDBQuery);
+            preparedStatement = ConnectionManager.getInstance().getConnection().prepareStatement(getArtistFromDBQuery);
             preparedStatement.setLong(1, id);
             resultSet = preparedStatement.executeQuery();
             artist = parseResultSet(resultSet);
@@ -40,7 +40,8 @@ public class ArtistDAO implements IArtistDAO {
             e.printStackTrace();
             log.debug("Throwing exception", e);
         } finally {
-            SqlCloser.closeSQL(resultSet, preparedStatement);
+            SqlCloser.closeResultSet(resultSet);
+            SqlCloser.closePreparedStatement(preparedStatement);
 
         }
         return artist;
@@ -50,7 +51,7 @@ public class ArtistDAO implements IArtistDAO {
     public void addArtist(Artist artist) {
         PreparedStatement preparedStatement = null;
         try {
-            preparedStatement = ConnectionManager.getConnection().prepareStatement(addArtistToDBQuery);
+            preparedStatement = ConnectionManager.getInstance().getConnection().prepareStatement(addArtistToDBQuery);
             preparedStatement.setString(1, artist.getName());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {

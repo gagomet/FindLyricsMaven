@@ -1,29 +1,29 @@
-package com.findlyrics.db.service;
+package com.findlyrics.service.implementations;
 
-import com.findlyrics.util.ConnectionManager;
 import com.findlyrics.db.dao.implementations.ArtistDAO;
 import com.findlyrics.db.dao.implementations.SongDAO;
 import com.findlyrics.db.model.Artist;
 import com.findlyrics.db.model.Song;
+import com.findlyrics.service.ILyricService;
 import com.findlyrics.ui.model.LyricItemDTO;
 import com.findlyrics.ui.model.LyricsDTO;
 import org.apache.log4j.Logger;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 /**
  * Created by Padonag on 06.08.2014.
  */
-public class LyricsService {
+public class DBLyricsService implements ILyricService {
     private static final Logger log = Logger.getLogger(ArtistDAO.class);
 
     private ArtistDAO artistDAO;
     private SongDAO songDAO;
 
-    public LyricsService() {
+    public DBLyricsService() {
         this.artistDAO = new ArtistDAO();
         this.songDAO = new SongDAO();
     }
@@ -44,13 +44,13 @@ public class LyricsService {
                 resultMap.put(artistID, currentArtist);
             }
         }
-        return new ArrayList<Artist>(resultMap.values());
+        return new LinkedList<Artist>(resultMap.values());
     }
 
-    public LyricsDTO getDTOFromDB(String query) {
-        List<Artist> inputData = getArtist(query);
+    public LyricsDTO getDTO(String query) {
         LyricsDTO dto = new LyricsDTO();
-        List<LyricItemDTO> lyricItemDTOs = new ArrayList<LyricItemDTO>();
+        List<Artist> inputData = getArtist(query);
+        List<LyricItemDTO> lyricItemDTOs = new LinkedList<LyricItemDTO>();
 
         for (Artist currentArtist : inputData) {
             for (Song currentSong : currentArtist.getRepertoir()) {
@@ -64,6 +64,6 @@ public class LyricsService {
 
 
     public void addEntity(String artistName, String title, String text) {
-
+        //TODO add implementation
     }
 }

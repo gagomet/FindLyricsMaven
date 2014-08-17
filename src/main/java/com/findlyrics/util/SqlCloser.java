@@ -15,21 +15,21 @@ public class SqlCloser {
     private SqlCloser() {
     }
 
-    //TODO change signature method instead void to boolean!!!
-    public static void closeSQL(ResultSet resultSet, PreparedStatement preparedStatement) {
-        if (resultSet != null && preparedStatement != null) {
+
+    public static boolean closeResultSet(ResultSet resultSet) {
+        if (resultSet != null) {
             try {
                 resultSet.close();
-                closePreparedStatement(preparedStatement);
             } catch (SQLException e) {
                 e.printStackTrace();
                 log.debug("Throwing exception", e);
             }
 
         }
+        return true;
     }
 
-    public static void closePreparedStatement(PreparedStatement preparedStatement) {
+    public static boolean closePreparedStatement(PreparedStatement preparedStatement) {
         if (preparedStatement != null) {
             try {
                 preparedStatement.close();
@@ -37,6 +37,7 @@ public class SqlCloser {
                 e.printStackTrace();
             }
         }
+        return true;
     }
 
 }
