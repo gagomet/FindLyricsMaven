@@ -34,18 +34,22 @@ public class ConnectionManager {
         }
     }
 
+    private static class Holder {
+        private static final ConnectionManager INSTANCE = new ConnectionManager();
+    }
 
     public static Connection getConnection() {
         return connection;
     }
 
     public static ConnectionManager getInstance() {
-        if (instance == null) {
-            synchronized (ConnectionManager.class) {
-                if (instance == null)
-                    instance = new ConnectionManager();
-            }
-        }
-        return instance;
+//        if (instance == null) {
+//            synchronized (ConnectionManager.class) {
+//                if (instance == null)
+//                    instance = new ConnectionManager();
+//            }
+//        }
+//        return instance;
+        return Holder.INSTANCE;
     }
 }
