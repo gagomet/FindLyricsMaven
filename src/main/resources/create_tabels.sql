@@ -1,0 +1,13 @@
+CREATE TABLE `artists` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `ArtistName` tinytext CHARACTER SET utf8mb4 NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=823 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `songs` (
+  `idSongs` int(11) NOT NULL AUTO_INCREMENT,
+  `idArtist` int(11) DEFAULT NULL,
+  `SongName` tinytext NOT NULL,
+  `Lyrics` text NOT NULL,
+  PRIMARY KEY (`idSongs`)
+) ENGINE=InnoDB AUTO_INCREMENT=6373 DEFAULT CHARSET=utf8;
