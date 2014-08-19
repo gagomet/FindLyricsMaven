@@ -142,6 +142,7 @@ public class MainForm extends JFrame {
 //        }
 //    }
 
+
     private ActionListener listener(final ILyricService service) {
         return new ActionListener() {
             @Override

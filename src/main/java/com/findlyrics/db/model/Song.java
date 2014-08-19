@@ -60,6 +60,7 @@ public class Song {
 
         Song song = (Song) o;
 
+
         if (!artistId.equals(song.artistId)) return false;
         if (!id.equals(song.id)) return false;
         if (!lyrics.equals(song.lyrics)) return false;
@@ -80,7 +81,7 @@ public class Song {
     @Override
     public String toString() {
         return "Song{" +
-                "title='" + title + '\''+
+                "title='" + title + '\'' +
                 '}';
     }
 }

@@ -27,7 +27,7 @@ import java.util.List;
 /**
  * Created by Padonag on 10.08.2014.
  */
-public class RestLyricsService implements ILyricService{
+public class RestLyricsService implements ILyricService {
     private static final Logger log = Logger.getLogger(RestLyricsService.class);
     private static final String REST_URL = "http://api.lyricsnmusic.com/songs?api_key=3699a6ba6f1ecdc9b9e208123fd382&lyrics=";
 

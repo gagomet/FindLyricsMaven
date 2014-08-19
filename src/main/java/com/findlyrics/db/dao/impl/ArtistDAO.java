@@ -66,6 +66,7 @@ public class ArtistDAO implements IArtistDAO {
         Artist artist = new Artist();
         while (resultSet.next()) {
             artist = new Artist(resultSet.getString("artist_name"));
+
         }
 
         return artist;

@@ -16,8 +16,6 @@ public class StartApp {
     ArgsUtil.setParameters(args[0]);
     MainForm guiForm = new MainForm();
 
-
-
     }
 }
 

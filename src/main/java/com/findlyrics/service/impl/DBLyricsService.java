@@ -28,6 +28,7 @@ public class DBLyricsService implements ILyricService {
         this.songDAO = new SongDAO();
     }
 
+
     private List<Artist> getArtist(String text) {
         Map<Long, Artist> resultMap = new HashMap<Long, Artist>();
         List<Song> songList = songDAO.getSongs(text);

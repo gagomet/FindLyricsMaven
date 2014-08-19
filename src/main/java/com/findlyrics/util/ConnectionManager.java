@@ -43,13 +43,6 @@ public class ConnectionManager {
     }
 
     public static ConnectionManager getInstance() {
-//        if (instance == null) {
-//            synchronized (ConnectionManager.class) {
-//                if (instance == null)
-//                    instance = new ConnectionManager();
-//            }
-//        }
-//        return instance;
         return Holder.INSTANCE;
     }
 }
