@@ -1,4 +1,4 @@
-package com.findlyrics.service.implementations;
+package com.findlyrics.rest.model.service;
 
 
 import com.fasterxml.jackson.core.type.TypeReference;

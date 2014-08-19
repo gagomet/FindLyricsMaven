@@ -1,4 +1,4 @@
-package com.findlyrics.db.dao.implementations;
+package com.findlyrics.db.dao.impl;
 
 import com.findlyrics.util.ConnectionManager;
 import com.findlyrics.db.dao.ISongDAO;
@@ -21,7 +21,7 @@ public class SongDAO implements ISongDAO {
 
     private static final Logger log = Logger.getLogger(SongDAO.class);
     private static final String getSongsFromDBQuery = "SELECT * FROM songs WHERE songs.lyrics LIKE ?";
-    private static final String addSongsToDBQuery = "INSERT INTO songs(idArtist, SongName, Lyrics) VALUES(?, ?, ?)";
+    private static final String addSongsToDBQuery = "INSERT INTO songs(id_artist, song_name, lyrics) VALUES(?, ?, ?)";
 
     public SongDAO() {
 
@@ -75,9 +75,9 @@ public class SongDAO implements ISongDAO {
 
         List<Song> result = new LinkedList<Song>();
         while (resultSet.next()) {
-            Song currentSong = new Song(resultSet.getString("SongName"), resultSet.getString("Lyrics"));
-            currentSong.setArtistId(resultSet.getLong("idArtist"));
-            currentSong.setId(resultSet.getLong("idSongs"));
+            Song currentSong = new Song(resultSet.getString("song_name"), resultSet.getString("lyrics"));
+            currentSong.setArtistId(resultSet.getLong("id_artist"));
+            currentSong.setId(resultSet.getLong("id_songs"));
             result.add(currentSong);
         }
         return result;

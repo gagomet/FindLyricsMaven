@@ -1,6 +1,6 @@
 package com.findlyrics.db.model;
 
-import com.findlyrics.db.dao.implementations.SongDAO;
+import com.findlyrics.db.dao.impl.SongDAO;
 import org.apache.log4j.Logger;
 
 /**

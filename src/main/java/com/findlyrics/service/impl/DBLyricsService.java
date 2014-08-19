@@ -1,7 +1,7 @@
-package com.findlyrics.service.implementations;
+package com.findlyrics.service.impl;
 
-import com.findlyrics.db.dao.implementations.ArtistDAO;
-import com.findlyrics.db.dao.implementations.SongDAO;
+import com.findlyrics.db.dao.impl.ArtistDAO;
+import com.findlyrics.db.dao.impl.SongDAO;
 import com.findlyrics.db.model.Artist;
 import com.findlyrics.db.model.Song;
 import com.findlyrics.service.ILyricService;

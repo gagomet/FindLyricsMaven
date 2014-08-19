@@ -1,4 +1,4 @@
-package com.findlyrics.db.dao.implementations;
+package com.findlyrics.db.dao.impl;
 
 import com.findlyrics.util.ConnectionManager;
 import com.findlyrics.db.dao.IArtistDAO;
@@ -65,7 +65,7 @@ public class ArtistDAO implements IArtistDAO {
     private Artist parseResultSet(ResultSet resultSet) throws SQLException {
         Artist artist = new Artist();
         while (resultSet.next()) {
-            artist = new Artist(resultSet.getString("ArtistName"));
+            artist = new Artist(resultSet.getString("artist_name"));
         }
 
         return artist;

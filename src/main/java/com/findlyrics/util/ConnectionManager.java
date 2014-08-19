@@ -38,7 +38,7 @@ public class ConnectionManager {
         private static final ConnectionManager INSTANCE = new ConnectionManager();
     }
 
-    public static Connection getConnection() {
+    public Connection getConnection() {
         return connection;
     }
 

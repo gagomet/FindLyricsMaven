@@ -1,8 +1,9 @@
 package com.findlyrics.ui;
 
+import com.findlyrics.http.service.HttpLyricsService;
+import com.findlyrics.rest.model.service.RestLyricsService;
 import com.findlyrics.service.ILyricService;
-import com.findlyrics.service.implementations.DBLyricsService;
-import com.findlyrics.service.implementations.RestLyricsService;
+import com.findlyrics.service.impl.DBLyricsService;
 import com.findlyrics.ui.model.LyricsDTO;
 
 import javax.swing.*;
@@ -24,8 +25,9 @@ public class MainForm extends JFrame {
     private JTable resultTable;
     private JButton previousPage;
     private JButton nextPage;
-    private JButton restButton;
+    private JButton searchMoreButton;
     private ResourceBundle messages;
+
 
     public MainForm() {
         messages = ResourceBundle.getBundle("text", Locale.ENGLISH);
@@ -97,7 +99,8 @@ public class MainForm extends JFrame {
 
     private void addButtons() {
         if (tableModel.getPageCount() == 1) {
-            addRestButton();
+//            addRestButton();
+            addSearchMoreButton();
         }
         if (previousPage == null && nextPage == null && tableModel.getPageCount() > 1) {
             previousPage = new JButton(messages.getString("pagedown.button.name"));
@@ -119,7 +122,8 @@ public class MainForm extends JFrame {
                     System.out.println("Button Next Pressed!");
                     tableModel.nextPage();
                     tableModel.fireTableDataChanged();
-                    addRestButton();
+//                    addRestButton();
+                    addSearchMoreButton();
 
                 }
             });
@@ -128,15 +132,15 @@ public class MainForm extends JFrame {
         }
     }
 
-    private void addRestButton() {
-        if (restButton == null && tableModel.getCurrentPage() == tableModel.getPageCount() - 1) {
-            restButton = new JButton(messages.getString("rest.button.name"));
-            ILyricService restService = new RestLyricsService();
-            restButton.addActionListener(listener(restService));
-            this.add(restButton);
-            refreshForm();
-        }
-    }
+//    private void addRestButton() {
+//        if (searchMoreButton == null && tableModel.getCurrentPage() == tableModel.getPageCount() - 1) {
+//            searchMoreButton = new JButton(messages.getString("rest.button.name"));
+//            ILyricService restService = new RestLyricsService();
+//            searchMoreButton.addActionListener(listener(restService));
+//            this.add(searchMoreButton);
+//            refreshForm();
+//        }
+//    }
 
     private ActionListener listener(final ILyricService service) {
         return new ActionListener() {
@@ -156,6 +160,24 @@ public class MainForm extends JFrame {
                 refreshForm();
             }
         };
+    }
+
+    private void addSearchMoreButton() {
+        if (searchMoreButton == null && tableModel.getCurrentPage() == tableModel.getPageCount() - 1) {
+            searchMoreButton = new JButton(messages.getString("search.more.button.name"));
+            ILyricService service = new HttpLyricsService();
+            searchMoreButton.addActionListener(listener(service));
+            this.add(searchMoreButton);
+            refreshForm();
+        } else if (searchMoreButton != null) {
+           this.remove(searchMoreButton);
+            searchMoreButton = new JButton(messages.getString("search.more.button.name"));
+            ILyricService service = new RestLyricsService();
+            searchMoreButton.addActionListener(listener(service));
+            this.add(searchMoreButton);
+            refreshForm();
+        }
+
     }
 
 }
