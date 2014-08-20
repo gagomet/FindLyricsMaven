@@ -4,7 +4,6 @@ import com.findlyrics.ui.model.UiModel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.util.Locale;
@@ -14,40 +13,51 @@ import java.util.ResourceBundle;
  * Created by Padonag on 19.08.2014.
  */
 public class UiViewer extends JFrame {
+    private static final int FRAME_WIDTH = 640;
+    private static final int FRAME_HEIGHT = 480;
+
     private ResourceBundle messages = ResourceBundle.getBundle("text", Locale.ENGLISH);
 
-    private JTextField queryField = queryField = new JTextField(50);
-    private JTable resultTable = new JTable();
-    private JButton previousPage = new JButton(messages.getString("pagedown.button.name"));
-    private JButton nextPage = new JButton(messages.getString("pageup.button.name"));
-    private JButton searchButton = new JButton(messages.getString("search.button.name"));
+    private JTextField queryField;
+    private JTable resultTable;
+    private JButton previousPage;
+    private JButton nextPage;
+    private JButton searchButton;
 
-    // test
+
     private UiModel model;
 
     public UiViewer(UiModel model) {
         this.model = model;
+        this.queryField = new JTextField(50);
+        this.searchButton = new JButton(messages.getString("search.button.name"));
+        this.resultTable = new JTable();
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
-        createForm(this);
+        createForm();
         pack();
-        this.setSize(640, 480);
+        this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
 
     }
 
-    private void createForm(final Container pane) {
+    private void createForm() {
 
         FlowLayout fl = new FlowLayout();
-        pane.setLayout(fl);
-        pane.add(queryField);
-        pane.add(searchButton);
-        pane.add(previousPage);
-        pane.add(nextPage);
-        pane.add(resultTable);
+        this.setLayout(fl);
+        this.add(queryField);
+        this.add(searchButton);
+        this.add(resultTable);
 
 
     }
 
+    public void addPaginationButtons(){
+    previousPage = new JButton(messages.getString("pagedown.button.name"));
+    nextPage = new JButton(messages.getString("pageup.button.name"));
+        this.add(previousPage);
+        this.add(nextPage);
+        this.repaint();
+    }
 
 
     public void addButtonsListener(ActionListener listener) {

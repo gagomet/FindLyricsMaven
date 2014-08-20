@@ -1,7 +1,5 @@
-package com.findlyrics.ui;
+package com.findlyrics.ui.model;
 
-import com.findlyrics.ui.model.LyricItemDTO;
-import com.findlyrics.ui.model.LyricsDTO;
 import org.apache.log4j.Logger;
 
 import javax.swing.table.AbstractTableModel;

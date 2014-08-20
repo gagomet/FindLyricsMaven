@@ -1,4 +1,4 @@
-package com.findlyrics.ui;
+package com.findlyrics.ui.view;
 
 import javax.swing.*;
 import java.awt.*;

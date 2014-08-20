@@ -12,10 +12,7 @@ public class StartApp {
 
 
     public static void main(String[] args) {
-    ArgsUtil.setParameters(args[0]);
-//    MainForm guiForm = new MainForm();
-
-
+        ArgsUtil.setParameters(args[0]);
         UiModel model = new UiModel();
         UiViewer view = new UiViewer(model);
         UiController controller = new UiController(model, view);

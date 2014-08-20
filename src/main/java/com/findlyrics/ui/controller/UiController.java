@@ -1,12 +1,11 @@
-
 package com.findlyrics.ui.controller;
 
 import com.findlyrics.http.service.HttpLyricsService;
 import com.findlyrics.rest.model.service.RestLyricsService;
 import com.findlyrics.service.ILyricService;
 import com.findlyrics.service.impl.DBLyricsService;
-import com.findlyrics.ui.ShowLyricsFrame;
 import com.findlyrics.ui.model.UiModel;
+import com.findlyrics.ui.view.ShowLyricsFrame;
 import com.findlyrics.ui.view.UiViewer;
 
 import javax.swing.*;
@@ -21,6 +20,9 @@ import java.util.ResourceBundle;
  * Created by Padonag on 19.08.2014.
  */
 public class UiController {
+
+    private static final String EMPTY_STRING = "";
+
     private UiModel model;
     private UiViewer view;
     private ResourceBundle messages;
@@ -31,32 +33,36 @@ public class UiController {
         this.model = model;
         this.view = view;
         view.addButtonsListener(new ButtonsListener());
-        view.addPaginationListener(new PaginationListener());
-        view.addTableMouseAdapter(new TableMouseAdapter());
+
     }
 
     private class ButtonsListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (view.getQuery().equals("")) {
+            if (EMPTY_STRING.equals(view.getQuery())) {
                 view.showError(messages.getString("error.message"));
             } else {
-                if (view.getSearchButton().getText() == messages.getString("search.button.name")) {
+                if (view.getSearchButton().getText().equals(messages.getString("search.button.name"))) {
                     ILyricService dbService = new DBLyricsService();
                     model.createTableModel(dbService, view.getQuery());
                     view.setSearchButton(new JButton(messages.getString("search.more.button.name")));
-                } else if (view.getSearchButton().getText() == messages.getString("search.more.button.name")) {
+                } else if (view.getSearchButton().getText().equals(messages.getString("search.more.button.name"))) {
                     ILyricService dbService = new HttpLyricsService();
                     model.createTableModel(dbService, view.getQuery());
                     view.setSearchButton(new JButton(messages.getString("search.once.more.button.name")));
-                } else if (view.getSearchButton().getText() == messages.getString("search.once.more.button.name")) {
+                } else if (view.getSearchButton().getText().equals(messages.getString("search.once.more.button.name"))) {
                     ILyricService dbService = new RestLyricsService();
                     model.createTableModel(dbService, view.getQuery());
                     view.setSearchButton(new JButton(messages.getString("search.once.more.button.name")));
                 }
+                if (model.getOutputTableModel().getPageCount() > 1) {
+                    view.addPaginationButtons();
+                    view.addPaginationListener(new PaginationListener());
+                }
                 if (model.getOutputTableModel().getPageCount() != 0) {
                     view.showTable();
+                    view.addTableMouseAdapter(new TableMouseAdapter());
                 }
             }
         }
