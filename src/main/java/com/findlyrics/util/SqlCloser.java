@@ -23,6 +23,7 @@ public class SqlCloser {
             } catch (SQLException e) {
                 e.printStackTrace();
                 log.debug("Throwing exception", e);
+                return false;
             }
 
         }
@@ -35,6 +36,8 @@ public class SqlCloser {
                 preparedStatement.close();
             } catch (SQLException e) {
                 e.printStackTrace();
+                log.debug("Throwing exception", e);
+                return false;
             }
         }
         return true;

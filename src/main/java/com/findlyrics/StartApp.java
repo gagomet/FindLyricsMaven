@@ -1,9 +1,8 @@
 package com.findlyrics;
 
-import com.findlyrics.http.ForArguments;
-import com.findlyrics.http.service.HttpLyricsService;
-import com.findlyrics.ui.MainForm;
-import com.findlyrics.ui.model.LyricsDTO;
+import com.findlyrics.ui.controller.UiController;
+import com.findlyrics.ui.model.UiModel;
+import com.findlyrics.ui.view.UiView;
 import com.findlyrics.util.ArgsUtil;
 
 /**
@@ -14,7 +13,14 @@ public class StartApp {
 
     public static void main(String[] args) {
     ArgsUtil.setParameters(args[0]);
-    MainForm guiForm = new MainForm();
+//    MainForm guiForm = new MainForm();
+
+
+        UiModel model = new UiModel();
+        UiView view = new UiView(model);
+        UiController controller = new UiController(model, view);
+
+        view.setVisible(true);
 
     }
 }

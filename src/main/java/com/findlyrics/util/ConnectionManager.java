@@ -8,8 +8,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
- * Created by Padonag on 21.07.2014.
- */
+* Created by Padonag on 21.07.2014.
+*/
 public class ConnectionManager {
     private static final Logger log = Logger.getLogger(ConnectionManager.class);
     private static Connection connection;
