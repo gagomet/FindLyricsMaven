@@ -7,7 +7,7 @@ import com.findlyrics.service.ILyricService;
 import com.findlyrics.service.impl.DBLyricsService;
 import com.findlyrics.ui.ShowLyricsFrame;
 import com.findlyrics.ui.model.UiModel;
-import com.findlyrics.ui.view.UiView;
+import com.findlyrics.ui.view.UiViewer;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -22,11 +22,11 @@ import java.util.ResourceBundle;
  */
 public class UiController {
     private UiModel model;
-    private UiView view;
+    private UiViewer view;
     private ResourceBundle messages;
 
 
-    public UiController(UiModel model, UiView view) {
+    public UiController(UiModel model, UiViewer view) {
         messages = ResourceBundle.getBundle("text", Locale.ENGLISH);
         this.model = model;
         this.view = view;

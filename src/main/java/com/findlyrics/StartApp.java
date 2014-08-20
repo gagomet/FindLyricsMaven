@@ -2,7 +2,7 @@ package com.findlyrics;
 
 import com.findlyrics.ui.controller.UiController;
 import com.findlyrics.ui.model.UiModel;
-import com.findlyrics.ui.view.UiView;
+import com.findlyrics.ui.view.UiViewer;
 import com.findlyrics.util.ArgsUtil;
 
 /**
@@ -17,7 +17,7 @@ public class StartApp {
 
 
         UiModel model = new UiModel();
-        UiView view = new UiView(model);
+        UiViewer view = new UiViewer(model);
         UiController controller = new UiController(model, view);
 
         view.setVisible(true);
