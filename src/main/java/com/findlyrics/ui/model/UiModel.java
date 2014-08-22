@@ -1,7 +1,9 @@
 package com.findlyrics.ui.model;
 
 
+import com.findlyrics.exceptions.DbConnectionException;
 import com.findlyrics.service.ILyricService;
+
 
 /**
  * Created by Padonag on 19.08.2014.
@@ -11,7 +13,7 @@ public class UiModel {
     private OutputTableModel outputTableModel;
 
 
-    public void createTableModel(ILyricService service, String query){
+    public void createTableModel(ILyricService service, String query) throws DbConnectionException{
         dto = service.getDTO(query);
         outputTableModel = new OutputTableModel(dto);
     }

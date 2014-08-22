@@ -43,20 +43,20 @@ public class UiViewer extends JFrame {
     private void createForm() {
 
         FlowLayout fl = new FlowLayout();
-        this.setLayout(fl);
-        this.add(queryField);
-        this.add(searchButton);
-        this.add(resultTable);
+        setLayout(fl);
+        add(queryField);
+        add(searchButton);
+        add(resultTable);
 
 
     }
 
-    public void addPaginationButtons(){
-    previousPage = new JButton(messages.getString("pagedown.button.name"));
-    nextPage = new JButton(messages.getString("pageup.button.name"));
-        this.add(previousPage);
-        this.add(nextPage);
-        this.repaint();
+    public void addPaginationButtons() {
+        previousPage = new JButton(messages.getString("pagedown.button.name"));
+        nextPage = new JButton(messages.getString("pageup.button.name"));
+        add(previousPage);
+        add(nextPage);
+        repaint();
     }
 
 
@@ -89,13 +89,11 @@ public class UiViewer extends JFrame {
         return nextPage;
     }
 
-    public JButton getSearchButton() {
-        return searchButton;
-    }
-
-    public void setSearchButton(JButton searchButton) {
-        this.searchButton = searchButton;
-        validate();
+    public void setSearchButton(String buttonName) {
+        searchButton.setVisible(false);
+        remove(searchButton);
+        searchButton = new JButton(buttonName);
+        this.add(searchButton);
         this.repaint();
     }
 

@@ -1,5 +1,6 @@
 package com.findlyrics.db.dao.impl;
 
+import com.findlyrics.exceptions.DbConnectionException;
 import com.findlyrics.util.ConnectionManager;
 import com.findlyrics.db.dao.ISongDAO;
 import com.findlyrics.db.model.Song;
@@ -28,7 +29,7 @@ public class SongDAO implements ISongDAO {
     }
 
     @Override
-    public List<Song> getSongs(String lyrics) {
+    public List<Song> getSongs(String lyrics) throws DbConnectionException {
         List<Song> result = new ArrayList<Song>();
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -39,8 +40,7 @@ public class SongDAO implements ISongDAO {
             result = parseResultSet(resultSet);
 
         } catch (SQLException e) {
-            e.printStackTrace();
-            log.debug("Throwing exception", e);
+           log.debug("Throwing exception", e);
         } finally {
             SqlCloser.closeResultSet(resultSet);
             SqlCloser.closePreparedStatement(preparedStatement);
@@ -51,7 +51,7 @@ public class SongDAO implements ISongDAO {
     }
 
     @Override
-    public void addSong(Song song) {
+    public void addSong(Song song) throws DbConnectionException{
         PreparedStatement preparedStatement = null;
 
         try {
@@ -61,7 +61,6 @@ public class SongDAO implements ISongDAO {
             preparedStatement.setString(3, song.getLyrics());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
             log.debug("Throwing exception", e);
         } finally {
             SqlCloser.closePreparedStatement(preparedStatement);

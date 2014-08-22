@@ -1,5 +1,6 @@
 package com.findlyrics.util;
 
+import com.findlyrics.exceptions.DbConnectionException;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.apache.log4j.Logger;
 
@@ -16,7 +17,7 @@ public class ConnectionManager {
     private ComboPooledDataSource c3p0Pool;
     private static volatile ConnectionManager instance;
 
-    private ConnectionManager() {
+    private ConnectionManager()  {
         try {
             this.c3p0Pool = new ComboPooledDataSource();
             c3p0Pool.setDriverClass(PropertiesManager.getProperty("db.driver"));
@@ -26,19 +27,21 @@ public class ConnectionManager {
             connection = c3p0Pool.getConnection();
 
         } catch (SQLException e) {
-            e.printStackTrace();
             log.debug("Throwing exception", e);
+            //            throw new DbConnectionException("Db connection is dead!");
         } catch (PropertyVetoException e) {
-            e.printStackTrace();
             log.debug("Throwing exception", e);
         }
     }
 
-    private static class Holder {
+    private static class Holder  {
         private static final ConnectionManager INSTANCE = new ConnectionManager();
     }
 
-    public Connection getConnection() {
+    public Connection getConnection() throws DbConnectionException{
+      if(connection == null){
+          throw new DbConnectionException("Db connection is dead!");
+      }
         return connection;
     }
 

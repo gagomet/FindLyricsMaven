@@ -4,6 +4,7 @@ import com.findlyrics.db.dao.impl.ArtistDAO;
 import com.findlyrics.db.dao.impl.SongDAO;
 import com.findlyrics.db.model.Artist;
 import com.findlyrics.db.model.Song;
+import com.findlyrics.exceptions.DbConnectionException;
 import com.findlyrics.service.ILyricService;
 import com.findlyrics.ui.model.LyricItemDTO;
 import com.findlyrics.ui.model.LyricsDTO;
@@ -29,7 +30,7 @@ public class DBLyricsService implements ILyricService {
     }
 
 
-    private List<Artist> getArtist(String text) {
+    private List<Artist> getArtist(String text) throws DbConnectionException{
         Map<Long, Artist> resultMap = new HashMap<Long, Artist>();
         List<Song> songList = songDAO.getSongs(text);
 
@@ -48,7 +49,7 @@ public class DBLyricsService implements ILyricService {
         return new LinkedList<Artist>(resultMap.values());
     }
 
-    public LyricsDTO getDTO(String query) {
+    public LyricsDTO getDTO(String query) throws DbConnectionException{
         LyricsDTO dto = new LyricsDTO();
         List<Artist> inputData = getArtist(query);
         List<LyricItemDTO> lyricItemDTOs = new LinkedList<LyricItemDTO>();
