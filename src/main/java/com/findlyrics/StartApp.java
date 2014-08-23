@@ -14,7 +14,7 @@ public class StartApp {
 
 
     public static void main(String[] args) {
-        ArgsUtil.setParameters(args[0]);
+                ArgsUtil.setParameters(args[0]);
 
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -25,6 +25,8 @@ public class StartApp {
                 view.setVisible(true);
             }
         });
+
+
 
 
 

@@ -10,7 +10,6 @@ import com.findlyrics.ui.view.ShowLyricsFrame;
 import com.findlyrics.ui.view.UiViewer;
 import org.apache.log4j.Logger;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -39,11 +38,12 @@ public class UiController {
         messages = ResourceBundle.getBundle("text", Locale.ENGLISH);
         this.model = model;
         this.view = view;
-        view.addButtonsListener(new SearchButtonListener());
+        view.addSearchButtonsListener(new SearchButtonListener());
+        view.addTextClearButtonListener(new ClearTextListener());
 
     }
 
-    private void addPagination(){
+    private void addPagination() {
         if (model.getOutputTableModel().getPageCount() > 1) {
             if (view.getPreviousPage() == null && view.getNextPage() == null) {
                 view.addPaginationButtons();
@@ -53,38 +53,39 @@ public class UiController {
         }
     }
 
-    private void addTable(MouseAdapter adapter){
+    private void addTable(MouseAdapter adapter) {
         if (model.getOutputTableModel().getPageCount() != 0) {
             view.showTable();
             view.addTableMouseAdapter(adapter);
         }
     }
 
-    private class SearchButtonListener implements ActionListener{
+    private class SearchButtonListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            if(EMPTY_STRING.equals(view.getQuery())){
+            if (EMPTY_STRING.equals(view.getQuery())) {
                 view.showError(messages.getString("error.message"));
+            } else {
+                ILyricService dbService = new DBLyricsService();
+                try {
+                    model.createTableModel(dbService, view.getQuery());
+                } catch (DbConnectionException e1) {
+                    log.debug("Throwing exception", e1);
+                }
+                addPagination();
+                addTable(new TableMouseAdapter());
+                view.setSearchButton(messages.getString("search.more.button.name"));
+                view.addSearchButtonsListener(new SearchMoreButtonListener());
             }
-            ILyricService dbService = new DBLyricsService();
-            try {
-                model.createTableModel(dbService, view.getQuery());
-            } catch (DbConnectionException e1) {
-                log.debug("Throwing exception", e1);
-            }
-            addPagination();
-            addTable(new TableMouseAdapter());
-            view.setSearchButton(messages.getString("search.more.button.name"));
-            view.addButtonsListener(new SearchMoreButtonListener());
         }
     }
 
-    private class SearchMoreButtonListener implements ActionListener{
+    private class SearchMoreButtonListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            if(EMPTY_STRING.equals(view.getQuery())){
+            if (EMPTY_STRING.equals(view.getQuery())) {
                 view.showError(messages.getString("error.message"));
             }
             ILyricService httpService = new HttpLyricsService();
@@ -96,15 +97,15 @@ public class UiController {
             addPagination();
             addTable(new TableMouseAdapter());
             view.setSearchButton(messages.getString("search.once.more.button.name"));
-            view.addButtonsListener(new SearchOnceMoreButtonListener());
+            view.addSearchButtonsListener(new SearchOnceMoreButtonListener());
         }
     }
 
-    private class SearchOnceMoreButtonListener implements ActionListener{
+    private class SearchOnceMoreButtonListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            if(EMPTY_STRING.equals(view.getQuery())){
+            if (EMPTY_STRING.equals(view.getQuery())) {
                 view.showError(messages.getString("error.message"));
             }
             ILyricService restService = new RestLyricsService();
@@ -115,6 +116,14 @@ public class UiController {
             }
             addPagination();
             addTable(new TableWithUrlMouseAdapter());
+        }
+    }
+
+    private class ClearTextListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            view.setTextInQueryField(EMPTY_STRING);
         }
     }
 
