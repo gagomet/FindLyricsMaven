@@ -3,7 +3,7 @@ package com.findlyrics.http.service;
 import com.findlyrics.db.model.Artist;
 import com.findlyrics.db.model.Song;
 import com.findlyrics.http.type.ForArguments;
-import com.findlyrics.service.ILyricService;
+import com.findlyrics.db.service.ILyricService;
 import com.findlyrics.ui.model.LyricItemDTO;
 import com.findlyrics.ui.model.LyricsDTO;
 import org.apache.commons.io.IOUtils;

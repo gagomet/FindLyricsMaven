@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.findlyrics.db.model.Artist;
 import com.findlyrics.db.model.Song;
 import com.findlyrics.rest.model.SongPojo;
-import com.findlyrics.service.ILyricService;
+import com.findlyrics.db.service.ILyricService;
 import com.findlyrics.ui.model.LyricItemDTO;
 import com.findlyrics.ui.model.LyricsDTO;
 import org.apache.http.HttpEntity;

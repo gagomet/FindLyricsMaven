@@ -6,12 +6,12 @@ CREATE TABLE `artists` (
 
 
 CREATE TABLE `songs` (
-  `id_songs` bigint(20) NOT NULL AUTO_INCREMENT,
-  `id_artist` bigint(20) DEFAULT NULL,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `artist_id` bigint(20) DEFAULT NULL,
   `song_name` tinytext NOT NULL,
   `lyrics` text NOT NULL,
-  PRIMARY KEY (`id_songs`),
-  KEY `art_id_idx` (`id_artist`),
-  CONSTRAINT `id_art` FOREIGN KEY (`id_artist`) REFERENCES `artists` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6373 DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`id`),
+  KEY `art_id_idx` (`artist_id`),
+  CONSTRAINT `id_art` FOREIGN KEY (`artist_id`) REFERENCES `artists` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=6374 DEFAULT CHARSET=utf8;
 

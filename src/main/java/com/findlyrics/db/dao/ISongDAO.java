@@ -10,5 +10,5 @@ import java.util.List;
  */
 public interface ISongDAO {
     public List<Song> getSongs(String lyrics) throws DbConnectionException;
-    public void addSong(Song song) throws DbConnectionException;
+    public boolean addSong(Song song) throws DbConnectionException;
 }

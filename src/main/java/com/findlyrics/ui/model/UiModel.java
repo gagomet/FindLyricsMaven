@@ -2,7 +2,7 @@ package com.findlyrics.ui.model;
 
 
 import com.findlyrics.exceptions.DbConnectionException;
-import com.findlyrics.service.ILyricService;
+import com.findlyrics.db.service.ILyricService;
 
 
 /**

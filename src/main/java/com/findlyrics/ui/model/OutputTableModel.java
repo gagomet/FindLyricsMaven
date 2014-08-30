@@ -25,7 +25,7 @@ public class OutputTableModel extends AbstractTableModel {
 
         this.pageCount = (results.size() + VISIBLE_ON_PAGE - 1) / VISIBLE_ON_PAGE;
         this.pageData = createPageData();
-        log.info("Creating Page Data in Constructor : " + pageData.toString());
+//        log.info("Creating Page Data in Constructor : " + pageData.toString());
     }
 
     @Override

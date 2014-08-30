@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
@@ -19,8 +20,7 @@ import java.util.ResourceBundle;
 public class UiViewer extends JFrame {
     private static final int FRAME_WIDTH = 800;
     private static final int FRAME_HEIGHT = 600;
-    private static final String BACKGROUND_IMAGE = "/resources/bground.jpg";
-
+    
     private ResourceBundle messages = ResourceBundle.getBundle("text", Locale.ENGLISH);
 
     private JTextField queryField;
@@ -32,14 +32,12 @@ public class UiViewer extends JFrame {
     private JPanel queryPanel;
     private JPanel paginationPanel;
     private JPanel resultTablePanel;
-    private JPanel bgPanel;
+
 
     private UiModel model;
 
     public UiViewer(UiModel model) {
 
-        bgPanel = new PaneWithBackground();
-        this.setContentPane(bgPanel);
         this.model = model;
         this.queryField = new JTextField(50);
         this.searchButton = new JButton(messages.getString("search.button.name"));
@@ -55,6 +53,7 @@ public class UiViewer extends JFrame {
     }
 
     private void createForm(){
+
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
         queryPanel = new JPanel();
         paginationPanel = new JPanel();
@@ -141,26 +140,5 @@ public class UiViewer extends JFrame {
         resultTablePanel.repaint();
     }
 
-    private class PaneWithBackground extends JPanel{
-        //TODO not working. Need to fix
-
-        Image bgImage;
-        public PaneWithBackground() {
-            MediaTracker mt = new MediaTracker(this);
-            bgImage = Toolkit.getDefaultToolkit().getImage(BACKGROUND_IMAGE);
-            mt.addImage(bgImage, 0);
-            try {
-                mt.waitForAll();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            g.drawImage(bgImage, 1, 1, null);
-
-        }
-    }
 
 }

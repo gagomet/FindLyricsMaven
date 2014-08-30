@@ -1,15 +1,18 @@
 package com.findlyrics.ui.controller;
 
+import com.findlyrics.db.service.ILyricService;
+import com.findlyrics.db.service.impl.DBLyricsService;
 import com.findlyrics.exceptions.DbConnectionException;
 import com.findlyrics.http.service.HttpLyricsService;
 import com.findlyrics.rest.model.service.RestLyricsService;
-import com.findlyrics.service.ILyricService;
-import com.findlyrics.service.impl.DBLyricsService;
+import com.findlyrics.ui.model.LyricItemDTO;
+import com.findlyrics.ui.model.OutputTableModel;
 import com.findlyrics.ui.model.UiModel;
 import com.findlyrics.ui.view.ShowLyricsFrame;
 import com.findlyrics.ui.view.UiViewer;
 import org.apache.log4j.Logger;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -74,7 +77,7 @@ public class UiController {
                     log.debug("Throwing exception", e1);
                 }
                 addPagination();
-                addTable(new TableMouseAdapter());
+                addTable(new TableMouseAdapterViewOnly());
                 view.setSearchButton(messages.getString("search.more.button.name"));
                 view.addSearchButtonsListener(new SearchMoreButtonListener());
             }
@@ -150,7 +153,7 @@ public class UiController {
         }
     }
 
-    private class TableMouseAdapter extends MouseAdapter {
+    private class TableMouseAdapterViewOnly extends MouseAdapter {
         @Override
         public void mouseClicked(MouseEvent e) {
             super.mouseClicked(e);
@@ -159,6 +162,27 @@ public class UiController {
             if (row >= 0 && column == 2) {
                 String text = (String) model.getOutputTableModel().getValueAt(view.getResultTable().getSelectedRow(), view.getResultTable().getSelectedColumn());
                 new ShowLyricsFrame(text);
+            }
+        }
+    }
+
+    private class TableMouseAdapter extends MouseAdapter {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            super.mouseClicked(e);
+            int row = view.getResultTable().rowAtPoint(e.getPoint());
+            int column = view.getResultTable().columnAtPoint(e.getPoint());
+            if (row >= 0 && column == 2) {
+                try {
+                    String text = (String) model.getOutputTableModel().getValueAt(view.getResultTable().getSelectedRow(), view.getResultTable().getSelectedColumn());
+                    new ShowLyricsFrame(text);
+                    DBLyricsService service = new DBLyricsService();
+                    LyricItemDTO itemDTO = getDtoToAdd(view.getResultTable(), model.getOutputTableModel());
+                    service.addSongToDB(itemDTO);
+                } catch (DbConnectionException e1) {
+                    log.debug("Throwing exception", e1);
+                    //TODO handle exception and send it to UI
+                }
             }
         }
     }
@@ -173,12 +197,27 @@ public class UiController {
                 String htmlPath = (String) model.getOutputTableModel().getValueAt(view.getResultTable().getSelectedRow(), view.getResultTable().getSelectedColumn());
                 try {
                     Desktop.getDesktop().browse(new URI(htmlPath));
+                    DBLyricsService service = new DBLyricsService();
+                    LyricItemDTO itemDTO = getDtoToAdd(view.getResultTable(), model.getOutputTableModel());
+                    service.addSongToDB(itemDTO);
+
                 } catch (IOException e1) {
                     log.debug("Throwing exception", e1);
                 } catch (URISyntaxException e1) {
                     log.debug("Throwing exception", e1);
+                } catch (DbConnectionException e1) {
+                    log.debug("Throwing exception", e1);
+                    //TODO handle exception and send it to UI
                 }
             }
         }
+    }
+
+    private LyricItemDTO getDtoToAdd(JTable resultTable, OutputTableModel tableModel) {
+        int rowNumber = resultTable.getSelectedRow();
+        String artistName = (String) tableModel.getValueAt(rowNumber, 0);
+        String songTitle = (String) tableModel.getValueAt(rowNumber, 1);
+        String lyrics = (String) tableModel.getValueAt(rowNumber, 2);
+        return new LyricItemDTO(artistName, songTitle, lyrics);
     }
 }

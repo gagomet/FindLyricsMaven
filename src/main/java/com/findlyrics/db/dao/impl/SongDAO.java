@@ -1,9 +1,9 @@
 package com.findlyrics.db.dao.impl;
 
-import com.findlyrics.exceptions.DbConnectionException;
-import com.findlyrics.util.ConnectionManager;
 import com.findlyrics.db.dao.ISongDAO;
 import com.findlyrics.db.model.Song;
+import com.findlyrics.exceptions.DbConnectionException;
+import com.findlyrics.util.ConnectionManager;
 import com.findlyrics.util.SqlCloser;
 import org.apache.log4j.Logger;
 
@@ -23,6 +23,7 @@ public class SongDAO implements ISongDAO {
     private static final Logger log = Logger.getLogger(SongDAO.class);
     private static final String getSongsFromDBQuery = "SELECT * FROM songs WHERE songs.lyrics LIKE ?";
     private static final String addSongsToDBQuery = "INSERT INTO songs(artist_id, song_name, lyrics) VALUES(?, ?, ?)";
+    private static final String checkSongByName = "SELECT * FROM songs WHERE songs.song_name = ?";
 
     public SongDAO() {
 
@@ -40,18 +41,18 @@ public class SongDAO implements ISongDAO {
             result = parseResultSet(resultSet);
 
         } catch (SQLException e) {
-           log.debug("Throwing exception", e);
+            log.debug("Throwing exception ", e);
         } finally {
             SqlCloser.closeResultSet(resultSet);
             SqlCloser.closePreparedStatement(preparedStatement);
 
         }
-        log.info("Creating List<Song> object" + result.toString());
+//        log.info("Creating List<Song> object" + result.toString());
         return result;
     }
 
     @Override
-    public void addSong(Song song) throws DbConnectionException{
+    public boolean addSong(Song song) throws DbConnectionException {
         PreparedStatement preparedStatement = null;
 
         try {
@@ -60,8 +61,10 @@ public class SongDAO implements ISongDAO {
             preparedStatement.setString(2, song.getTitle());
             preparedStatement.setString(3, song.getLyrics());
             preparedStatement.executeUpdate();
+            return true;
         } catch (SQLException e) {
-            log.debug("Throwing exception", e);
+            log.debug("Throwing exception ", e);
+            return false;
         } finally {
             SqlCloser.closePreparedStatement(preparedStatement);
         }
@@ -80,5 +83,23 @@ public class SongDAO implements ISongDAO {
             result.add(currentSong);
         }
         return result;
+    }
+
+    public boolean isSongAlreadyInDB(Song song) {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            preparedStatement = ConnectionManager.getInstance().getConnection().prepareStatement(checkSongByName);
+            preparedStatement.setString(1, song.getTitle());
+            resultSet = preparedStatement.executeQuery();
+            if(resultSet.next()){
+                return true;
+            }
+        } catch (SQLException e) {
+            log.debug("Throwing exception ", e);
+        } catch (DbConnectionException e) {
+            log.debug("Throwing exception ", e);
+        }
+        return false;
     }
 }

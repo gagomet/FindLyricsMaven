@@ -1,4 +1,4 @@
-package com.findlyrics.service;
+package com.findlyrics.db.service;
 
 import com.findlyrics.exceptions.DbConnectionException;
 import com.findlyrics.ui.model.LyricsDTO;
