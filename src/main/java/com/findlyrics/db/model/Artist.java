@@ -10,10 +10,12 @@ public class Artist {
     Long id;
     private String name;
     private List<Song> repertoir = new ArrayList<Song>();
+
     public Artist() {
     }
-    public Artist(String name){
-        this.name=name;
+
+    public Artist(String name) {
+        this.name = name;
     }
 
     public String getName() {
@@ -38,14 +40,10 @@ public class Artist {
         if (!(o instanceof Artist)) return false;
 
         Artist artist = (Artist) o;
-
-        if (!id.equals(artist.id)) return false;
-        if (!name.equals(artist.name)) return false;
-
-        return true;
+        return id.equals(artist.id) && name.equals(artist.name);
     }
 
-    public void addSong(Song song){
+    public void addSong(Song song) {
         this.repertoir.add(song);
     }
 

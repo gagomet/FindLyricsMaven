@@ -14,13 +14,13 @@ public class ShowLyricsFrame extends JFrame {
         this.lyrics = lyrics;
         createFrame();
         pack();
-        this.setLocationRelativeTo(null);
-        this.setSize(screenSize.width / 2, screenSize.height / 2);
+        setLocationRelativeTo(null);
+        setSize(screenSize.width / 2, screenSize.height / 2);
         setVisible(true);
     }
 
     private void createFrame() {
-        this.setDefaultCloseOperation(HIDE_ON_CLOSE);
+        setDefaultCloseOperation(HIDE_ON_CLOSE);
         JPanel textPanel = new JPanel();
         textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
         JTextArea textArea = new JTextArea(lyrics);
@@ -28,12 +28,11 @@ public class ShowLyricsFrame extends JFrame {
         textArea.setCaretPosition(0);
         JScrollPane scrollPane = new JScrollPane(textArea);
         textPanel.add(scrollPane);
-        this.add(textPanel);
-        this.add(scrollPane);
+        add(textPanel);
+        add(scrollPane);
     }
 
-    private void closeFrame(){
-        this.setVisible(false);
-
+    private void closeFrame() {
+        setVisible(false);
     }
 }

@@ -45,7 +45,6 @@ public class SongDAO implements ISongDAO {
         } finally {
             SqlCloser.closeResultSet(resultSet);
             SqlCloser.closePreparedStatement(preparedStatement);
-
         }
 //        log.info("Creating List<Song> object" + result.toString());
         return result;
@@ -92,7 +91,7 @@ public class SongDAO implements ISongDAO {
             preparedStatement = ConnectionManager.getInstance().getConnection().prepareStatement(checkSongByName);
             preparedStatement.setString(1, song.getTitle());
             resultSet = preparedStatement.executeQuery();
-            if(resultSet.next()){
+            if (resultSet.next()) {
                 return true;
             }
         } catch (SQLException e) {

@@ -11,15 +11,15 @@ public enum ForArguments {
 
     private final String name;
 
-    private ForArguments(String arg){
+    private ForArguments(String arg) {
         name = arg;
     }
 
-    public boolean equalsName(String otherName){
-        return (otherName == null)? false:name.equals(otherName);
+    public boolean equalsName(String otherName) {
+        return (otherName == null) ? false : name.equals(otherName);
     }
 
-    public String toString(){
+    public String toString() {
         return name;
     }
 }

@@ -1,16 +1,10 @@
 package com.findlyrics.ui.view;
 
 import com.findlyrics.ui.model.UiModel;
-import com.findlyrics.util.PropertiesManager;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -20,7 +14,7 @@ import java.util.ResourceBundle;
 public class UiViewer extends JFrame {
     private static final int FRAME_WIDTH = 800;
     private static final int FRAME_HEIGHT = 600;
-    
+
     private ResourceBundle messages = ResourceBundle.getBundle("text", Locale.ENGLISH);
 
     private JTextField queryField;
@@ -32,8 +26,6 @@ public class UiViewer extends JFrame {
     private JPanel queryPanel;
     private JPanel paginationPanel;
     private JPanel resultTablePanel;
-
-
     private UiModel model;
 
     public UiViewer(UiModel model) {
@@ -44,15 +36,14 @@ public class UiViewer extends JFrame {
         this.clearTextButton = new JButton(messages.getString("clear.text.button"));
         this.resultTable = new JTable();
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        this.setLocationRelativeTo(null);
+        setLocationRelativeTo(null);
         createForm();
         pack();
-        this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
-        this.setResizable(false);
-
+        setSize(FRAME_WIDTH, FRAME_HEIGHT);
+        setResizable(false);
     }
 
-    private void createForm(){
+    private void createForm() {
 
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
         queryPanel = new JPanel();
@@ -61,11 +52,9 @@ public class UiViewer extends JFrame {
         queryPanel.add(queryField);
         queryPanel.add(clearTextButton);
         queryPanel.add(searchButton);
-        this.add(queryPanel, this);
-        this.add(paginationPanel, this);
-        this.add(resultTablePanel, this);
-
-
+        add(queryPanel, this);
+        add(paginationPanel, this);
+        add(resultTablePanel, this);
     }
 
     public void addPaginationButtons() {
@@ -76,12 +65,13 @@ public class UiViewer extends JFrame {
         repaint();
     }
 
-
     public void addSearchButtonsListener(ActionListener listener) {
         searchButton.addActionListener(listener);
     }
 
-    public void addTextClearButtonListener(ActionListener listener){clearTextButton.addActionListener(listener);}
+    public void addTextClearButtonListener(ActionListener listener) {
+        clearTextButton.addActionListener(listener);
+    }
 
     public void addPaginationListener(ActionListener listener) {
         previousPage.addActionListener(listener);
@@ -96,7 +86,7 @@ public class UiViewer extends JFrame {
         return queryField.getText();
     }
 
-    public void setTextInQueryField(String text){
+    public void setTextInQueryField(String text) {
         queryField.setText(text);
     }
 
@@ -139,6 +129,5 @@ public class UiViewer extends JFrame {
         validate();
         resultTablePanel.repaint();
     }
-
 
 }

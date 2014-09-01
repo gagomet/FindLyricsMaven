@@ -8,5 +8,6 @@ import com.findlyrics.exceptions.DbConnectionException;
  */
 public interface IArtistDAO {
     public Artist getArtist(Long id) throws DbConnectionException;
+
     public Long addArtist(Artist artist) throws DbConnectionException;
 }

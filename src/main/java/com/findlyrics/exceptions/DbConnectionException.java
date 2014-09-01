@@ -5,8 +5,7 @@ package com.findlyrics.exceptions;
  */
 public class DbConnectionException extends Exception {
 
-    public DbConnectionException(String errorMsg){
+    public DbConnectionException(String errorMsg) {
         super(errorMsg);
     }
-
 }

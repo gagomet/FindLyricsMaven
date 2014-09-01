@@ -9,15 +9,14 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
-* Created by Padonag on 21.07.2014.
-*/
+ * Created by Padonag on 21.07.2014.
+ */
 public class ConnectionManager {
     private static final Logger log = Logger.getLogger(ConnectionManager.class);
     private static Connection connection;
     private ComboPooledDataSource c3p0Pool;
-    private static volatile ConnectionManager instance;
 
-    private ConnectionManager()  {
+    private ConnectionManager() {
         try {
             this.c3p0Pool = new ComboPooledDataSource();
             c3p0Pool.setDriverClass(PropertiesManager.getProperty("db.driver"));
@@ -34,14 +33,14 @@ public class ConnectionManager {
         }
     }
 
-    private static class Holder  {
+    private static class Holder {
         private static final ConnectionManager INSTANCE = new ConnectionManager();
     }
 
-    public Connection getConnection() throws DbConnectionException{
-      if(connection == null){
-          throw new DbConnectionException("Db connection is dead!");
-      }
+    public Connection getConnection() throws DbConnectionException {
+        if (connection == null) {
+            throw new DbConnectionException("Db connection is dead!");
+        }
         return connection;
     }
 

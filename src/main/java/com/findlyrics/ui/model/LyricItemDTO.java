@@ -12,7 +12,7 @@ public class LyricItemDTO {
     private String songName;
     private String lyrics;
 
-    public LyricItemDTO(Artist artist, Song song){
+    public LyricItemDTO(Artist artist, Song song) {
         this.artistName = artist.getName();
         this.songName = song.getTitle();
         this.lyrics = song.getLyrics();

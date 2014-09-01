@@ -57,7 +57,7 @@ public class DBLyricsService implements ILyricService {
             log.info("Entry added to DB " + song.toString());
             return true;
         } else {
-            if(songDAO.isSongAlreadyInDB(song)){
+            if (songDAO.isSongAlreadyInDB(song)) {
                 return false;
             }
             song.setArtistId(artistID);
@@ -65,10 +65,7 @@ public class DBLyricsService implements ILyricService {
             log.info("Entry added to DB " + song.toString() + " into repertoir of existing artist with ID " + artistID);
             return true;
         }
-
-
     }
-
 
     private List<Artist> getArtist(String text) throws DbConnectionException {
         Map<Long, Artist> resultMap = new HashMap<Long, Artist>();
@@ -88,7 +85,5 @@ public class DBLyricsService implements ILyricService {
         }
         return new LinkedList<Artist>(resultMap.values());
     }
-
-
 
 }

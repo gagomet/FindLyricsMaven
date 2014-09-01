@@ -1,6 +1,5 @@
 package com.findlyrics.ui.model;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -12,6 +11,7 @@ public class LyricsDTO {
 
     public LyricsDTO() {
     }
+
     public List<LyricItemDTO> getSearchResults() {
         return searchResults;
     }

@@ -23,11 +23,9 @@ public class ArtistDAO implements IArtistDAO {
     private static final String addArtistToDBQuery = "INSERT INTO artists (artist_name) VALUES (?)";
     private static final String checkArtistNameInDB = "SELECT * FROM artists WHERE artists.artist_name = ?";
 
-
     public ArtistDAO() {
 
     }
-
 
     @Override
     public Artist getArtist(Long id) throws DbConnectionException {
@@ -44,7 +42,6 @@ public class ArtistDAO implements IArtistDAO {
         } finally {
             SqlCloser.closeResultSet(resultSet);
             SqlCloser.closePreparedStatement(preparedStatement);
-
         }
         return artist;
     }
@@ -52,20 +49,20 @@ public class ArtistDAO implements IArtistDAO {
     @Override
     public Long addArtist(Artist artist) throws DbConnectionException {
         PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
+        ResultSet resultSet;
         try {
             preparedStatement = ConnectionManager.getInstance().getConnection().prepareStatement(addArtistToDBQuery, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, artist.getName());
             preparedStatement.executeUpdate();
             resultSet = preparedStatement.getGeneratedKeys();
-            if(resultSet.next()){
-            return resultSet.getLong(1);}
+            if (resultSet.next()) {
+                return resultSet.getLong(1);
+            }
         } catch (SQLException e) {
             log.debug("Throwing exception ", e);
             return null;
         } finally {
             SqlCloser.closePreparedStatement(preparedStatement);
-
         }
         return null;
     }
@@ -74,7 +71,6 @@ public class ArtistDAO implements IArtistDAO {
         Artist artist = new Artist();
         while (resultSet.next()) {
             artist = new Artist(resultSet.getString("artist_name"));
-
         }
 
         return artist;
