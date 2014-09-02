@@ -1,15 +1,17 @@
-package main.java.com.findlyrics.ui.controller;
+package com.findlyrics.ui.controller;
 
-import main.java.com.findlyrics.db.service.ILyricService;
-import main.java.com.findlyrics.db.service.impl.DBLyricsService;
-import main.java.com.findlyrics.exceptions.DbConnectionException;
-import main.java.com.findlyrics.http.service.HttpLyricsService;
-import main.java.com.findlyrics.rest.service.RestLyricsService;
-import main.java.com.findlyrics.ui.model.LyricItemDTO;
-import main.java.com.findlyrics.ui.model.OutputTableModel;
-import main.java.com.findlyrics.ui.model.UiModel;
-import main.java.com.findlyrics.ui.view.ShowLyricsFrame;
-import main.java.com.findlyrics.ui.view.UiViewer;
+import com.findlyrics.db.service.ILyricService;
+import com.findlyrics.db.service.impl.DBLyricsService;
+import com.findlyrics.db.service.impl.LyricServiceFactory;
+import com.findlyrics.exceptions.DbConnectionException;
+import com.findlyrics.http.service.HttpLyricsService;
+import com.findlyrics.rest.service.RestLyricsService;
+import com.findlyrics.type.ServiceType;
+import com.findlyrics.ui.model.LyricItemDTO;
+import com.findlyrics.ui.model.OutputTableModel;
+import com.findlyrics.ui.model.UiModel;
+import com.findlyrics.ui.view.ShowLyricsFrame;
+import com.findlyrics.ui.view.UiViewer;
 import org.apache.log4j.Logger;
 
 import javax.swing.*;
@@ -72,7 +74,8 @@ public class UiController {
             if (EMPTY_STRING.equals(view.getQuery())) {
                 view.showError(messages.getString("error.message"));
             } else {
-                ILyricService dbService = new DBLyricsService();
+//                ILyricService dbService = new DBLyricsService();
+                ILyricService dbService = LyricServiceFactory.getService(ServiceType.DB);
                 try {
                     model.createTableModel(dbService, view.getQuery());
                 } catch (DbConnectionException e1) {
@@ -94,7 +97,8 @@ public class UiController {
             if (EMPTY_STRING.equals(view.getQuery())) {
                 view.showError(messages.getString("error.message"));
             }
-            ILyricService httpService = new HttpLyricsService();
+//            ILyricService httpService = new HttpLyricsService();
+            ILyricService httpService = LyricServiceFactory.getService(ServiceType.HTTP);
             try {
                 model.createTableModel(httpService, view.getQuery());
             } catch (DbConnectionException e1) {
@@ -115,7 +119,8 @@ public class UiController {
             if (EMPTY_STRING.equals(view.getQuery())) {
                 view.showError(messages.getString("error.message"));
             }
-            ILyricService restService = new RestLyricsService();
+//            ILyricService restService = new RestLyricsService();
+            ILyricService restService = LyricServiceFactory.getService(ServiceType.REST);
             try {
                 model.createTableModel(restService, view.getQuery());
             } catch (DbConnectionException e1) {
@@ -136,6 +141,9 @@ public class UiController {
             view.getResultTablePanel().setVisible(false);
             view.setSearchButton(messages.getString("search.button.name"));
             view.addSearchButtonsListener(new SearchButtonListener());
+            model.clearOutputTableModel();
+            //TODO fix the pages count after use this method
+
 
         }
     }
@@ -186,6 +194,7 @@ public class UiController {
                 try {
                     String text = (String) model.getOutputTableModel().getValueAt(view.getResultTable().getSelectedRow(), view.getResultTable().getSelectedColumn());
                     new ShowLyricsFrame(text);
+                    //TODO can't use factory here
                     DBLyricsService service = new DBLyricsService();
                     LyricItemDTO itemDTO = getDtoToAdd(view.getResultTable(), model.getOutputTableModel());
                     service.addSongToDB(itemDTO);
@@ -207,6 +216,7 @@ public class UiController {
                 String htmlPath = (String) model.getOutputTableModel().getValueAt(view.getResultTable().getSelectedRow(), view.getResultTable().getSelectedColumn());
                 try {
                     Desktop.getDesktop().browse(new URI(htmlPath));
+                    //TODO can't use factory here
                     DBLyricsService service = new DBLyricsService();
                     LyricItemDTO itemDTO = getDtoToAdd(view.getResultTable(), model.getOutputTableModel());
                     itemDTO.setLyrics(service.getLyricsFromUrl(htmlPath));

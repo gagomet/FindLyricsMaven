@@ -1,9 +1,9 @@
 package com.findlyrics.db.service;
 
-import main.java.com.findlyrics.db.dao.IArtistDAO;
-import main.java.com.findlyrics.db.dao.impl.ArtistDAO;
-import main.java.com.findlyrics.db.model.Artist;
-import main.java.com.findlyrics.exceptions.DbConnectionException;
+import com.findlyrics.db.dao.IArtistDAO;
+import com.findlyrics.db.dao.impl.ArtistDAO;
+import com.findlyrics.db.model.Artist;
+import com.findlyrics.exceptions.DbConnectionException;
 import org.junit.Assert;
 import org.junit.Test;
 

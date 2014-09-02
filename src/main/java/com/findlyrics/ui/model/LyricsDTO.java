@@ -1,4 +1,4 @@
-package main.java.com.findlyrics.ui.model;
+package com.findlyrics.ui.model;
 
 import java.util.LinkedList;
 import java.util.List;

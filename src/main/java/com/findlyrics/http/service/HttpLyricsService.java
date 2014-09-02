@@ -1,11 +1,11 @@
-package main.java.com.findlyrics.http.service;
+package com.findlyrics.http.service;
 
-import main.java.com.findlyrics.db.model.Artist;
-import main.java.com.findlyrics.db.model.Song;
-import main.java.com.findlyrics.http.type.ForArguments;
-import main.java.com.findlyrics.db.service.ILyricService;
-import main.java.com.findlyrics.ui.model.LyricItemDTO;
-import main.java.com.findlyrics.ui.model.LyricsDTO;
+import com.findlyrics.db.model.Artist;
+import com.findlyrics.db.model.Song;
+import com.findlyrics.type.ForArguments;
+import com.findlyrics.db.service.ILyricService;
+import com.findlyrics.ui.model.LyricItemDTO;
+import com.findlyrics.ui.model.LyricsDTO;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 

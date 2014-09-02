@@ -1,7 +1,7 @@
-package main.java.com.findlyrics.db.dao;
+package com.findlyrics.db.dao;
 
-import main.java.com.findlyrics.db.model.Artist;
-import main.java.com.findlyrics.exceptions.DbConnectionException;
+import com.findlyrics.db.model.Artist;
+import com.findlyrics.exceptions.DbConnectionException;
 
 /**
  * Created by Padonag on 04.08.2014.

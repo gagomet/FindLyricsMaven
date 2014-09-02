@@ -1,13 +1,13 @@
-package main.java.com.findlyrics.db.service.impl;
+package com.findlyrics.db.service.impl;
 
-import main.java.com.findlyrics.db.dao.impl.ArtistDAO;
-import main.java.com.findlyrics.db.dao.impl.SongDAO;
-import main.java.com.findlyrics.db.model.Artist;
-import main.java.com.findlyrics.db.model.Song;
-import main.java.com.findlyrics.db.service.ILyricService;
-import main.java.com.findlyrics.exceptions.DbConnectionException;
-import main.java.com.findlyrics.ui.model.LyricItemDTO;
-import main.java.com.findlyrics.ui.model.LyricsDTO;
+import com.findlyrics.db.dao.impl.ArtistDAO;
+import com.findlyrics.db.dao.impl.SongDAO;
+import com.findlyrics.db.model.Artist;
+import com.findlyrics.db.model.Song;
+import com.findlyrics.db.service.ILyricService;
+import com.findlyrics.exceptions.DbConnectionException;
+import com.findlyrics.ui.model.LyricItemDTO;
+import com.findlyrics.ui.model.LyricsDTO;
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

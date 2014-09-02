@@ -1,6 +1,6 @@
-package main.java.com.findlyrics.ui.view;
+package com.findlyrics.ui.view;
 
-import main.java.com.findlyrics.ui.model.UiModel;
+import com.findlyrics.ui.model.UiModel;
 
 import javax.swing.*;
 import java.awt.event.ActionListener;

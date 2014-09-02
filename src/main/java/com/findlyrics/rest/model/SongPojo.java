@@ -1,4 +1,4 @@
-package main.java.com.findlyrics.rest.model;
+package com.findlyrics.rest.model;
 
 /**
  * Created by Padonag on 10.08.2014.

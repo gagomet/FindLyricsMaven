@@ -1,12 +1,13 @@
-package main.java.com.findlyrics.db.dao.impl;
+package com.findlyrics.db.dao.impl;
 
-import main.java.com.findlyrics.db.dao.ISongDAO;
-import main.java.com.findlyrics.db.model.Song;
-import main.java.com.findlyrics.exceptions.DbConnectionException;
-import main.java.com.findlyrics.util.ConnectionManager;
-import main.java.com.findlyrics.util.SqlCloser;
+import com.findlyrics.db.dao.ISongDAO;
+import com.findlyrics.db.model.Song;
+import com.findlyrics.exceptions.DbConnectionException;
+import com.findlyrics.util.ConnectionManager;
+import com.findlyrics.util.SqlCloser;
 import org.apache.log4j.Logger;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -55,11 +56,15 @@ public class SongDAO implements ISongDAO {
         PreparedStatement preparedStatement = null;
 
         try {
-            preparedStatement = ConnectionManager.getInstance().getConnection().prepareStatement(addSongsToDBQuery);
+            Connection connection = ConnectionManager.getInstance().getConnection();
+            connection.setAutoCommit(false);
+            preparedStatement = connection.prepareStatement(addSongsToDBQuery);
             preparedStatement.setLong(1, song.getArtistId());
             preparedStatement.setString(2, song.getTitle());
             preparedStatement.setString(3, song.getLyrics());
             preparedStatement.executeUpdate();
+            connection.commit();
+            connection.setAutoCommit(true);
             log.info("Entry added to DB " + song.toString());
             return true;
         } catch (SQLException e) {

@@ -1,4 +1,4 @@
-package main.java.com.findlyrics.ui.model;
+package com.findlyrics.ui.model;
 
 import org.apache.log4j.Logger;
 
@@ -19,6 +19,10 @@ public class OutputTableModel extends AbstractTableModel {
     private int pageCount = 0;
     private int currentPage = 0;
     private List<LyricItemDTO> results;
+
+    public OutputTableModel(){
+
+    }
 
     public OutputTableModel(LyricsDTO dto) {
         this.results = dto.getSearchResults();

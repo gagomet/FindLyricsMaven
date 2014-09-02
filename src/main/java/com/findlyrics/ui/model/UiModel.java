@@ -1,7 +1,7 @@
-package main.java.com.findlyrics.ui.model;
+package com.findlyrics.ui.model;
 
-import main.java.com.findlyrics.exceptions.DbConnectionException;
-import main.java.com.findlyrics.db.service.ILyricService;
+import com.findlyrics.db.service.ILyricService;
+import com.findlyrics.exceptions.DbConnectionException;
 
 
 /**
@@ -18,6 +18,10 @@ public class UiModel {
 
     public OutputTableModel getOutputTableModel() {
         return outputTableModel;
+    }
+
+    public void clearOutputTableModel() {
+        outputTableModel = new OutputTableModel();
     }
 
 }

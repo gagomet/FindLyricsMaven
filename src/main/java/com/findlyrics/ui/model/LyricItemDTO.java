@@ -1,8 +1,8 @@
-package main.java.com.findlyrics.ui.model;
+package com.findlyrics.ui.model;
 
 
-import main.java.com.findlyrics.db.model.Artist;
-import main.java.com.findlyrics.db.model.Song;
+import com.findlyrics.db.model.Artist;
+import com.findlyrics.db.model.Song;
 
 /**
  * Created by Padonag on 19.07.2014.
