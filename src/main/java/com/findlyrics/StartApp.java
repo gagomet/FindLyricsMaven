@@ -1,4 +1,4 @@
-package main.java.com.findlyrics;
+package com.findlyrics;
 
 import com.findlyrics.ui.controller.UiController;
 import com.findlyrics.ui.model.UiModel;
