@@ -1,15 +1,15 @@
-package com.findlyrics.ui.controller;
+package main.java.com.findlyrics.ui.controller;
 
-import com.findlyrics.db.service.ILyricService;
-import com.findlyrics.db.service.impl.DBLyricsService;
-import com.findlyrics.exceptions.DbConnectionException;
-import com.findlyrics.http.service.HttpLyricsService;
-import com.findlyrics.rest.model.service.RestLyricsService;
-import com.findlyrics.ui.model.LyricItemDTO;
-import com.findlyrics.ui.model.OutputTableModel;
-import com.findlyrics.ui.model.UiModel;
-import com.findlyrics.ui.view.ShowLyricsFrame;
-import com.findlyrics.ui.view.UiViewer;
+import main.java.com.findlyrics.db.service.ILyricService;
+import main.java.com.findlyrics.db.service.impl.DBLyricsService;
+import main.java.com.findlyrics.exceptions.DbConnectionException;
+import main.java.com.findlyrics.http.service.HttpLyricsService;
+import main.java.com.findlyrics.rest.service.RestLyricsService;
+import main.java.com.findlyrics.ui.model.LyricItemDTO;
+import main.java.com.findlyrics.ui.model.OutputTableModel;
+import main.java.com.findlyrics.ui.model.UiModel;
+import main.java.com.findlyrics.ui.view.ShowLyricsFrame;
+import main.java.com.findlyrics.ui.view.UiViewer;
 import org.apache.log4j.Logger;
 
 import javax.swing.*;
@@ -47,6 +47,7 @@ public class UiController {
     }
 
     private void addPagination() {
+        view.getPaginationPanel().setVisible(true);
         if (model.getOutputTableModel().getPageCount() > 1) {
             if (view.getPreviousPage() == null && view.getNextPage() == null) {
                 view.addPaginationButtons();
@@ -57,6 +58,7 @@ public class UiController {
     }
 
     private void addTable(MouseAdapter adapter) {
+        view.getResultTablePanel().setVisible(true);
         if (model.getOutputTableModel().getPageCount() != 0) {
             view.showTable();
             view.addTableMouseAdapter(adapter);
@@ -75,6 +77,7 @@ public class UiController {
                     model.createTableModel(dbService, view.getQuery());
                 } catch (DbConnectionException e1) {
                     log.debug("Throwing exception", e1);
+                    view.showError(e1.getMessage());
                 }
                 addPagination();
                 addTable(new TableMouseAdapterViewOnly());
@@ -96,6 +99,7 @@ public class UiController {
                 model.createTableModel(httpService, view.getQuery());
             } catch (DbConnectionException e1) {
                 log.debug("Throwing exception", e1);
+                view.showError(e1.getMessage());
             }
             addPagination();
             addTable(new TableMouseAdapter());
@@ -116,6 +120,7 @@ public class UiController {
                 model.createTableModel(restService, view.getQuery());
             } catch (DbConnectionException e1) {
                 log.debug("Throwing exception", e1);
+                view.showError(e1.getMessage());
             }
             addPagination();
             addTable(new TableWithUrlMouseAdapter());
@@ -127,6 +132,11 @@ public class UiController {
         @Override
         public void actionPerformed(ActionEvent e) {
             view.setTextInQueryField(EMPTY_STRING);
+            view.getPaginationPanel().setVisible(false);
+            view.getResultTablePanel().setVisible(false);
+            view.setSearchButton(messages.getString("search.button.name"));
+            view.addSearchButtonsListener(new SearchButtonListener());
+
         }
     }
 
@@ -181,7 +191,7 @@ public class UiController {
                     service.addSongToDB(itemDTO);
                 } catch (DbConnectionException e1) {
                     log.debug("Throwing exception", e1);
-                    //TODO handle exception and send it to UI
+                    view.showError(e1.getMessage());
                 }
             }
         }
@@ -199,15 +209,18 @@ public class UiController {
                     Desktop.getDesktop().browse(new URI(htmlPath));
                     DBLyricsService service = new DBLyricsService();
                     LyricItemDTO itemDTO = getDtoToAdd(view.getResultTable(), model.getOutputTableModel());
+                    itemDTO.setLyrics(service.getLyricsFromUrl(htmlPath));
+                    System.out.println(itemDTO.getLyrics());
                     service.addSongToDB(itemDTO);
 
                 } catch (IOException e1) {
                     log.debug("Throwing exception", e1);
                 } catch (URISyntaxException e1) {
                     log.debug("Throwing exception", e1);
-                } catch (DbConnectionException e1) {
+                }
+                catch (DbConnectionException e1) {
                     log.debug("Throwing exception", e1);
-                    //TODO handle exception and send it to UI
+                    view.showError(e1.getMessage());
                 }
             }
         }

@@ -1,9 +1,9 @@
-package com.findlyrics;
+package main.java.com.findlyrics;
 
-import com.findlyrics.ui.controller.UiController;
-import com.findlyrics.ui.model.UiModel;
-import com.findlyrics.ui.view.UiViewer;
-import com.findlyrics.util.ArgsUtil;
+import main.java.com.findlyrics.ui.controller.UiController;
+import main.java.com.findlyrics.ui.model.UiModel;
+import main.java.com.findlyrics.ui.view.UiViewer;
+import main.java.com.findlyrics.util.ArgsUtil;
 
 import javax.swing.*;
 

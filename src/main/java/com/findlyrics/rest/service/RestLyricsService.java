@@ -1,14 +1,14 @@
-package com.findlyrics.rest.model.service;
+package main.java.com.findlyrics.rest.service;
 
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.findlyrics.db.model.Artist;
-import com.findlyrics.db.model.Song;
-import com.findlyrics.rest.model.SongPojo;
-import com.findlyrics.db.service.ILyricService;
-import com.findlyrics.ui.model.LyricItemDTO;
-import com.findlyrics.ui.model.LyricsDTO;
+import main.java.com.findlyrics.db.model.Artist;
+import main.java.com.findlyrics.db.model.Song;
+import main.java.com.findlyrics.rest.model.SongPojo;
+import main.java.com.findlyrics.db.service.ILyricService;
+import main.java.com.findlyrics.ui.model.LyricItemDTO;
+import main.java.com.findlyrics.ui.model.LyricsDTO;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;

@@ -1,6 +1,6 @@
-package com.findlyrics.ui.view;
+package main.java.com.findlyrics.ui.view;
 
-import com.findlyrics.ui.model.UiModel;
+import main.java.com.findlyrics.ui.model.UiModel;
 
 import javax.swing.*;
 import java.awt.event.ActionListener;
@@ -130,4 +130,11 @@ public class UiViewer extends JFrame {
         resultTablePanel.repaint();
     }
 
+    public JPanel getPaginationPanel() {
+        return paginationPanel;
+    }
+
+    public JPanel getResultTablePanel() {
+        return resultTablePanel;
+    }
 }

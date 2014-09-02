@@ -1,4 +1,4 @@
-package com.findlyrics.ui.model;
+package main.java.com.findlyrics.ui.model;
 
 import org.apache.log4j.Logger;
 

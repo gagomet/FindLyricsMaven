@@ -1,11 +1,11 @@
-package com.findlyrics.http.service;
+package main.java.com.findlyrics.http.service;
 
-import com.findlyrics.db.model.Artist;
-import com.findlyrics.db.model.Song;
-import com.findlyrics.http.type.ForArguments;
-import com.findlyrics.db.service.ILyricService;
-import com.findlyrics.ui.model.LyricItemDTO;
-import com.findlyrics.ui.model.LyricsDTO;
+import main.java.com.findlyrics.db.model.Artist;
+import main.java.com.findlyrics.db.model.Song;
+import main.java.com.findlyrics.http.type.ForArguments;
+import main.java.com.findlyrics.db.service.ILyricService;
+import main.java.com.findlyrics.ui.model.LyricItemDTO;
+import main.java.com.findlyrics.ui.model.LyricsDTO;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
@@ -25,23 +25,16 @@ public class HttpLyricsService implements ILyricService {
     private static final Logger log = Logger.getLogger(HttpLyricsService.class);
     private static final String SERVICE_URL = "http://webservices.lyrdb.com/lookup.php?q=";
     private static final String URL_TO_GET_LYRICS = "http://webservices.lyrdb.com/getlyr.php?q=";
+    private static final String EMPTY_STRING="";
 
-    //TODO make methods private after testing!!!!
+
 
     @Override
     public LyricsDTO getDTO(String query) {
         LyricsDTO dto = new LyricsDTO();
-        String response = getHttpResponse(getRequestUrl(query));
+        String response = getHttpResponse(SERVICE_URL + query + ForArguments.FOR_WORD_IN_LYRICS);
         dto.setSearchResults(parseResponse(response));
         return dto;
-    }
-
-    public String getRequestUrl(String query) {
-        return SERVICE_URL + query + ForArguments.FOR_WORD_IN_LYRICS;
-    }
-
-    public String getLyricsUrl(String id) {
-        return URL_TO_GET_LYRICS + id;
     }
 
     public String getHttpResponse(String request) {
@@ -62,16 +55,21 @@ public class HttpLyricsService implements ILyricService {
         return response;
     }
 
-    public List<LyricItemDTO> parseResponse(String response) {
+    private List<LyricItemDTO> parseResponse(String response) {
         List<LyricItemDTO> result = new LinkedList<LyricItemDTO>();
         for (String currentEntity : response.split("\\r?\\n")) {
             String[] song = currentEntity.split("\\\\");
-            String currentLyrics = getHttpResponse(getLyricsUrl(song[0]));
+            String currentLyrics = trimLyricsResponse(getHttpResponse(URL_TO_GET_LYRICS + song[0]));
             Artist currentArtist = new Artist(song[2]);
             Song currentSong = new Song(song[1], currentLyrics);
             LyricItemDTO currentItem = new LyricItemDTO(currentArtist, currentSong);
             result.add(currentItem);
         }
         return result;
+    }
+
+    private String trimLyricsResponse(String response){
+        String[] trimmedLyrics = response.split("<br />");
+        return trimmedLyrics[2];
     }
 }

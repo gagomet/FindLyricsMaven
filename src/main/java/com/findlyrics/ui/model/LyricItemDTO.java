@@ -1,8 +1,8 @@
-package com.findlyrics.ui.model;
+package main.java.com.findlyrics.ui.model;
 
 
-import com.findlyrics.db.model.Artist;
-import com.findlyrics.db.model.Song;
+import main.java.com.findlyrics.db.model.Artist;
+import main.java.com.findlyrics.db.model.Song;
 
 /**
  * Created by Padonag on 19.07.2014.
@@ -35,6 +35,10 @@ public class LyricItemDTO {
 
     public String getLyrics() {
         return lyrics;
+    }
+
+    public void setLyrics(String lyrics) {
+        this.lyrics = lyrics;
     }
 
     @Override

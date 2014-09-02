@@ -1,6 +1,6 @@
-package com.findlyrics.util;
+package main.java.com.findlyrics.util;
 
-import com.findlyrics.exceptions.DbConnectionException;
+import main.java.com.findlyrics.exceptions.DbConnectionException;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.apache.log4j.Logger;
 

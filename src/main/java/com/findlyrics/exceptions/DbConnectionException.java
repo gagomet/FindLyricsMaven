@@ -1,4 +1,4 @@
-package com.findlyrics.exceptions;
+package main.java.com.findlyrics.exceptions;
 
 /**
  * Created by Padonag on 21.08.2014.

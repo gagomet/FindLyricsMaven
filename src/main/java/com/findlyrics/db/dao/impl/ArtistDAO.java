@@ -1,10 +1,10 @@
-package com.findlyrics.db.dao.impl;
+package main.java.com.findlyrics.db.dao.impl;
 
-import com.findlyrics.db.dao.IArtistDAO;
-import com.findlyrics.db.model.Artist;
-import com.findlyrics.exceptions.DbConnectionException;
-import com.findlyrics.util.ConnectionManager;
-import com.findlyrics.util.SqlCloser;
+import main.java.com.findlyrics.db.dao.IArtistDAO;
+import main.java.com.findlyrics.db.model.Artist;
+import main.java.com.findlyrics.exceptions.DbConnectionException;
+import main.java.com.findlyrics.util.ConnectionManager;
+import main.java.com.findlyrics.util.SqlCloser;
 import org.apache.log4j.Logger;
 
 import java.sql.PreparedStatement;
@@ -54,6 +54,7 @@ public class ArtistDAO implements IArtistDAO {
             preparedStatement = ConnectionManager.getInstance().getConnection().prepareStatement(addArtistToDBQuery, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, artist.getName());
             preparedStatement.executeUpdate();
+            log.info("Entry added to DB " + artist.toString());
             resultSet = preparedStatement.getGeneratedKeys();
             if (resultSet.next()) {
                 return resultSet.getLong(1);

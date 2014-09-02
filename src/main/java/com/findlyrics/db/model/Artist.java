@@ -1,4 +1,4 @@
-package com.findlyrics.db.model;
+package main.java.com.findlyrics.db.model;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,10 +1,10 @@
-package com.findlyrics.db.dao.impl;
+package main.java.com.findlyrics.db.dao.impl;
 
-import com.findlyrics.db.dao.ISongDAO;
-import com.findlyrics.db.model.Song;
-import com.findlyrics.exceptions.DbConnectionException;
-import com.findlyrics.util.ConnectionManager;
-import com.findlyrics.util.SqlCloser;
+import main.java.com.findlyrics.db.dao.ISongDAO;
+import main.java.com.findlyrics.db.model.Song;
+import main.java.com.findlyrics.exceptions.DbConnectionException;
+import main.java.com.findlyrics.util.ConnectionManager;
+import main.java.com.findlyrics.util.SqlCloser;
 import org.apache.log4j.Logger;
 
 import java.sql.PreparedStatement;
@@ -60,6 +60,7 @@ public class SongDAO implements ISongDAO {
             preparedStatement.setString(2, song.getTitle());
             preparedStatement.setString(3, song.getLyrics());
             preparedStatement.executeUpdate();
+            log.info("Entry added to DB " + song.toString());
             return true;
         } catch (SQLException e) {
             log.debug("Throwing exception ", e);

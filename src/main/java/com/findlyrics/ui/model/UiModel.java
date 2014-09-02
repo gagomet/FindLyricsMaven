@@ -1,7 +1,7 @@
-package com.findlyrics.ui.model;
+package main.java.com.findlyrics.ui.model;
 
-import com.findlyrics.exceptions.DbConnectionException;
-import com.findlyrics.db.service.ILyricService;
+import main.java.com.findlyrics.exceptions.DbConnectionException;
+import main.java.com.findlyrics.db.service.ILyricService;
 
 
 /**

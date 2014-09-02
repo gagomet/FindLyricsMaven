@@ -1,4 +1,4 @@
-package com.findlyrics.util;
+package main.java.com.findlyrics.util;
 
 /**
  * Created by Padonag on 15.08.2014.

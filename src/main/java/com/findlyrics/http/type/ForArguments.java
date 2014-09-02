@@ -1,4 +1,4 @@
-package com.findlyrics.http.type;
+package main.java.com.findlyrics.http.type;
 
 /**
  * Created by Padonag on 18.08.2014.
