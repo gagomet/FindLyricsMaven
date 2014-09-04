@@ -20,10 +20,6 @@ public class OutputTableModel extends AbstractTableModel {
     private int currentPage = 0;
     private List<LyricItemDTO> results;
 
-    public OutputTableModel(){
-
-    }
-
     public OutputTableModel(LyricsDTO dto) {
         this.results = dto.getSearchResults();
 

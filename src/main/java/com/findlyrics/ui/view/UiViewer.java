@@ -3,7 +3,10 @@ package com.findlyrics.ui.view;
 import com.findlyrics.ui.model.UiModel;
 
 import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.LayoutManager;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -73,6 +76,8 @@ public class UiViewer extends JFrame {
         clearTextButton.addActionListener(listener);
     }
 
+    public void addTextFieldListener(ActionListener listener) {queryField.addActionListener(listener);}
+
     public void addPaginationListener(ActionListener listener) {
         previousPage.addActionListener(listener);
         nextPage.addActionListener(listener);
@@ -125,7 +130,9 @@ public class UiViewer extends JFrame {
         resultTable.getColumnModel().getColumn(1).setPreferredWidth(200);
         resultTable.getColumnModel().getColumn(2).setPreferredWidth(300);
         resultTable.setShowGrid(false);
-        resultTablePanel.add(resultTable);
+        LayoutManager manager = new BorderLayout();
+        resultTablePanel.setLayout(manager);
+        resultTablePanel.add(resultTable, BorderLayout.NORTH);
         validate();
         resultTablePanel.repaint();
     }

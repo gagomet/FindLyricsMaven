@@ -21,7 +21,7 @@ public class UiModel {
     }
 
     public void clearOutputTableModel() {
-        outputTableModel = new OutputTableModel();
+        outputTableModel = null;
     }
 
 }

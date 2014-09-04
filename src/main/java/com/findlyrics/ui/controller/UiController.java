@@ -4,8 +4,6 @@ import com.findlyrics.db.service.ILyricService;
 import com.findlyrics.db.service.impl.DBLyricsService;
 import com.findlyrics.db.service.impl.LyricServiceFactory;
 import com.findlyrics.exceptions.DbConnectionException;
-import com.findlyrics.http.service.HttpLyricsService;
-import com.findlyrics.rest.service.RestLyricsService;
 import com.findlyrics.type.ServiceType;
 import com.findlyrics.ui.model.LyricItemDTO;
 import com.findlyrics.ui.model.OutputTableModel;
@@ -43,6 +41,7 @@ public class UiController {
         messages = ResourceBundle.getBundle("text", Locale.ENGLISH);
         this.model = model;
         this.view = view;
+        view.addTextFieldListener(new SearchButtonListener());
         view.addSearchButtonsListener(new SearchButtonListener());
         view.addTextClearButtonListener(new ClearTextListener());
 
@@ -74,7 +73,6 @@ public class UiController {
             if (EMPTY_STRING.equals(view.getQuery())) {
                 view.showError(messages.getString("error.message"));
             } else {
-//                ILyricService dbService = new DBLyricsService();
                 ILyricService dbService = LyricServiceFactory.getService(ServiceType.DB);
                 try {
                     model.createTableModel(dbService, view.getQuery());
@@ -86,6 +84,7 @@ public class UiController {
                 addTable(new TableMouseAdapterViewOnly());
                 view.setSearchButton(messages.getString("search.more.button.name"));
                 view.addSearchButtonsListener(new SearchMoreButtonListener());
+                view.addTextFieldListener(new SearchOnceMoreButtonListener());
             }
         }
     }
@@ -109,6 +108,7 @@ public class UiController {
             addTable(new TableMouseAdapter());
             view.setSearchButton(messages.getString("search.once.more.button.name"));
             view.addSearchButtonsListener(new SearchOnceMoreButtonListener());
+            view.addTextFieldListener(new SearchOnceMoreButtonListener());
         }
     }
 
@@ -142,9 +142,6 @@ public class UiController {
             view.setSearchButton(messages.getString("search.button.name"));
             view.addSearchButtonsListener(new SearchButtonListener());
             model.clearOutputTableModel();
-            //TODO fix the pages count after use this method
-
-
         }
     }
 
@@ -227,8 +224,7 @@ public class UiController {
                     log.debug("Throwing exception", e1);
                 } catch (URISyntaxException e1) {
                     log.debug("Throwing exception", e1);
-                }
-                catch (DbConnectionException e1) {
+                } catch (DbConnectionException e1) {
                     log.debug("Throwing exception", e1);
                     view.showError(e1.getMessage());
                 }
