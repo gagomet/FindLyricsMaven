@@ -1,10 +1,8 @@
 package com.findlyrics.db.service;
 
-import com.findlyrics.db.dao.IArtistDAO;
-import com.findlyrics.db.dao.impl.ArtistDAO;
-import com.findlyrics.db.model.Artist;
-import com.findlyrics.exceptions.DbConnectionException;
-import org.junit.Assert;
+import com.findlyrics.db.service.impl.LyricServiceFactory;
+import com.findlyrics.exceptions.DataConnectionException;
+import com.findlyrics.type.ServiceType;
 import org.junit.Test;
 
 /**
@@ -13,9 +11,11 @@ import org.junit.Test;
 public class DBLyricsServiceTest {
 
     @Test
-    public void findSong() throws DbConnectionException {
+    public void findSong() throws DataConnectionException {
 
         System.out.println("test is running...");
+        ILyricService dbService = LyricServiceFactory.getService(ServiceType.DB);
+
 //        IArtistDAO dao = new ArtistDAO();
 //        Artist artist = dao.getArtist(1L);
 //        Assert.assertEquals("queen", artist.getName());

@@ -2,7 +2,7 @@ package com.findlyrics.db.dao.impl;
 
 import com.findlyrics.db.dao.IArtistDAO;
 import com.findlyrics.db.model.Artist;
-import com.findlyrics.exceptions.DbConnectionException;
+import com.findlyrics.exceptions.DataConnectionException;
 import com.findlyrics.util.ConnectionManager;
 import com.findlyrics.util.SqlCloser;
 import org.apache.log4j.Logger;
@@ -25,7 +25,7 @@ public class ArtistDAO implements IArtistDAO {
     }
 
     @Override
-    public Artist getArtist(Long id) throws DbConnectionException {
+    public Artist getArtist(Long id) throws DataConnectionException {
         Artist artist = new Artist();
         ResultSet resultSet = null;
         PreparedStatement preparedStatement = null;
@@ -44,7 +44,7 @@ public class ArtistDAO implements IArtistDAO {
     }
 
     @Override
-    public Long addArtist(Artist artist) throws DbConnectionException {
+    public Long addArtist(Artist artist) throws DataConnectionException {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet;
         try {
@@ -62,6 +62,7 @@ public class ArtistDAO implements IArtistDAO {
             }
         } catch (SQLException e) {
             log.debug("Throwing exception ", e);
+
             return null;
         } finally {
             SqlCloser.closePreparedStatement(preparedStatement);
@@ -92,7 +93,7 @@ public class ArtistDAO implements IArtistDAO {
             }
         } catch (SQLException e) {
             log.debug("Throwing exception ", e);
-        } catch (DbConnectionException e) {
+        } catch (DataConnectionException e) {
             log.debug("Throwing exception ", e);
         } finally {
             SqlCloser.closeResultSet(resultSet);

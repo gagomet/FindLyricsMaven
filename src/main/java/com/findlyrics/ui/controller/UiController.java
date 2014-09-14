@@ -3,7 +3,7 @@ package com.findlyrics.ui.controller;
 import com.findlyrics.db.service.ILyricService;
 import com.findlyrics.db.service.impl.DBLyricsService;
 import com.findlyrics.db.service.impl.LyricServiceFactory;
-import com.findlyrics.exceptions.DbConnectionException;
+import com.findlyrics.exceptions.DataConnectionException;
 import com.findlyrics.type.ServiceType;
 import com.findlyrics.ui.model.LyricItemDTO;
 import com.findlyrics.ui.model.OutputTableModel;
@@ -12,13 +12,14 @@ import com.findlyrics.ui.view.ShowLyricsFrame;
 import com.findlyrics.ui.view.UiViewer;
 import org.apache.log4j.Logger;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JTable;
+import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Locale;
@@ -76,7 +77,7 @@ public class UiController {
                 ILyricService dbService = LyricServiceFactory.getService(ServiceType.DB);
                 try {
                     model.createTableModel(dbService, view.getQuery());
-                } catch (DbConnectionException e1) {
+                } catch (DataConnectionException e1) {
                     log.debug("Throwing exception", e1);
                     view.showError(e1.getMessage());
                 }
@@ -96,11 +97,10 @@ public class UiController {
             if (EMPTY_STRING.equals(view.getQuery())) {
                 view.showError(messages.getString("error.message"));
             }
-//            ILyricService httpService = new HttpLyricsService();
             ILyricService httpService = LyricServiceFactory.getService(ServiceType.HTTP);
             try {
                 model.createTableModel(httpService, view.getQuery());
-            } catch (DbConnectionException e1) {
+            } catch (DataConnectionException e1) {
                 log.debug("Throwing exception", e1);
                 view.showError(e1.getMessage());
             }
@@ -123,7 +123,7 @@ public class UiController {
             ILyricService restService = LyricServiceFactory.getService(ServiceType.REST);
             try {
                 model.createTableModel(restService, view.getQuery());
-            } catch (DbConnectionException e1) {
+            } catch (DataConnectionException e1) {
                 log.debug("Throwing exception", e1);
                 view.showError(e1.getMessage());
             }
@@ -195,7 +195,7 @@ public class UiController {
                     DBLyricsService service = new DBLyricsService();
                     LyricItemDTO itemDTO = getDtoToAdd(view.getResultTable(), model.getOutputTableModel());
                     service.addSongToDB(itemDTO);
-                } catch (DbConnectionException e1) {
+                } catch (DataConnectionException e1) {
                     log.debug("Throwing exception", e1);
                     view.showError(e1.getMessage());
                 }
@@ -224,7 +224,7 @@ public class UiController {
                     log.debug("Throwing exception", e1);
                 } catch (URISyntaxException e1) {
                     log.debug("Throwing exception", e1);
-                } catch (DbConnectionException e1) {
+                } catch (DataConnectionException e1) {
                     log.debug("Throwing exception", e1);
                     view.showError(e1.getMessage());
                 }

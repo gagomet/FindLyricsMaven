@@ -5,7 +5,7 @@ import com.findlyrics.db.dao.impl.SongDAO;
 import com.findlyrics.db.model.Artist;
 import com.findlyrics.db.model.Song;
 import com.findlyrics.db.service.ILyricService;
-import com.findlyrics.exceptions.DbConnectionException;
+import com.findlyrics.exceptions.DataConnectionException;
 import com.findlyrics.ui.model.LyricItemDTO;
 import com.findlyrics.ui.model.LyricsDTO;
 import org.apache.log4j.Logger;
@@ -33,7 +33,7 @@ public class DBLyricsService implements ILyricService {
         this.songDAO = new SongDAO();
     }
 
-    public LyricsDTO getDTO(String query) throws DbConnectionException {
+    public LyricsDTO getDTO(String query) throws DataConnectionException {
         LyricsDTO dto = new LyricsDTO();
         List<Artist> inputData = getArtist(query);
         List<LyricItemDTO> lyricItemDTOs = new LinkedList<LyricItemDTO>();
@@ -48,7 +48,7 @@ public class DBLyricsService implements ILyricService {
         return dto;
     }
 
-    public boolean addSongToDB(LyricItemDTO dto) throws DbConnectionException {
+    public boolean addSongToDB(LyricItemDTO dto) throws DataConnectionException {
         Song song = new Song(dto.getSongName(), dto.getLyrics());
         Long artistID = artistDAO.isArtistExistInDB(dto.getArtistName());
         if (artistID == null) {
@@ -76,7 +76,7 @@ public class DBLyricsService implements ILyricService {
         return lyrics.text();
     }
 
-    private List<Artist> getArtist(String text) throws DbConnectionException {
+    private List<Artist> getArtist(String text) throws DataConnectionException {
         Map<Long, Artist> resultMap = new HashMap<Long, Artist>();
         List<Song> songList = songDAO.getSongs(text);
 

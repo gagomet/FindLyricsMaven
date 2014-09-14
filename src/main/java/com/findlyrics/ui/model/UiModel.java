@@ -1,7 +1,9 @@
 package com.findlyrics.ui.model;
 
 import com.findlyrics.db.service.ILyricService;
-import com.findlyrics.exceptions.DbConnectionException;
+import com.findlyrics.exceptions.DataConnectionException;
+
+import java.net.ConnectException;
 
 
 /**
@@ -11,7 +13,7 @@ public class UiModel {
     private LyricsDTO dto;
     private OutputTableModel outputTableModel;
 
-    public void createTableModel(ILyricService service, String query) throws DbConnectionException {
+    public void createTableModel(ILyricService service, String query) throws DataConnectionException {
         dto = service.getDTO(query);
         outputTableModel = new OutputTableModel(dto);
     }

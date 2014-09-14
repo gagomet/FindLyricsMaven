@@ -1,6 +1,6 @@
 package com.findlyrics.util;
 
-import com.findlyrics.exceptions.DbConnectionException;
+import com.findlyrics.exceptions.DataConnectionException;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.apache.log4j.Logger;
 
@@ -37,9 +37,9 @@ public class ConnectionManager {
         private static final ConnectionManager INSTANCE = new ConnectionManager();
     }
 
-    public Connection getConnection() throws DbConnectionException {
+    public Connection getConnection() throws DataConnectionException {
         if (connection == null) {
-            throw new DbConnectionException("Db connection is dead!");
+            throw new DataConnectionException("Db connection is dead!");
         }
         return connection;
     }
