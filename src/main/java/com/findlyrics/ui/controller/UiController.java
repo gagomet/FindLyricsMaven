@@ -50,7 +50,7 @@ public class UiController {
 
     private void addPagination() {
         view.getPaginationPanel().setVisible(true);
-        if (model.getOutputTableModel().getPageCount() > 1) {
+        if (/*model.getOutputTableModel().getPageCount()*/ model.getTableModel().getPageCount() > 1) {
             if (view.getPreviousPage() == null && view.getNextPage() == null) {
                 view.addPaginationButtons();
 
@@ -61,13 +61,13 @@ public class UiController {
 
     private void addTable(MouseAdapter adapter) {
         view.getResultTablePanel().setVisible(true);
-        if (model.getOutputTableModel().getPageCount() != 0) {
+        if (/*model.getOutputTableModel().getPageCount()*/ model.getTableModel().getPageCount() != 0) {
             view.showTable();
             view.addTableMouseAdapter(adapter);
         }
     }
 
-    private class SearchButtonListener implements ActionListener {
+    /*private class SearchButtonListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -77,6 +77,30 @@ public class UiController {
                 ILyricService dbService = LyricServiceFactory.getService(ServiceType.DB);
                 try {
                     model.createTableModel(dbService, view.getQuery());
+                } catch (DataConnectionException e1) {
+                    log.debug("Throwing exception", e1);
+                    view.showError(e1.getMessage());
+                }
+                addPagination();
+                addTable(new TableMouseAdapterViewOnly());
+                view.setSearchButton(messages.getString("search.more.button.name"));
+                view.addSearchButtonsListener(new SearchMoreButtonListener());
+                view.addTextFieldListener(new SearchOnceMoreButtonListener());
+            }
+        }
+    }*/
+
+    private class SearchButtonListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (EMPTY_STRING.equals(view.getQuery())) {
+                view.showError(messages.getString("error.message"));
+            } else {
+                DBLyricsService dbService = new DBLyricsService();
+                try {
+                    dbService.setQuery(view.getQuery());
+                    model.createPartialTableModel(dbService);
                 } catch (DataConnectionException e1) {
                     log.debug("Throwing exception", e1);
                     view.showError(e1.getMessage());
@@ -119,7 +143,7 @@ public class UiController {
             if (EMPTY_STRING.equals(view.getQuery())) {
                 view.showError(messages.getString("error.message"));
             }
-//            ILyricService restService = new RestLyricsService();
+            model.clearPartialTableModel();
             ILyricService restService = LyricServiceFactory.getService(ServiceType.REST);
             try {
                 model.createTableModel(restService, view.getQuery());
@@ -142,6 +166,7 @@ public class UiController {
             view.setSearchButton(messages.getString("search.button.name"));
             view.addSearchButtonsListener(new SearchButtonListener());
             model.clearOutputTableModel();
+            model.clearPartialTableModel();
         }
     }
 
@@ -153,16 +178,33 @@ public class UiController {
 
             if (e.getSource() == view.getPreviousPage()) {
 
-                System.out.println("Button Previous Pressed!");
+                /*System.out.println("Button Previous Pressed!");
                 model.getOutputTableModel().previousPage();
-                model.getOutputTableModel().fireTableDataChanged();
+                model.getOutputTableModel().fireTableDataChanged();*/
+                System.out.println("Button Previous Pressed!");
+                try {
+                    model.getTableModel().previousPage();
+                    model.getTableModel().refreshData();
+                } catch (DataConnectionException e1) {
+                    log.debug("Throwing exception", e1);
+                    view.showError(e1.getMessage());
+                }
+
             }
 
             if (e.getSource() == view.getNextPage()) {
 
-                System.out.println("Button Next Pressed!");
+                /*System.out.println("Button Next Pressed!");
                 model.getOutputTableModel().nextPage();
-                model.getOutputTableModel().fireTableDataChanged();
+                model.getOutputTableModel().fireTableDataChanged();*/
+                System.out.println("Button Next Pressed!");
+                try {
+                    model.getTableModel().nextPage();
+                    model.getTableModel().refreshData();
+                } catch (DataConnectionException e1) {
+                    log.debug("Throwing exception", e1);
+                    view.showError(e1.getMessage());
+                }
             }
 
         }

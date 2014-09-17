@@ -1,5 +1,6 @@
 package com.findlyrics.db.service.impl;
 
+import com.findlyrics.db.dao.PartialSongDAO;
 import com.findlyrics.db.dao.impl.ArtistDAO;
 import com.findlyrics.db.dao.impl.SongDAO;
 import com.findlyrics.db.model.Artist;
@@ -27,10 +28,12 @@ public class DBLyricsService implements ILyricService {
 
     private ArtistDAO artistDAO;
     private SongDAO songDAO;
+    private PartialSongDAO partialSongDAO;
 
     public DBLyricsService() {
         this.artistDAO = new ArtistDAO();
         this.songDAO = new SongDAO();
+        this.partialSongDAO = new PartialSongDAO();
     }
 
     public LyricsDTO getDTO(String query) throws DataConnectionException {
@@ -43,6 +46,20 @@ public class DBLyricsService implements ILyricService {
                 LyricItemDTO tempResult = new LyricItemDTO(currentArtist, currentSong);
                 lyricItemDTOs.add(tempResult);
             }
+        }
+        dto.setSearchResults(lyricItemDTOs);
+        return dto;
+    }
+
+    public LyricsDTO getDTO(int page, int recordsPerPage) throws DataConnectionException {
+        LyricsDTO dto = new LyricsDTO();
+        List<LyricItemDTO> lyricItemDTOs = new LinkedList<LyricItemDTO>();
+        List<Song> list = partialSongDAO.getSongsPart((page - 1) * recordsPerPage,
+                recordsPerPage);
+        for (Song currentSong : list) {
+            Artist tempArtist = artistDAO.getArtist(currentSong.getArtistId());
+            LyricItemDTO itemDTO = new LyricItemDTO(tempArtist, currentSong);
+            lyricItemDTOs.add(itemDTO);
         }
         dto.setSearchResults(lyricItemDTOs);
         return dto;
@@ -76,6 +93,18 @@ public class DBLyricsService implements ILyricService {
         return lyrics.text();
     }
 
+    public PartialSongDAO getPartialSongDAO() {
+        return partialSongDAO;
+    }
+
+    public void setQuery(String query){
+        partialSongDAO.setLyrics(query);
+    }
+
+    public int getNumberOfPages(){
+        return partialSongDAO.getNoOfRecords();
+    }
+
     private List<Artist> getArtist(String text) throws DataConnectionException {
         Map<Long, Artist> resultMap = new HashMap<Long, Artist>();
         List<Song> songList = songDAO.getSongs(text);
@@ -94,5 +123,6 @@ public class DBLyricsService implements ILyricService {
         }
         return new LinkedList<Artist>(resultMap.values());
     }
+
 
 }

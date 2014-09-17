@@ -15,18 +15,20 @@ import java.util.List;
 /**
  * Created by Padonag on 11.09.2014.
  */
-public class PartialDataAccessDAO {
+public class PartialSongDAO {
     private int noOfRecords;
+    private String lyrics;
 
-    public List<Song> getSongsPart(
-            int offset,
-            int noOfRecords, String lyrics) {
+    public PartialSongDAO() {
+    }
+
+    public List<Song> getSongsPart(int offset, int noOfRecords) throws DataConnectionException {
 
         List<Song> list = new ArrayList<Song>();
         String query = "SELECT SQL_CALC_FOUND_ROWS * FROM songs WHERE songs.lyrics LIKE '%" + lyrics + "%' LIMIT "
                 + offset + ", " + noOfRecords;
         Statement statement = null;
-        ResultSet resultSet = null;
+        ResultSet resultSet;
 
         try {
             Connection connection = ConnectionManager.getInstance().getConnection();
@@ -47,8 +49,6 @@ public class PartialDataAccessDAO {
                 this.noOfRecords = resultSet.getInt(1);
         } catch (SQLException e) {
             e.printStackTrace();
-        } catch (DataConnectionException e) {
-            e.printStackTrace();
         } finally {
             try {
                 if (statement != null)
@@ -64,4 +64,7 @@ public class PartialDataAccessDAO {
         return noOfRecords;
     }
 
+    public void setLyrics(String lyrics) {
+        this.lyrics = lyrics;
+    }
 }

@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by Padonag on 27.07.2014.
  */
-public class OutputTableModel extends AbstractTableModel {
+public class OutputTableModel extends AbstractTableModel implements ITableModelPagination {
 
     public static final Logger log = Logger.getLogger(OutputTableModel.class);
     private static final int VISIBLE_ON_PAGE = 20;
@@ -60,6 +60,11 @@ public class OutputTableModel extends AbstractTableModel {
             currentPage--;
             pageData = createPageData();
         }
+    }
+
+    @Override
+    public void refreshData() {
+        this.fireTableDataChanged();
     }
 
     public int getPageCount() {

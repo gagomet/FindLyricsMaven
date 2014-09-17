@@ -17,7 +17,6 @@ import java.util.ResourceBundle;
 public class UiViewer extends JFrame {
     private static final int FRAME_WIDTH = 800;
     private static final int FRAME_HEIGHT = 600;
-
     private ResourceBundle messages = ResourceBundle.getBundle("text", Locale.ENGLISH);
 
     private JTextField queryField;
@@ -125,7 +124,15 @@ public class UiViewer extends JFrame {
             resultTablePanel.remove(resultTable);
         }
 
-        resultTable = new JTable(model.getOutputTableModel());
+//        resultTable = new JTable(/*model.getOutputTableModel()*/ model.getTableModel());
+        //TODO find more elegance solution
+
+        if(model.getPartialTableModel()==null){
+            resultTable = new JTable(model.getOutputTableModel());
+        } else {
+            resultTable = new JTable(model.getPartialTableModel());
+        }
+
         resultTable.getColumnModel().getColumn(0).setPreferredWidth(100);
         resultTable.getColumnModel().getColumn(1).setPreferredWidth(200);
         resultTable.getColumnModel().getColumn(2).setPreferredWidth(300);
@@ -144,4 +151,6 @@ public class UiViewer extends JFrame {
     public JPanel getResultTablePanel() {
         return resultTablePanel;
     }
+
+
 }
