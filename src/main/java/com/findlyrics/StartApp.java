@@ -5,7 +5,7 @@ import com.findlyrics.ui.model.UiModel;
 import com.findlyrics.ui.view.UiViewer;
 import com.findlyrics.util.ArgsUtil;
 
-import javax.swing.*;
+import javax.swing.SwingUtilities;
 
 /**
  * Created by Padonag on 21.07.2014.

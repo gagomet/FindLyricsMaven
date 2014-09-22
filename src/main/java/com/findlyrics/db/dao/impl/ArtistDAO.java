@@ -7,7 +7,11 @@ import com.findlyrics.util.ConnectionManager;
 import com.findlyrics.util.SqlCloser;
 import org.apache.log4j.Logger;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 
 /**
@@ -62,12 +66,9 @@ public class ArtistDAO implements IArtistDAO {
             }
         } catch (SQLException e) {
             log.debug("Throwing exception ", e);
-
             return null;
         } finally {
             SqlCloser.closePreparedStatement(preparedStatement);
-
-
         }
         return null;
     }
@@ -77,7 +78,6 @@ public class ArtistDAO implements IArtistDAO {
         while (resultSet.next()) {
             artist = new Artist(resultSet.getString("artist_name"));
         }
-
         return artist;
     }
 

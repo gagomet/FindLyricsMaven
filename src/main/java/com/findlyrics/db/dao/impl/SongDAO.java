@@ -40,7 +40,6 @@ public class SongDAO implements ISongDAO {
             preparedStatement.setString(1, "%" + lyrics + "%");
             resultSet = preparedStatement.executeQuery();
             result = parseResultSet(resultSet);
-
         } catch (SQLException e) {
             log.debug("Throwing exception ", e);
         } finally {
@@ -54,7 +53,6 @@ public class SongDAO implements ISongDAO {
     @Override
     public boolean addSong(Song song) throws DataConnectionException {
         PreparedStatement preparedStatement = null;
-
         try {
             Connection connection = ConnectionManager.getInstance().getConnection();
             connection.setAutoCommit(false);
@@ -79,7 +77,6 @@ public class SongDAO implements ISongDAO {
         if (resultSet == null) {
             return Collections.EMPTY_LIST;
         }
-
         List<Song> result = new LinkedList<Song>();
         while (resultSet.next()) {
             Song currentSong = new Song(resultSet.getString("song_name"), resultSet.getString("lyrics"));

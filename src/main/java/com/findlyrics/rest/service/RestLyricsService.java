@@ -5,8 +5,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.findlyrics.db.model.Artist;
 import com.findlyrics.db.model.Song;
-import com.findlyrics.rest.model.SongPojo;
 import com.findlyrics.db.service.ILyricService;
+import com.findlyrics.exceptions.DataConnectionException;
+import com.findlyrics.rest.model.SongPojo;
 import com.findlyrics.ui.model.LyricItemDTO;
 import com.findlyrics.ui.model.LyricsDTO;
 import org.apache.http.HttpEntity;
@@ -30,6 +31,8 @@ import java.util.List;
 public class RestLyricsService implements ILyricService {
     private static final Logger log = Logger.getLogger(RestLyricsService.class);
     private static final String REST_URL = "http://api.lyricsnmusic.com/songs?api_key=3699a6ba6f1ecdc9b9e208123fd382&lyrics=";
+    private int numberOfRecords;
+    private String query = null;
 
     public RestLyricsService() {
     }
@@ -48,6 +51,35 @@ public class RestLyricsService implements ILyricService {
         return dto;
     }
 
+    @Override
+    public LyricsDTO getPartDTO(int page, int recordsPerPage) throws DataConnectionException {
+        if (query == null) {
+            return null;
+        }
+        List<SongPojo> inputData = jsonToPojo(getJsonFromRest(query)).subList((page - 1) * recordsPerPage, recordsPerPage);
+
+        LyricsDTO dto = new LyricsDTO();
+        List<LyricItemDTO> entries = new ArrayList<LyricItemDTO>();
+        for (SongPojo currentSong : inputData) {
+            Artist newArtist = new Artist(currentSong.getArtist().getName());
+            Song newSong = new Song(currentSong.getTitle(), currentSong.getUrl());
+            LyricItemDTO tempResult = new LyricItemDTO(newArtist, newSong);
+            entries.add(tempResult);
+        }
+        dto.setSearchResults(entries);
+        return dto;
+    }
+
+    @Override
+    public int getNumberOfRecords() {
+        return numberOfRecords;
+    }
+
+    @Override
+    public void setQuery(String query) {
+        this.query = query;
+    }
+
     private String queryToHttp(String query) {
         return REST_URL + query.replace(" ", "%20");
     }
@@ -58,9 +90,7 @@ public class RestLyricsService implements ILyricService {
         String responseBody = null;
         try {
             HttpGet httpget = new HttpGet(fullUrl);
-
             System.out.println("Executing request " + httpget.getRequestLine());
-
             // Create a custom response handler
             ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
 
@@ -82,7 +112,6 @@ public class RestLyricsService implements ILyricService {
                 e.printStackTrace();
                 log.debug("Throwing exception", e);
             }
-
         } finally {
             try {
                 httpclient.close();
@@ -97,7 +126,6 @@ public class RestLyricsService implements ILyricService {
     private List<SongPojo> jsonToPojo(String json) {
         List<SongPojo> result = new ArrayList<SongPojo>();
         try {
-
             result = new ObjectMapper().readValue(json, new TypeReference<ArrayList<SongPojo>>() {
             });
 
@@ -105,6 +133,7 @@ public class RestLyricsService implements ILyricService {
             e.printStackTrace();
             log.debug("Throwing exception", e);
         }
+        numberOfRecords = result.size();
         return result;
     }
 

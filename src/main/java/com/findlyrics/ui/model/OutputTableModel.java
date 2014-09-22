@@ -22,10 +22,8 @@ public class OutputTableModel extends AbstractTableModel implements ITableModelP
 
     public OutputTableModel(LyricsDTO dto) {
         this.results = dto.getSearchResults();
-
         this.pageCount = (results.size() + VISIBLE_ON_PAGE - 1) / VISIBLE_ON_PAGE;
         this.pageData = createPageData();
-//        log.info("Creating Page Data in Constructor : " + pageData.toString());
     }
 
     @Override

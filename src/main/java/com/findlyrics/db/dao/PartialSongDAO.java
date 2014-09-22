@@ -23,18 +23,15 @@ public class PartialSongDAO {
     }
 
     public List<Song> getSongsPart(int offset, int noOfRecords) throws DataConnectionException {
-
         List<Song> list = new ArrayList<Song>();
         String query = "SELECT SQL_CALC_FOUND_ROWS * FROM songs WHERE songs.lyrics LIKE '%" + lyrics + "%' LIMIT "
                 + offset + ", " + noOfRecords;
         Statement statement = null;
         ResultSet resultSet;
-
         try {
             Connection connection = ConnectionManager.getInstance().getConnection();
             statement = connection.createStatement();
             resultSet = statement.executeQuery(query);
-
             while (resultSet.next()) {
                 Song song = new Song();
                 song.setArtistId(resultSet.getLong("artist_id"));
@@ -43,7 +40,6 @@ public class PartialSongDAO {
                 list.add(song);
             }
             resultSet.close();
-
             resultSet = statement.executeQuery("SELECT FOUND_ROWS()");
             if (resultSet.next())
                 this.noOfRecords = resultSet.getInt(1);

@@ -1,7 +1,12 @@
 package com.findlyrics.ui.view;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.BoxLayout;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 
 /**
  * Created by Padonag on 02.08.2014.

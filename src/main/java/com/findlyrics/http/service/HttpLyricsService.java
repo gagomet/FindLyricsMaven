@@ -28,17 +28,40 @@ public class HttpLyricsService implements ILyricService {
     private static final String SERVICE_URL = "http://webservices.lyrdb.com/lookup.php?q=";
     private static final String URL_TO_GET_LYRICS = "http://webservices.lyrdb.com/getlyr.php?q=";
     private static final String EMPTY_STRING = "";
+    private int entities;
+    private String query = null;
 
 
     @Override
     public LyricsDTO getDTO(String query) throws DataConnectionException {
         LyricsDTO dto = new LyricsDTO();
         String response = null;
-
         response = getHttpResponse(SERVICE_URL + query + ForArguments.FOR_WORD_IN_LYRICS);
         dto.setSearchResults(parseResponse(response));
-
         return dto;
+    }
+
+    @Override
+    public LyricsDTO getPartDTO(int page, int recordsPerPage) throws DataConnectionException {
+        if (query == null) {
+            return null;
+        }
+        LyricsDTO dto = new LyricsDTO();
+        String response = null;
+        response = getHttpResponse(SERVICE_URL + query + ForArguments.FOR_WORD_IN_LYRICS);
+        List<LyricItemDTO> partialList = parseResponse(response).subList((page - 1) * recordsPerPage, recordsPerPage);
+        dto.setSearchResults(parseResponse(response));
+        return dto;
+    }
+
+    @Override
+    public int getNumberOfRecords() {
+        return entities;
+    }
+
+    @Override
+    public void setQuery(String query) {
+        this.query = query;
     }
 
     private String getHttpResponse(String request) throws DataConnectionException {
@@ -71,6 +94,7 @@ public class HttpLyricsService implements ILyricService {
             LyricItemDTO currentItem = new LyricItemDTO(currentArtist, currentSong);
             result.add(currentItem);
         }
+        entities = result.size();
         return result;
     }
 

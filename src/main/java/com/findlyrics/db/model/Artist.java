@@ -38,7 +38,6 @@ public class Artist {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Artist)) return false;
-
         Artist artist = (Artist) o;
         return id.equals(artist.id) && name.equals(artist.name);
     }

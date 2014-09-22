@@ -2,11 +2,17 @@ package com.findlyrics.ui.view;
 
 import com.findlyrics.ui.model.UiModel;
 
-import javax.swing.*;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.WindowConstants;
 import java.awt.BorderLayout;
 import java.awt.LayoutManager;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -75,7 +81,9 @@ public class UiViewer extends JFrame {
         clearTextButton.addActionListener(listener);
     }
 
-    public void addTextFieldListener(ActionListener listener) {queryField.addActionListener(listener);}
+    public void addTextFieldListener(ActionListener listener) {
+        queryField.addActionListener(listener);
+    }
 
     public void addPaginationListener(ActionListener listener) {
         previousPage.addActionListener(listener);
@@ -127,7 +135,7 @@ public class UiViewer extends JFrame {
 //        resultTable = new JTable(/*model.getOutputTableModel()*/ model.getTableModel());
         //TODO find more elegance solution
 
-        if(model.getPartialTableModel()==null){
+        if (model.getPartialTableModel() == null) {
             resultTable = new JTable(model.getOutputTableModel());
         } else {
             resultTable = new JTable(model.getPartialTableModel());

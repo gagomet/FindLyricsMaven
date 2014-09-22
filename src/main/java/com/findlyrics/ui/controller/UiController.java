@@ -19,7 +19,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
-import java.net.ConnectException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Locale;
@@ -32,7 +31,6 @@ public class UiController {
 
     private static final String EMPTY_STRING = "";
     private static final Logger log = Logger.getLogger(UiController.class);
-
     private UiModel model;
     private UiViewer view;
     private ResourceBundle messages;
@@ -50,7 +48,7 @@ public class UiController {
 
     private void addPagination() {
         view.getPaginationPanel().setVisible(true);
-        if (/*model.getOutputTableModel().getPageCount()*/ model.getTableModel().getPageCount() > 1) {
+        if (model.getTableModel().getPageCount() > 1) {
             if (view.getPreviousPage() == null && view.getNextPage() == null) {
                 view.addPaginationButtons();
 
@@ -67,29 +65,6 @@ public class UiController {
         }
     }
 
-    /*private class SearchButtonListener implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            if (EMPTY_STRING.equals(view.getQuery())) {
-                view.showError(messages.getString("error.message"));
-            } else {
-                ILyricService dbService = LyricServiceFactory.getService(ServiceType.DB);
-                try {
-                    model.createTableModel(dbService, view.getQuery());
-                } catch (DataConnectionException e1) {
-                    log.debug("Throwing exception", e1);
-                    view.showError(e1.getMessage());
-                }
-                addPagination();
-                addTable(new TableMouseAdapterViewOnly());
-                view.setSearchButton(messages.getString("search.more.button.name"));
-                view.addSearchButtonsListener(new SearchMoreButtonListener());
-                view.addTextFieldListener(new SearchOnceMoreButtonListener());
-            }
-        }
-    }*/
-
     private class SearchButtonListener implements ActionListener {
 
         @Override
@@ -97,7 +72,7 @@ public class UiController {
             if (EMPTY_STRING.equals(view.getQuery())) {
                 view.showError(messages.getString("error.message"));
             } else {
-                DBLyricsService dbService = new DBLyricsService();
+                ILyricService dbService = LyricServiceFactory.getService(ServiceType.DB);
                 try {
                     dbService.setQuery(view.getQuery());
                     model.createPartialTableModel(dbService);
@@ -123,6 +98,7 @@ public class UiController {
             }
             ILyricService httpService = LyricServiceFactory.getService(ServiceType.HTTP);
             try {
+                httpService.setQuery(view.getQuery());
                 model.createTableModel(httpService, view.getQuery());
             } catch (DataConnectionException e1) {
                 log.debug("Throwing exception", e1);
@@ -175,12 +151,7 @@ public class UiController {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-
             if (e.getSource() == view.getPreviousPage()) {
-
-                /*System.out.println("Button Previous Pressed!");
-                model.getOutputTableModel().previousPage();
-                model.getOutputTableModel().fireTableDataChanged();*/
                 System.out.println("Button Previous Pressed!");
                 try {
                     model.getTableModel().previousPage();
@@ -193,10 +164,6 @@ public class UiController {
             }
 
             if (e.getSource() == view.getNextPage()) {
-
-                /*System.out.println("Button Next Pressed!");
-                model.getOutputTableModel().nextPage();
-                model.getOutputTableModel().fireTableDataChanged();*/
                 System.out.println("Button Next Pressed!");
                 try {
                     model.getTableModel().nextPage();
@@ -217,7 +184,7 @@ public class UiController {
             int row = view.getResultTable().rowAtPoint(e.getPoint());
             int column = view.getResultTable().columnAtPoint(e.getPoint());
             if (row >= 0 && column == 2) {
-                String text = (String) model.getOutputTableModel().getValueAt(view.getResultTable().getSelectedRow(), view.getResultTable().getSelectedColumn());
+                String text = (String) model.getPartialTableModel().getValueAt(view.getResultTable().getSelectedRow(), view.getResultTable().getSelectedColumn());
                 new ShowLyricsFrame(text);
             }
         }

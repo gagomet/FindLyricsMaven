@@ -1,7 +1,6 @@
 package com.findlyrics.ui.model;
 
-import com.findlyrics.db.dao.BlindService;
-import com.findlyrics.db.service.impl.DBLyricsService;
+import com.findlyrics.db.service.ILyricService;
 import com.findlyrics.exceptions.DataConnectionException;
 
 import javax.swing.table.AbstractTableModel;
@@ -11,23 +10,20 @@ import java.util.List;
 /**
  * Created by Padonag on 14.09.2014.
  */
-public class PartialTableModel extends AbstractTableModel implements ITableModelPagination{
+public class PartialTableModel extends AbstractTableModel implements ITableModelPagination {
     private static final String[] namesOfColumns = {"Artist", "Song name", "Lyrics"};
     private static final int RECORDS_PER_PAGE = 20;
-
-    private int currentPage = 1;
-    private int noOfPages;
-    private int offset;
+    private int currentPage = 0;
+    private int noOfPages = 0;
+    private int noOfRecords;
     private List<String[]> pageData;
-    private DBLyricsService service;
+    private ILyricService service;
 
-
-
-    public PartialTableModel(DBLyricsService service) throws DataConnectionException {
+    public PartialTableModel(ILyricService service) throws DataConnectionException {
         this.service = service;
-        this.pageData = createPageData(service.getDTO(currentPage, RECORDS_PER_PAGE));
-        this.noOfPages = service.getNumberOfPages();
-
+        this.pageData = createPageData();
+        this.noOfRecords = service.getNumberOfRecords();
+        this.noOfPages = (noOfRecords + RECORDS_PER_PAGE - 1) / RECORDS_PER_PAGE;
 
     }
 
@@ -49,8 +45,7 @@ public class PartialTableModel extends AbstractTableModel implements ITableModel
     public void nextPage() throws DataConnectionException {
         if (currentPage < noOfPages - 1) {
             currentPage++;
-            offset += RECORDS_PER_PAGE;
-            pageData = createPageData(service.getDTO(currentPage, RECORDS_PER_PAGE));
+            pageData = createPageData();
         }
 
     }
@@ -58,8 +53,7 @@ public class PartialTableModel extends AbstractTableModel implements ITableModel
     public void previousPage() throws DataConnectionException {
         if (currentPage > 0) {
             currentPage--;
-            offset -= RECORDS_PER_PAGE;
-            pageData = createPageData(service.getDTO(currentPage, RECORDS_PER_PAGE));
+            pageData = createPageData();
         }
 
     }
@@ -69,10 +63,10 @@ public class PartialTableModel extends AbstractTableModel implements ITableModel
         this.fireTableDataChanged();
     }
 
-    private List<String[]> createPageData(LyricsDTO dto) {
-        List<String[]> pageData = new LinkedList<String[]>();
-        List<LyricItemDTO> itemDTOs = dto.getSearchResults();
-
+    private List<String[]> createPageData() throws DataConnectionException {
+        LyricsDTO results = service.getPartDTO(currentPage, RECORDS_PER_PAGE);
+        List<String[]> pageData = new LinkedList<>();
+        List<LyricItemDTO> itemDTOs = results.getSearchResults();
         for (LyricItemDTO currentDTO : itemDTOs) {
             pageData.add(new String[]{currentDTO.getArtistName(), currentDTO.getSongName(), currentDTO.getLyrics()});
         }
@@ -80,6 +74,6 @@ public class PartialTableModel extends AbstractTableModel implements ITableModel
     }
 
     public int getPageCount() {
-        return noOfPages;
+        return noOfRecords;
     }
 }

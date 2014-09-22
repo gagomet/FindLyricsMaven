@@ -25,7 +25,6 @@ import java.util.Map;
  */
 public class DBLyricsService implements ILyricService {
     private static final Logger log = Logger.getLogger(ArtistDAO.class);
-
     private ArtistDAO artistDAO;
     private SongDAO songDAO;
     private PartialSongDAO partialSongDAO;
@@ -40,7 +39,6 @@ public class DBLyricsService implements ILyricService {
         LyricsDTO dto = new LyricsDTO();
         List<Artist> inputData = getArtist(query);
         List<LyricItemDTO> lyricItemDTOs = new LinkedList<LyricItemDTO>();
-
         for (Artist currentArtist : inputData) {
             for (Song currentSong : currentArtist.getRepertoir()) {
                 LyricItemDTO tempResult = new LyricItemDTO(currentArtist, currentSong);
@@ -51,10 +49,10 @@ public class DBLyricsService implements ILyricService {
         return dto;
     }
 
-    public LyricsDTO getDTO(int page, int recordsPerPage) throws DataConnectionException {
+    public LyricsDTO getPartDTO(int page, int recordsPerPage) throws DataConnectionException {
         LyricsDTO dto = new LyricsDTO();
         List<LyricItemDTO> lyricItemDTOs = new LinkedList<LyricItemDTO>();
-        List<Song> list = partialSongDAO.getSongsPart((page - 1) * recordsPerPage,
+        List<Song> list = partialSongDAO.getSongsPart(page * recordsPerPage,
                 recordsPerPage);
         for (Song currentSong : list) {
             Artist tempArtist = artistDAO.getArtist(currentSong.getArtistId());
@@ -87,7 +85,6 @@ public class DBLyricsService implements ILyricService {
     }
 
     public String getLyricsFromUrl(String url) throws IOException {
-
         Document document = Jsoup.connect(url).get();
         Element lyrics = document.select("pre").get(0);
         return lyrics.text();
@@ -97,11 +94,12 @@ public class DBLyricsService implements ILyricService {
         return partialSongDAO;
     }
 
-    public void setQuery(String query){
+    public void setQuery(String query) {
         partialSongDAO.setLyrics(query);
     }
 
-    public int getNumberOfPages(){
+    public int getNumberOfRecords() {
+        System.out.println(partialSongDAO.getNoOfRecords());
         return partialSongDAO.getNoOfRecords();
     }
 
