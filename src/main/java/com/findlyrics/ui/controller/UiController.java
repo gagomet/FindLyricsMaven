@@ -6,7 +6,7 @@ import com.findlyrics.db.service.impl.LyricServiceFactory;
 import com.findlyrics.exceptions.DataConnectionException;
 import com.findlyrics.type.ServiceType;
 import com.findlyrics.ui.model.LyricItemDTO;
-import com.findlyrics.ui.model.OutputTableModel;
+import com.findlyrics.ui.model.tablemodel.impl.OutputTableModel;
 import com.findlyrics.ui.model.UiModel;
 import com.findlyrics.ui.view.ShowLyricsFrame;
 import com.findlyrics.ui.view.UiViewer;

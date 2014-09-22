@@ -1,5 +1,8 @@
-package com.findlyrics.ui.model;
+package com.findlyrics.ui.model.tablemodel.impl;
 
+import com.findlyrics.ui.model.LyricItemDTO;
+import com.findlyrics.ui.model.LyricsDTO;
+import com.findlyrics.ui.model.tablemodel.ITableModelPagination;
 import org.apache.log4j.Logger;
 
 import javax.swing.table.AbstractTableModel;

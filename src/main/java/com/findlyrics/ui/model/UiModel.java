@@ -2,6 +2,9 @@ package com.findlyrics.ui.model;
 
 import com.findlyrics.db.service.ILyricService;
 import com.findlyrics.exceptions.DataConnectionException;
+import com.findlyrics.ui.model.tablemodel.ITableModelPagination;
+import com.findlyrics.ui.model.tablemodel.impl.OutputTableModel;
+import com.findlyrics.ui.model.tablemodel.impl.PartialTableModel;
 
 
 /**

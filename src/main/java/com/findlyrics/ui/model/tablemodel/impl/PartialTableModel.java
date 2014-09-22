@@ -1,7 +1,10 @@
-package com.findlyrics.ui.model;
+package com.findlyrics.ui.model.tablemodel.impl;
 
 import com.findlyrics.db.service.ILyricService;
 import com.findlyrics.exceptions.DataConnectionException;
+import com.findlyrics.ui.model.LyricItemDTO;
+import com.findlyrics.ui.model.LyricsDTO;
+import com.findlyrics.ui.model.tablemodel.ITableModelPagination;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.LinkedList;

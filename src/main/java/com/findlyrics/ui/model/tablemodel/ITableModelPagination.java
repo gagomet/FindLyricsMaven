@@ -1,4 +1,4 @@
-package com.findlyrics.ui.model;
+package com.findlyrics.ui.model.tablemodel;
 
 import com.findlyrics.exceptions.DataConnectionException;
 
