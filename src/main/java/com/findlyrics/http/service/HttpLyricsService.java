@@ -49,8 +49,9 @@ public class HttpLyricsService implements ILyricService {
         LyricsDTO dto = new LyricsDTO();
         String response = null;
         response = getHttpResponse(SERVICE_URL + query + ForArguments.FOR_WORD_IN_LYRICS);
-        List<LyricItemDTO> partialList = parseResponse(response).subList((page - 1) * recordsPerPage, recordsPerPage);
-        dto.setSearchResults(parseResponse(response));
+        List<LyricItemDTO> inputData = parseResponse(response);
+        List<LyricItemDTO> partialData = inputData.subList(page * recordsPerPage, Math.min((page+1)*recordsPerPage, inputData.size()));
+        dto.setSearchResults(partialData);
         return dto;
     }
 

@@ -99,7 +99,7 @@ public class UiController {
             ILyricService httpService = LyricServiceFactory.getService(ServiceType.HTTP);
             try {
                 httpService.setQuery(view.getQuery());
-                model.createTableModel(httpService, view.getQuery());
+                model.createPartialTableModel(httpService);
             } catch (DataConnectionException e1) {
                 log.debug("Throwing exception", e1);
                 view.showError(e1.getMessage());
@@ -122,7 +122,8 @@ public class UiController {
             model.clearPartialTableModel();
             ILyricService restService = LyricServiceFactory.getService(ServiceType.REST);
             try {
-                model.createTableModel(restService, view.getQuery());
+                restService.setQuery(view.getQuery());
+                model.createPartialTableModel(restService);
             } catch (DataConnectionException e1) {
                 log.debug("Throwing exception", e1);
                 view.showError(e1.getMessage());
