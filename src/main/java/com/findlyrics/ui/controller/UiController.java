@@ -6,8 +6,8 @@ import com.findlyrics.db.service.impl.LyricServiceFactory;
 import com.findlyrics.exceptions.DataConnectionException;
 import com.findlyrics.type.ServiceType;
 import com.findlyrics.ui.model.LyricItemDTO;
-import com.findlyrics.ui.model.tablemodel.impl.OutputTableModel;
 import com.findlyrics.ui.model.UiModel;
+import com.findlyrics.ui.model.tablemodel.impl.OutputTableModel;
 import com.findlyrics.ui.view.ShowLyricsFrame;
 import com.findlyrics.ui.view.UiViewer;
 import org.apache.log4j.Logger;
@@ -59,7 +59,7 @@ public class UiController {
 
     private void addTable(MouseAdapter adapter) {
         view.getResultTablePanel().setVisible(true);
-        if (/*model.getOutputTableModel().getPageCount()*/ model.getTableModel().getPageCount() != 0) {
+        if (model.getTableModel().getPageCount() != 0) {
             view.showTable();
             view.addTableMouseAdapter(adapter);
         }
@@ -69,23 +69,12 @@ public class UiController {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (EMPTY_STRING.equals(view.getQuery())) {
-                view.showError(messages.getString("error.message"));
-            } else {
-                ILyricService dbService = LyricServiceFactory.getService(ServiceType.DB);
-                try {
-                    dbService.setQuery(view.getQuery());
-                    model.createPartialTableModel(dbService);
-                } catch (DataConnectionException e1) {
-                    log.debug("Throwing exception", e1);
-                    view.showError(e1.getMessage());
-                }
-                addPagination();
-                addTable(new TableMouseAdapterViewOnly());
-                view.setSearchButton(messages.getString("search.more.button.name"));
-                view.addSearchButtonsListener(new SearchMoreButtonListener());
-                view.addTextFieldListener(new SearchOnceMoreButtonListener());
-            }
+            createServiceAndModel(ServiceType.DB);
+            addPagination();
+            addTable(new TableMouseAdapterViewOnly());
+            view.setSearchButton(messages.getString("search.more.button.name"));
+            view.addSearchButtonsListener(new SearchMoreButtonListener());
+            view.addTextFieldListener(new SearchOnceMoreButtonListener());
         }
     }
 
@@ -93,17 +82,7 @@ public class UiController {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (EMPTY_STRING.equals(view.getQuery())) {
-                view.showError(messages.getString("error.message"));
-            }
-            ILyricService httpService = LyricServiceFactory.getService(ServiceType.HTTP);
-            try {
-                httpService.setQuery(view.getQuery());
-                model.createPartialTableModel(httpService);
-            } catch (DataConnectionException e1) {
-                log.debug("Throwing exception", e1);
-                view.showError(e1.getMessage());
-            }
+            createServiceAndModel(ServiceType.HTTP);
             addPagination();
             addTable(new TableMouseAdapter());
             view.setSearchButton(messages.getString("search.once.more.button.name"));
@@ -116,18 +95,7 @@ public class UiController {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (EMPTY_STRING.equals(view.getQuery())) {
-                view.showError(messages.getString("error.message"));
-            }
-            model.clearPartialTableModel();
-            ILyricService restService = LyricServiceFactory.getService(ServiceType.REST);
-            try {
-                restService.setQuery(view.getQuery());
-                model.createPartialTableModel(restService);
-            } catch (DataConnectionException e1) {
-                log.debug("Throwing exception", e1);
-                view.showError(e1.getMessage());
-            }
+            createServiceAndModel(ServiceType.REST);
             addPagination();
             addTable(new TableWithUrlMouseAdapter());
         }
@@ -229,7 +197,6 @@ public class UiController {
                     itemDTO.setLyrics(service.getLyricsFromUrl(htmlPath));
                     System.out.println(itemDTO.getLyrics());
                     service.addSongToDB(itemDTO);
-
                 } catch (IOException e1) {
                     log.debug("Throwing exception", e1);
                 } catch (URISyntaxException e1) {
@@ -248,5 +215,19 @@ public class UiController {
         String songTitle = (String) tableModel.getValueAt(rowNumber, 1);
         String lyrics = (String) tableModel.getValueAt(rowNumber, 2);
         return new LyricItemDTO(artistName, songTitle, lyrics);
+    }
+
+    private void createServiceAndModel(ServiceType serviceType) {
+        if (EMPTY_STRING.equals(view.getQuery())) {
+            view.showError(messages.getString("error.message"));
+        }
+        ILyricService service = LyricServiceFactory.getService(serviceType);
+        try {
+            service.setQuery(view.getQuery());
+            model.createPartialTableModel(service);
+        } catch (DataConnectionException e1) {
+            log.debug("Throwing exception", e1);
+            view.showError(e1.getMessage());
+        }
     }
 }

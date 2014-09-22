@@ -57,7 +57,7 @@ public class RestLyricsService implements ILyricService {
             return null;
         }
         List<SongPojo> inputData = jsonToPojo(getJsonFromRest(query));
-        List<SongPojo> partialData = inputData.subList(page * recordsPerPage, Math.min((page+1)*recordsPerPage, inputData.size()));
+        List<SongPojo> partialData = inputData.subList(page * recordsPerPage, Math.min((page + 1) * recordsPerPage, inputData.size()));
         LyricsDTO dto = new LyricsDTO();
         List<LyricItemDTO> entries = new ArrayList<LyricItemDTO>();
         for (SongPojo currentSong : partialData) {
