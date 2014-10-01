@@ -68,7 +68,7 @@ public class PartialTableModel extends AbstractTableModel implements ITableModel
 
     private List<String[]> createPageData() throws DataConnectionException {
         LyricsDTO results = service.getPartDTO(currentPage, RECORDS_PER_PAGE);
-        List<String[]> pageData = new LinkedList<>();
+        List<String[]> pageData = new LinkedList<String[]>();
         List<LyricItemDTO> itemDTOs = results.getSearchResults();
         for (LyricItemDTO currentDTO : itemDTOs) {
             pageData.add(new String[]{currentDTO.getArtistName(), currentDTO.getSongName(), currentDTO.getLyrics()});
