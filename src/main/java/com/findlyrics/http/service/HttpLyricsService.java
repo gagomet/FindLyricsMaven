@@ -3,6 +3,7 @@ package com.findlyrics.http.service;
 import com.findlyrics.db.model.Artist;
 import com.findlyrics.db.model.Song;
 import com.findlyrics.db.service.ILyricService;
+import com.findlyrics.db.service.IServiceFactory;
 import com.findlyrics.exceptions.DataConnectionException;
 import com.findlyrics.type.ForArguments;
 import com.findlyrics.ui.model.LyricItemDTO;
@@ -27,9 +28,19 @@ public class HttpLyricsService implements ILyricService {
     private static final Logger log = Logger.getLogger(HttpLyricsService.class);
     private static final String SERVICE_URL = "http://webservices.lyrdb.com/lookup.php?q=";
     private static final String URL_TO_GET_LYRICS = "http://webservices.lyrdb.com/getlyr.php?q=";
-    private static final String EMPTY_STRING = "";
     private int entities;
     private String query = null;
+
+    private HttpLyricsService() {
+
+    }
+
+    public static final IServiceFactory factory = new IServiceFactory() {
+        @Override
+        public ILyricService getInstance() {
+            return new HttpLyricsService();
+        }
+    };
 
 
     @Override

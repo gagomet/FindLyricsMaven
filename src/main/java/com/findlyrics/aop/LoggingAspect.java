@@ -4,7 +4,6 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.aspectj.lang.reflect.MethodSignature;
 
 /**
  * Created by Oleksandr_Kramskyi on 9/29/2014.
@@ -21,9 +20,10 @@ public class LoggingAspect {
         return result;
     }*/
 
-//    @Pointcut("execution(* HelloWorld.sayHello(..))")
+    //    @Pointcut("execution(* HelloWorld.sayHello(..))")
     @Pointcut("execution(* ArtistDAO.getArtist(..))")
-    public void logging() {}
+    public void logging() {
+    }
 
     @Around("logging()")
     public Object logging(ProceedingJoinPoint thisJoinPoint) throws Throwable {

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.findlyrics.db.model.Artist;
 import com.findlyrics.db.model.Song;
 import com.findlyrics.db.service.ILyricService;
+import com.findlyrics.db.service.IServiceFactory;
 import com.findlyrics.exceptions.DataConnectionException;
 import com.findlyrics.rest.model.SongPojo;
 import com.findlyrics.ui.model.LyricItemDTO;
@@ -34,8 +35,15 @@ public class RestLyricsService implements ILyricService {
     private int numberOfRecords;
     private String query = null;
 
-    public RestLyricsService() {
+    private RestLyricsService() {
     }
+
+    public static final IServiceFactory factory = new IServiceFactory() {
+        @Override
+        public ILyricService getInstance() {
+            return new RestLyricsService();
+        }
+    };
 
     public LyricsDTO getDTO(String query) {
         List<SongPojo> inputData = jsonToPojo(getJsonFromRest(query));

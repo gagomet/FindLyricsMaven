@@ -1,10 +1,11 @@
 package com.findlyrics.ui.controller;
 
 import com.findlyrics.db.service.ILyricService;
+import com.findlyrics.db.service.IServiceFactory;
 import com.findlyrics.db.service.impl.DBLyricsService;
-import com.findlyrics.db.service.impl.LyricServiceFactory;
 import com.findlyrics.exceptions.DataConnectionException;
-import com.findlyrics.type.ServiceType;
+import com.findlyrics.http.service.HttpLyricsService;
+import com.findlyrics.rest.service.RestLyricsService;
 import com.findlyrics.ui.model.LyricItemDTO;
 import com.findlyrics.ui.model.UiModel;
 import com.findlyrics.ui.model.tablemodel.impl.OutputTableModel;
@@ -69,7 +70,7 @@ public class UiController {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            createServiceAndModel(ServiceType.DB);
+            createServiceAndModel(DBLyricsService.factory);
             addPagination();
             addTable(new TableMouseAdapterViewOnly());
             view.setSearchButton(messages.getString("search.more.button.name"));
@@ -82,7 +83,7 @@ public class UiController {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            createServiceAndModel(ServiceType.HTTP);
+            createServiceAndModel(HttpLyricsService.factory);
             addPagination();
             addTable(new TableMouseAdapter());
             view.setSearchButton(messages.getString("search.once.more.button.name"));
@@ -95,7 +96,7 @@ public class UiController {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            createServiceAndModel(ServiceType.REST);
+            createServiceAndModel(RestLyricsService.factory);
             addPagination();
             addTable(new TableWithUrlMouseAdapter());
         }
@@ -170,7 +171,7 @@ public class UiController {
                     String text = (String) model.getOutputTableModel().getValueAt(view.getResultTable().getSelectedRow(), view.getResultTable().getSelectedColumn());
                     new ShowLyricsFrame(text);
                     //TODO can't use factory here
-                    DBLyricsService service = new DBLyricsService();
+                    DBLyricsService service = (DBLyricsService) DBLyricsService.factory.getInstance();
                     LyricItemDTO itemDTO = getDtoToAdd(view.getResultTable(), model.getOutputTableModel());
                     service.addSongToDB(itemDTO);
                 } catch (DataConnectionException e1) {
@@ -192,7 +193,7 @@ public class UiController {
                 try {
                     Desktop.getDesktop().browse(new URI(htmlPath));
                     //TODO can't use factory here
-                    DBLyricsService service = new DBLyricsService();
+                    DBLyricsService service = (DBLyricsService) DBLyricsService.factory.getInstance();
                     LyricItemDTO itemDTO = getDtoToAdd(view.getResultTable(), model.getOutputTableModel());
                     itemDTO.setLyrics(service.getLyricsFromUrl(htmlPath));
                     System.out.println(itemDTO.getLyrics());
@@ -217,11 +218,11 @@ public class UiController {
         return new LyricItemDTO(artistName, songTitle, lyrics);
     }
 
-    private void createServiceAndModel(ServiceType serviceType) {
+    private void createServiceAndModel(IServiceFactory factory) {
         if (EMPTY_STRING.equals(view.getQuery())) {
             view.showError(messages.getString("error.message"));
         }
-        ILyricService service = LyricServiceFactory.getService(serviceType);
+        ILyricService service = factory.getInstance();
         try {
             service.setQuery(view.getQuery());
             model.createPartialTableModel(service);

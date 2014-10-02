@@ -6,6 +6,7 @@ import com.findlyrics.db.dao.impl.SongDAO;
 import com.findlyrics.db.model.Artist;
 import com.findlyrics.db.model.Song;
 import com.findlyrics.db.service.ILyricService;
+import com.findlyrics.db.service.IServiceFactory;
 import com.findlyrics.exceptions.DataConnectionException;
 import com.findlyrics.ui.model.LyricItemDTO;
 import com.findlyrics.ui.model.LyricsDTO;
@@ -29,11 +30,19 @@ public class DBLyricsService implements ILyricService {
     private SongDAO songDAO;
     private PartialSongDAO partialSongDAO;
 
-    public DBLyricsService() {
+    private DBLyricsService() {
         this.artistDAO = new ArtistDAO();
         this.songDAO = new SongDAO();
         this.partialSongDAO = new PartialSongDAO();
     }
+
+    public static final IServiceFactory factory = new IServiceFactory() {
+        @Override
+        public ILyricService getInstance() {
+            return new DBLyricsService();
+        }
+    };
+
 
     public LyricsDTO getDTO(String query) throws DataConnectionException {
         LyricsDTO dto = new LyricsDTO();
@@ -121,6 +130,5 @@ public class DBLyricsService implements ILyricService {
         }
         return new LinkedList<Artist>(resultMap.values());
     }
-
 
 }
