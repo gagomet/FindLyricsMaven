@@ -15,6 +15,10 @@ import javax.swing.SwingUtilities;
 public class StartApp {
 
     public static void main(String[] args) {
+        if (args.length == 0) {
+            throw new IllegalArgumentException("Must specify arguments!");
+        }
+
         ArgsUtil.setParameters(args[0]);
 
         SwingUtilities.invokeLater(new Runnable() {
@@ -25,7 +29,6 @@ public class StartApp {
                 UiViewer view = new UiViewer(model);
                 UiController controller = new UiController(model, view);
                 view.setVisible(true);
-
             }
         });
     }

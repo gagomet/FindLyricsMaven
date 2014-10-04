@@ -18,14 +18,12 @@ import java.awt.event.ActionListener;
  */
 public class ButtonsMediator implements IMediator {
 
-
     SearchButton searchButton;
     SearchMoreButton searchMoreButton;
     SearchOnceMoreButton searchOnceMoreButton;
     UiViewer view;
     UiController controller;
     UiModel model;
-
 
     @Override
     public void viewSearchMoreButton() {
@@ -35,9 +33,6 @@ public class ButtonsMediator implements IMediator {
         searchMoreButton.setEnabled(true);
         searchOnceMoreButton.setVisible(false);
         searchOnceMoreButton.setEnabled(false);
-
-
-
     }
 
     @Override
@@ -48,9 +43,7 @@ public class ButtonsMediator implements IMediator {
         searchMoreButton.setVisible(false);
         searchOnceMoreButton.setVisible(true);
         searchOnceMoreButton.setEnabled(true);
-
     }
-
 
     @Override
     public void viewSearchButton() {
@@ -96,5 +89,4 @@ public class ButtonsMediator implements IMediator {
         controller.constructOutput(DBLyricsService.factory, controller.getTableMouseAdapterViewOnly());
 
     }
-
 }

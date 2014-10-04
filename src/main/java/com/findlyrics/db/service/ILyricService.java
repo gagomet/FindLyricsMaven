@@ -7,7 +7,6 @@ import com.findlyrics.ui.model.LyricsDTO;
  * Created by Padonag on 17.08.2014.
  */
 public interface ILyricService {
-    public LyricsDTO getDTO(String query) throws DataConnectionException;
 
     public LyricsDTO getPartDTO(int page, int recordsPerPage) throws DataConnectionException;
 

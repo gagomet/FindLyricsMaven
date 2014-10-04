@@ -13,16 +13,16 @@ import com.findlyrics.ui.model.tablemodel.impl.OutputTableModel;
 import com.findlyrics.ui.view.ShowLyricsFrame;
 import com.findlyrics.ui.view.UiViewer;
 import org.apache.log4j.Logger;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
 import javax.swing.JTable;
-import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -38,9 +38,8 @@ public class UiController {
     private ResourceBundle messages;
     private IMediator mediator;
 
-
     public UiController(UiModel model, UiViewer view) {
-        this.mediator = view.getMediator();
+        this.mediator = model.getMediator();
         messages = ResourceBundle.getBundle("text", Locale.ENGLISH);
         this.model = model;
         this.view = view;
@@ -48,7 +47,6 @@ public class UiController {
         view.addTextFieldListener(new SearchButtonListener());
         view.addSearchButtonsListener(new SearchButtonListener());
         view.addTextClearButtonListener(new ClearTextListener());
-
     }
 
     public void constructOutput(IServiceFactory factory, MouseAdapter adapter){
@@ -74,7 +72,6 @@ public class UiController {
         if (model.getTableModel().getPageCount() > 1) {
             if (view.getPreviousPage() == null && view.getNextPage() == null) {
                 view.addPaginationButtons();
-
             }
             view.addPaginationListener(new PaginationListener());
         }
@@ -132,7 +129,6 @@ public class UiController {
         }
     }
 
-
     private class PaginationListener implements ActionListener {
 
         @Override
@@ -146,7 +142,6 @@ public class UiController {
                     log.debug("Throwing exception", e1);
                     view.showError(e1.getMessage());
                 }
-
             }
 
             if (e.getSource() == view.getNextPage()) {
@@ -159,7 +154,6 @@ public class UiController {
                     view.showError(e1.getMessage());
                 }
             }
-
         }
     }
 
@@ -207,16 +201,12 @@ public class UiController {
             if (row >= 0 && column == 2) {
                 String htmlPath = (String) model.getOutputTableModel().getValueAt(view.getResultTable().getSelectedRow(), view.getResultTable().getSelectedColumn());
                 try {
-                    Desktop.getDesktop().browse(new URI(htmlPath));
                     //TODO can't use factory here
                     DBLyricsService service = (DBLyricsService) DBLyricsService.factory.getInstance();
                     LyricItemDTO itemDTO = getDtoToAdd(view.getResultTable(), model.getOutputTableModel());
-                    itemDTO.setLyrics(service.getLyricsFromUrl(htmlPath));
-                    System.out.println(itemDTO.getLyrics());
+                    itemDTO.setLyrics(getLyricsFromUrl(htmlPath));
                     service.addSongToDB(itemDTO);
                 } catch (IOException e1) {
-                    log.debug("Throwing exception", e1);
-                } catch (URISyntaxException e1) {
                     log.debug("Throwing exception", e1);
                 } catch (DataConnectionException e1) {
                     log.debug("Throwing exception", e1);
@@ -224,6 +214,12 @@ public class UiController {
                 }
             }
         }
+    }
+
+    private String getLyricsFromUrl(String url) throws IOException {
+        Document document = Jsoup.connect(url).get();
+        Element lyrics = document.select("pre").get(0);
+        return lyrics.text();
     }
 
     private LyricItemDTO getDtoToAdd(JTable resultTable, OutputTableModel tableModel) {

@@ -45,20 +45,6 @@ public class RestLyricsService implements ILyricService {
         }
     };
 
-    public LyricsDTO getDTO(String query) {
-        List<SongPojo> inputData = jsonToPojo(getJsonFromRest(query));
-        LyricsDTO dto = new LyricsDTO();
-        List<LyricItemDTO> entries = new ArrayList<LyricItemDTO>();
-        for (SongPojo currentSong : inputData) {
-            Artist newArtist = new Artist(currentSong.getArtist().getName());
-            Song newSong = new Song(currentSong.getTitle(), currentSong.getUrl());
-            LyricItemDTO tempResult = new LyricItemDTO(newArtist, newSong);
-            entries.add(tempResult);
-        }
-        dto.setSearchResults(entries);
-        return dto;
-    }
-
     @Override
     public LyricsDTO getPartDTO(int page, int recordsPerPage) throws DataConnectionException {
         if (query == null) {

@@ -36,8 +36,4 @@ public class ShowLyricsFrame extends JFrame {
         add(textPanel);
         add(scrollPane);
     }
-
-    private void closeFrame() {
-        setVisible(false);
-    }
 }

@@ -13,7 +13,6 @@ import com.findlyrics.ui.model.tablemodel.impl.PartialTableModel;
  */
 public class UiModel {
 
-    private LyricsDTO dto;
     private OutputTableModel outputTableModel;
     private PartialTableModel partialTableModel;
     private IMediator mediator;
@@ -23,14 +22,8 @@ public class UiModel {
         mediator.registerModel(this);
     }
 
-    public void createTableModel(ILyricService service, String query) throws DataConnectionException {
-        dto = service.getDTO(query);
-        outputTableModel = new OutputTableModel(dto);
-    }
-
     public void createPartialTableModel(ILyricService service) throws DataConnectionException {
         partialTableModel = new PartialTableModel(service);
-
     }
 
     public OutputTableModel getOutputTableModel() {

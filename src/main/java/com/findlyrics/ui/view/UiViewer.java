@@ -4,7 +4,6 @@ import com.findlyrics.ui.mediator.IMediator;
 import com.findlyrics.ui.mediator.buttons.impl.SearchButton;
 import com.findlyrics.ui.mediator.buttons.impl.SearchMoreButton;
 import com.findlyrics.ui.mediator.buttons.impl.SearchOnceMoreButton;
-import com.findlyrics.ui.mediator.impl.ButtonsMediator;
 import com.findlyrics.ui.model.UiModel;
 
 import javax.swing.BoxLayout;
@@ -38,7 +37,6 @@ public class UiViewer extends JFrame {
     private SearchMoreButton searchMoreButton;
     private SearchOnceMoreButton searchOnceMoreButton;
     private JButton clearTextButton;
-    private JPanel queryPanel;
     private JPanel paginationPanel;
     private JPanel resultTablePanel;
     private UiModel model;
@@ -60,15 +58,13 @@ public class UiViewer extends JFrame {
         setSize(FRAME_WIDTH, FRAME_HEIGHT);
         setResizable(false);
         mediator.registerView(this);
-
     }
 
     private void createForm() {
-
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
-        queryPanel = new JPanel();
         paginationPanel = new JPanel();
         resultTablePanel = new JPanel();
+        JPanel queryPanel = new JPanel();
         queryPanel.add(queryField);
         queryPanel.add(clearTextButton);
         queryPanel.add(searchButton);
@@ -139,10 +135,6 @@ public class UiViewer extends JFrame {
         return nextPage;
     }
 
-    public IMediator getMediator() {
-        return mediator;
-    }
-
     public void showError(String errorMessage) {
         JOptionPane.showMessageDialog(null, errorMessage);
     }
@@ -178,6 +170,5 @@ public class UiViewer extends JFrame {
     public JPanel getResultTablePanel() {
         return resultTablePanel;
     }
-
 
 }

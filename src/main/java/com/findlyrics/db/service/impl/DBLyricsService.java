@@ -11,15 +11,9 @@ import com.findlyrics.exceptions.DataConnectionException;
 import com.findlyrics.ui.model.LyricItemDTO;
 import com.findlyrics.ui.model.LyricsDTO;
 import org.apache.log4j.Logger;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Padonag on 06.08.2014.
@@ -43,21 +37,7 @@ public class DBLyricsService implements ILyricService {
         }
     };
 
-
-    public LyricsDTO getDTO(String query) throws DataConnectionException {
-        LyricsDTO dto = new LyricsDTO();
-        List<Artist> inputData = getArtist(query);
-        List<LyricItemDTO> lyricItemDTOs = new LinkedList<LyricItemDTO>();
-        for (Artist currentArtist : inputData) {
-            for (Song currentSong : currentArtist.getRepertoir()) {
-                LyricItemDTO tempResult = new LyricItemDTO(currentArtist, currentSong);
-                lyricItemDTOs.add(tempResult);
-            }
-        }
-        dto.setSearchResults(lyricItemDTOs);
-        return dto;
-    }
-
+    @Override
     public LyricsDTO getPartDTO(int page, int recordsPerPage) throws DataConnectionException {
         LyricsDTO dto = new LyricsDTO();
         List<LyricItemDTO> lyricItemDTOs = new LinkedList<LyricItemDTO>();
@@ -93,42 +73,14 @@ public class DBLyricsService implements ILyricService {
         }
     }
 
-    public String getLyricsFromUrl(String url) throws IOException {
-        Document document = Jsoup.connect(url).get();
-        Element lyrics = document.select("pre").get(0);
-        return lyrics.text();
-    }
-
-    public PartialSongDAO getPartialSongDAO() {
-        return partialSongDAO;
-    }
-
+    @Override
     public void setQuery(String query) {
         partialSongDAO.setLyrics(query);
     }
 
+    @Override
     public int getNumberOfRecords() {
         System.out.println(partialSongDAO.getNoOfRecords());
         return partialSongDAO.getNoOfRecords();
     }
-
-    private List<Artist> getArtist(String text) throws DataConnectionException {
-        Map<Long, Artist> resultMap = new HashMap<Long, Artist>();
-        List<Song> songList = songDAO.getSongs(text);
-
-        for (Song currentSong : songList) {
-            Long artistID = currentSong.getArtistId();
-            Artist currentArtist = artistDAO.getArtist(artistID);
-            if (resultMap.containsKey(artistID)) {
-                Artist temporary = resultMap.get(artistID);
-                temporary.addSong(currentSong);
-                resultMap.put(artistID, temporary);
-            } else {
-                currentArtist.addSong(currentSong);
-                resultMap.put(artistID, currentArtist);
-            }
-        }
-        return new LinkedList<Artist>(resultMap.values());
-    }
-
 }

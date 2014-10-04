@@ -28,11 +28,10 @@ public class HttpLyricsService implements ILyricService {
     private static final Logger log = Logger.getLogger(HttpLyricsService.class);
     private static final String SERVICE_URL = "http://webservices.lyrdb.com/lookup.php?q=";
     private static final String URL_TO_GET_LYRICS = "http://webservices.lyrdb.com/getlyr.php?q=";
-    private int entities;
+    private int numberOfRows;
     private String query = null;
 
     private HttpLyricsService() {
-
     }
 
     public static final IServiceFactory factory = new IServiceFactory() {
@@ -42,24 +41,13 @@ public class HttpLyricsService implements ILyricService {
         }
     };
 
-
-    @Override
-    public LyricsDTO getDTO(String query) throws DataConnectionException {
-        LyricsDTO dto = new LyricsDTO();
-        String response = null;
-        response = getHttpResponse(SERVICE_URL + query + ForArguments.FOR_WORD_IN_LYRICS);
-        dto.setSearchResults(parseResponse(response));
-        return dto;
-    }
-
     @Override
     public LyricsDTO getPartDTO(int page, int recordsPerPage) throws DataConnectionException {
         if (query == null) {
             return null;
         }
         LyricsDTO dto = new LyricsDTO();
-        String response = null;
-        response = getHttpResponse(SERVICE_URL + query + ForArguments.FOR_WORD_IN_LYRICS);
+        String response = getHttpResponse(SERVICE_URL + query + ForArguments.FOR_WORD_IN_LYRICS);
         List<LyricItemDTO> inputData = parseResponse(response);
         List<LyricItemDTO> partialData = inputData.subList(page * recordsPerPage, Math.min((page + 1) * recordsPerPage, inputData.size()));
         dto.setSearchResults(partialData);
@@ -68,7 +56,7 @@ public class HttpLyricsService implements ILyricService {
 
     @Override
     public int getNumberOfRecords() {
-        return entities;
+        return numberOfRows;
     }
 
     @Override
@@ -106,7 +94,7 @@ public class HttpLyricsService implements ILyricService {
             LyricItemDTO currentItem = new LyricItemDTO(currentArtist, currentSong);
             result.add(currentItem);
         }
-        entities = result.size();
+        numberOfRows = result.size();
         return result;
     }
 
