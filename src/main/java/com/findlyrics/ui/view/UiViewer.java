@@ -1,5 +1,10 @@
 package com.findlyrics.ui.view;
 
+import com.findlyrics.ui.mediator.IMediator;
+import com.findlyrics.ui.mediator.buttons.impl.SearchButton;
+import com.findlyrics.ui.mediator.buttons.impl.SearchMoreButton;
+import com.findlyrics.ui.mediator.buttons.impl.SearchOnceMoreButton;
+import com.findlyrics.ui.mediator.impl.ButtonsMediator;
 import com.findlyrics.ui.model.UiModel;
 
 import javax.swing.BoxLayout;
@@ -29,18 +34,23 @@ public class UiViewer extends JFrame {
     private JTable resultTable;
     private JButton previousPage;
     private JButton nextPage;
-    private JButton searchButton;
+    private SearchButton searchButton;
+    private SearchMoreButton searchMoreButton;
+    private SearchOnceMoreButton searchOnceMoreButton;
     private JButton clearTextButton;
     private JPanel queryPanel;
     private JPanel paginationPanel;
     private JPanel resultTablePanel;
     private UiModel model;
+    private IMediator mediator;
 
     public UiViewer(UiModel model) {
-
+        this.mediator = model.getMediator();
         this.model = model;
         this.queryField = new JTextField(50);
-        this.searchButton = new JButton(messages.getString("search.button.name"));
+        this.searchButton = new SearchButton(mediator, messages.getString("search.button.name"));
+        this.searchMoreButton = new SearchMoreButton(mediator, messages.getString("search.more.button.name"));
+        this.searchOnceMoreButton = new SearchOnceMoreButton(mediator, messages.getString("search.once.more.button.name"));
         this.clearTextButton = new JButton(messages.getString("clear.text.button"));
         this.resultTable = new JTable();
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -49,6 +59,8 @@ public class UiViewer extends JFrame {
         pack();
         setSize(FRAME_WIDTH, FRAME_HEIGHT);
         setResizable(false);
+        mediator.registerView(this);
+
     }
 
     private void createForm() {
@@ -60,6 +72,9 @@ public class UiViewer extends JFrame {
         queryPanel.add(queryField);
         queryPanel.add(clearTextButton);
         queryPanel.add(searchButton);
+        queryPanel.add(searchMoreButton);
+        queryPanel.add(searchOnceMoreButton);
+        mediator.viewSearchButton();
         add(queryPanel, this);
         add(paginationPanel, this);
         add(resultTablePanel, this);
@@ -72,10 +87,20 @@ public class UiViewer extends JFrame {
         paginationPanel.add(nextPage);
         repaint();
     }
-
+// -----------------------------------------------------------------------------------------
+// I must add this 3 methods to force the app to work
     public void addSearchButtonsListener(ActionListener listener) {
         searchButton.addActionListener(listener);
     }
+
+    public void addSearchMoreButtonsListener(ActionListener listener) {
+        searchMoreButton.addActionListener(listener);
+    }
+
+    public void addSearchOnceMoreButtonsListener(ActionListener listener) {
+        searchOnceMoreButton.addActionListener(listener);
+    }
+//-------------------------------------------------------------------------------------------
 
     public void addTextClearButtonListener(ActionListener listener) {
         clearTextButton.addActionListener(listener);
@@ -114,13 +139,8 @@ public class UiViewer extends JFrame {
         return nextPage;
     }
 
-    public void setSearchButton(String buttonName) {
-        searchButton.setVisible(false);
-        remove(searchButton);
-        searchButton = new JButton(buttonName);
-        queryPanel.add(searchButton);
-        queryPanel.repaint();
-        this.repaint();
+    public IMediator getMediator() {
+        return mediator;
     }
 
     public void showError(String errorMessage) {
@@ -132,7 +152,6 @@ public class UiViewer extends JFrame {
             resultTablePanel.remove(resultTable);
         }
 
-//        resultTable = new JTable(/*model.getOutputTableModel()*/ model.getTableModel());
         //TODO find more elegance solution
 
         if (model.getPartialTableModel() == null) {

@@ -6,6 +6,7 @@ import com.findlyrics.db.service.impl.DBLyricsService;
 import com.findlyrics.exceptions.DataConnectionException;
 import com.findlyrics.http.service.HttpLyricsService;
 import com.findlyrics.rest.service.RestLyricsService;
+import com.findlyrics.ui.mediator.IMediator;
 import com.findlyrics.ui.model.LyricItemDTO;
 import com.findlyrics.ui.model.UiModel;
 import com.findlyrics.ui.model.tablemodel.impl.OutputTableModel;
@@ -35,16 +36,37 @@ public class UiController {
     private UiModel model;
     private UiViewer view;
     private ResourceBundle messages;
+    private IMediator mediator;
 
 
     public UiController(UiModel model, UiViewer view) {
+        this.mediator = view.getMediator();
         messages = ResourceBundle.getBundle("text", Locale.ENGLISH);
         this.model = model;
         this.view = view;
+        mediator.registerController(this);
         view.addTextFieldListener(new SearchButtonListener());
         view.addSearchButtonsListener(new SearchButtonListener());
         view.addTextClearButtonListener(new ClearTextListener());
 
+    }
+
+    public void constructOutput(IServiceFactory factory, MouseAdapter adapter){
+        createServiceAndModel(factory);
+        addPagination();
+        addTable(adapter);
+    }
+
+    public TableMouseAdapter getTableMouseAdapter(){
+        return new TableMouseAdapter();
+    }
+
+    public TableMouseAdapterViewOnly getTableMouseAdapterViewOnly(){
+        return new TableMouseAdapterViewOnly();
+    }
+
+    public TableWithUrlMouseAdapter getTableWithUrlMouseAdapter(){
+        return new TableWithUrlMouseAdapter();
     }
 
     private void addPagination() {
@@ -70,11 +92,9 @@ public class UiController {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            createServiceAndModel(DBLyricsService.factory);
-            addPagination();
-            addTable(new TableMouseAdapterViewOnly());
-            view.setSearchButton(messages.getString("search.more.button.name"));
-            view.addSearchButtonsListener(new SearchMoreButtonListener());
+            constructOutput(DBLyricsService.factory, getTableMouseAdapterViewOnly());
+            mediator.viewSearchMoreButton();
+            view.addSearchMoreButtonsListener(new SearchMoreButtonListener());
             view.addTextFieldListener(new SearchOnceMoreButtonListener());
         }
     }
@@ -83,11 +103,9 @@ public class UiController {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            createServiceAndModel(HttpLyricsService.factory);
-            addPagination();
-            addTable(new TableMouseAdapter());
-            view.setSearchButton(messages.getString("search.once.more.button.name"));
-            view.addSearchButtonsListener(new SearchOnceMoreButtonListener());
+            constructOutput(HttpLyricsService.factory, getTableMouseAdapter());
+            mediator.viewSearchOnceMoreButton();
+            view.addSearchOnceMoreButtonsListener(new SearchOnceMoreButtonListener());
             view.addTextFieldListener(new SearchOnceMoreButtonListener());
         }
     }
@@ -96,9 +114,7 @@ public class UiController {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            createServiceAndModel(RestLyricsService.factory);
-            addPagination();
-            addTable(new TableWithUrlMouseAdapter());
+            constructOutput(RestLyricsService.factory, getTableWithUrlMouseAdapter());
         }
     }
 
@@ -109,7 +125,7 @@ public class UiController {
             view.setTextInQueryField(EMPTY_STRING);
             view.getPaginationPanel().setVisible(false);
             view.getResultTablePanel().setVisible(false);
-            view.setSearchButton(messages.getString("search.button.name"));
+            mediator.viewSearchButton();
             view.addSearchButtonsListener(new SearchButtonListener());
             model.clearOutputTableModel();
             model.clearPartialTableModel();

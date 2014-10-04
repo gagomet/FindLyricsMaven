@@ -2,6 +2,7 @@ package com.findlyrics.ui.model;
 
 import com.findlyrics.db.service.ILyricService;
 import com.findlyrics.exceptions.DataConnectionException;
+import com.findlyrics.ui.mediator.IMediator;
 import com.findlyrics.ui.model.tablemodel.ITableModelPagination;
 import com.findlyrics.ui.model.tablemodel.impl.OutputTableModel;
 import com.findlyrics.ui.model.tablemodel.impl.PartialTableModel;
@@ -15,9 +16,11 @@ public class UiModel {
     private LyricsDTO dto;
     private OutputTableModel outputTableModel;
     private PartialTableModel partialTableModel;
+    private IMediator mediator;
 
-    public UiModel() {
-
+    public UiModel(IMediator mediator){
+        this.mediator = mediator;
+        mediator.registerModel(this);
     }
 
     public void createTableModel(ILyricService service, String query) throws DataConnectionException {
@@ -53,4 +56,7 @@ public class UiModel {
         partialTableModel = null;
     }
 
+    public IMediator getMediator() {
+        return mediator;
+    }
 }
