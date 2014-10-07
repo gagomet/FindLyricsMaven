@@ -49,21 +49,21 @@ public class UiController {
         view.addTextClearButtonListener(new ClearTextListener());
     }
 
-    public void constructOutput(IServiceFactory factory, MouseAdapter adapter){
-        createServiceAndModel(factory);
-        addPagination();
-        addTable(adapter);
+    public void constructOutput(IServiceFactory factory, MouseAdapter adapter) {
+            createServiceAndModel(factory);
+            addPagination();
+            addTable(adapter);
     }
 
-    public TableMouseAdapter getTableMouseAdapter(){
+    public TableMouseAdapter getTableMouseAdapter() {
         return new TableMouseAdapter();
     }
 
-    public TableMouseAdapterViewOnly getTableMouseAdapterViewOnly(){
+    public TableMouseAdapterViewOnly getTableMouseAdapterViewOnly() {
         return new TableMouseAdapterViewOnly();
     }
 
-    public TableWithUrlMouseAdapter getTableWithUrlMouseAdapter(){
+    public TableWithUrlMouseAdapter getTableWithUrlMouseAdapter() {
         return new TableWithUrlMouseAdapter();
     }
 
@@ -89,10 +89,15 @@ public class UiController {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            constructOutput(DBLyricsService.factory, getTableMouseAdapterViewOnly());
-            mediator.viewSearchMoreButton();
-            view.addSearchMoreButtonsListener(new SearchMoreButtonListener());
-            view.addTextFieldListener(new SearchOnceMoreButtonListener());
+            if (EMPTY_STRING.equals(view.getQuery())) {
+                view.showError(messages.getString("error.message"));
+
+            } else {
+                constructOutput(DBLyricsService.factory, getTableMouseAdapterViewOnly());
+                mediator.viewSearchMoreButton();
+                view.addSearchMoreButtonsListener(new SearchMoreButtonListener());
+                view.addTextFieldListener(new SearchOnceMoreButtonListener());
+            }
         }
     }
 
@@ -231,9 +236,6 @@ public class UiController {
     }
 
     private void createServiceAndModel(IServiceFactory factory) {
-        if (EMPTY_STRING.equals(view.getQuery())) {
-            view.showError(messages.getString("error.message"));
-        }
         ILyricService service = factory.getInstance();
         try {
             service.setQuery(view.getQuery());
