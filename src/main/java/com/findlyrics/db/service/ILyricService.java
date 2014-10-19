@@ -13,4 +13,6 @@ public interface ILyricService {
     public int getNumberOfRecords();
 
     public void setQuery(String query);
+
+    public LyricsDTO getFullDto(String query) throws DataConnectionException;
 }

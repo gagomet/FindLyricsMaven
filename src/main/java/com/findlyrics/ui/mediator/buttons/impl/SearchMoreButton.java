@@ -12,11 +12,12 @@ public class SearchMoreButton extends JButton implements IUiSearchButton {
 
     private IMediator mediator;
 
-    public SearchMoreButton(IMediator mediator, String text){
+    public SearchMoreButton(IMediator mediator, String text) {
         super(text);
         this.mediator = mediator;
         mediator.registerSearchMoreButton(this);
     }
+
     @Override
     public void click() {
         mediator.viewSearchOnceMoreButton();

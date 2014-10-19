@@ -16,10 +16,9 @@ public class LyricItemDTO {
         this.artistName = artist.getName();
         this.songName = song.getTitle();
         this.lyrics = song.getLyrics();
-
     }
 
-    public LyricItemDTO(String artist, String song, String lyrics) {
+    public LyricItemDTO(String artist, String song, final String lyrics) {
         this.artistName = artist;
         this.songName = song;
         this.lyrics = lyrics;
@@ -72,4 +71,3 @@ public class LyricItemDTO {
                 '}';
     }
 }
-

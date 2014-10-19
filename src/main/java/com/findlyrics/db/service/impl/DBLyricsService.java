@@ -40,15 +40,18 @@ public class DBLyricsService implements ILyricService {
     @Override
     public LyricsDTO getPartDTO(int page, int recordsPerPage) throws DataConnectionException {
         LyricsDTO dto = new LyricsDTO();
-        List<LyricItemDTO> lyricItemDTOs = new LinkedList<LyricItemDTO>();
         List<Song> list = partialSongDAO.getSongsPart(page * recordsPerPage,
                 recordsPerPage);
-        for (Song currentSong : list) {
-            Artist tempArtist = artistDAO.getArtist(currentSong.getArtistId());
-            LyricItemDTO itemDTO = new LyricItemDTO(tempArtist, currentSong);
-            lyricItemDTOs.add(itemDTO);
-        }
+        List<LyricItemDTO> lyricItemDTOs = mapArtistToSongs(list);
         dto.setSearchResults(lyricItemDTOs);
+        return dto;
+    }
+
+    @Override
+    public LyricsDTO getFullDto(String lyrics) throws DataConnectionException {
+        LyricsDTO dto = new LyricsDTO();
+        List<Song> songsList = songDAO.getSongs(lyrics);
+        dto.setSearchResults(mapArtistToSongs(songsList));
         return dto;
     }
 
@@ -83,4 +86,16 @@ public class DBLyricsService implements ILyricService {
         System.out.println(partialSongDAO.getNoOfRecords());
         return partialSongDAO.getNoOfRecords();
     }
+
+    private List<LyricItemDTO> mapArtistToSongs(List<Song> songList) throws DataConnectionException {
+        List<LyricItemDTO> result = new LinkedList<LyricItemDTO>();
+        for (Song currentSong : songList) {
+            Artist tempArtist = artistDAO.getArtist(currentSong.getArtistId());
+            LyricItemDTO itemDTO = new LyricItemDTO(tempArtist, currentSong);
+            result.add(itemDTO);
+        }
+        return result;
+    }
+
+
 }

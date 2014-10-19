@@ -1,16 +1,13 @@
 package com.findlyrics.ui.mediator.impl;
 
 import com.findlyrics.db.service.impl.DBLyricsService;
-import com.findlyrics.ui.controller.UiController;
+import com.findlyrics.ui.controller.ListController;
 import com.findlyrics.ui.mediator.IMediator;
-import com.findlyrics.ui.mediator.buttons.IUiSearchButton;
 import com.findlyrics.ui.mediator.buttons.impl.SearchButton;
 import com.findlyrics.ui.mediator.buttons.impl.SearchMoreButton;
 import com.findlyrics.ui.mediator.buttons.impl.SearchOnceMoreButton;
 import com.findlyrics.ui.model.UiModel;
-import com.findlyrics.ui.view.UiViewer;
-
-import java.awt.event.ActionListener;
+import com.findlyrics.ui.view.ListModelView;
 
 
 /**
@@ -21,8 +18,8 @@ public class ButtonsMediator implements IMediator {
     SearchButton searchButton;
     SearchMoreButton searchMoreButton;
     SearchOnceMoreButton searchOnceMoreButton;
-    UiViewer view;
-    UiController controller;
+    ListModelView view;
+    ListController controller;
     UiModel model;
 
     @Override
@@ -76,17 +73,14 @@ public class ButtonsMediator implements IMediator {
     }
 
     @Override
-    public void registerView(UiViewer view) {
+    public void registerView(ListModelView view) {
         this.view = view;
     }
 
     @Override
-    public void registerController(UiController controller) {
+    public void registerController(ListController controller) {
         this.controller = controller;
     }
 
-    public void setSearchListener(){
-        controller.constructOutput(DBLyricsService.factory, controller.getTableMouseAdapterViewOnly());
 
-    }
 }

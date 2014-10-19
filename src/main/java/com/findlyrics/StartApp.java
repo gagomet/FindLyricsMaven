@@ -1,10 +1,10 @@
 package com.findlyrics;
 
-import com.findlyrics.ui.controller.UiController;
+import com.findlyrics.ui.controller.ListController;
 import com.findlyrics.ui.mediator.IMediator;
 import com.findlyrics.ui.mediator.impl.ButtonsMediator;
 import com.findlyrics.ui.model.UiModel;
-import com.findlyrics.ui.view.UiViewer;
+import com.findlyrics.ui.view.ListModelView;
 import com.findlyrics.util.ArgsUtil;
 
 import javax.swing.SwingUtilities;
@@ -26,8 +26,12 @@ public class StartApp {
             public void run() {
                 IMediator mediator = new ButtonsMediator();
                 UiModel model = new UiModel(mediator);
-                UiViewer view = new UiViewer(model);
-                UiController controller = new UiController(model, view);
+//                UiViewer view = new UiViewer(model);
+//                UiController controller = new UiController(model, view);
+
+                ListModelView view = new ListModelView(model);
+                ListController controller = new ListController(model, view);
+
                 view.setVisible(true);
             }
         });

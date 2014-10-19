@@ -24,6 +24,7 @@ import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -48,18 +49,23 @@ public class RestLyricsService implements ILyricService {
     @Override
     public LyricsDTO getPartDTO(int page, int recordsPerPage) throws DataConnectionException {
         if (query == null) {
-            return null;
+            return new LyricsDTO();
         }
         List<SongPojo> inputData = jsonToPojo(getJsonFromRest(query));
         List<SongPojo> partialData = inputData.subList(page * recordsPerPage, Math.min((page + 1) * recordsPerPage, inputData.size()));
         LyricsDTO dto = new LyricsDTO();
-        List<LyricItemDTO> entries = new ArrayList<LyricItemDTO>();
-        for (SongPojo currentSong : partialData) {
-            Artist newArtist = new Artist(currentSong.getArtist().getName());
-            Song newSong = new Song(currentSong.getTitle(), currentSong.getUrl());
-            LyricItemDTO tempResult = new LyricItemDTO(newArtist, newSong);
-            entries.add(tempResult);
+        List<LyricItemDTO> entries = pojoToLyricItemDtoList(partialData);
+        dto.setSearchResults(entries);
+        return dto;
+    }
+
+    public LyricsDTO getFullDto(String query) {
+        if (query == null) {
+            return new LyricsDTO();
         }
+        List<SongPojo> inputData = jsonToPojo(getJsonFromRest(query));
+        LyricsDTO dto = new LyricsDTO();
+        List<LyricItemDTO> entries = pojoToLyricItemDtoList(inputData);
         dto.setSearchResults(entries);
         return dto;
     }
@@ -128,6 +134,17 @@ public class RestLyricsService implements ILyricService {
             log.debug("Throwing exception", e);
         }
         numberOfRecords = result.size();
+        return result;
+    }
+
+    private List<LyricItemDTO> pojoToLyricItemDtoList(List<SongPojo> pojoList) {
+        List<LyricItemDTO> result = new LinkedList<LyricItemDTO>();
+        for (SongPojo currentSong : pojoList) {
+            Artist newArtist = new Artist(currentSong.getArtist().getName());
+            Song newSong = new Song(currentSong.getTitle(), currentSong.getUrl());
+            LyricItemDTO tempResult = new LyricItemDTO(newArtist, newSong);
+            result.add(tempResult);
+        }
         return result;
     }
 
