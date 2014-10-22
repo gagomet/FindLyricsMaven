@@ -4,7 +4,6 @@ import com.findlyrics.ui.mediator.IMediator;
 import com.findlyrics.ui.model.listmodel.ArrayListModel;
 
 
-
 /**
  * Created by Padonag on 19.08.2014.
  */

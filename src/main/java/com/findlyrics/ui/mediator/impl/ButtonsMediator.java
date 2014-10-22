@@ -1,6 +1,5 @@
 package com.findlyrics.ui.mediator.impl;
 
-import com.findlyrics.db.service.impl.DBLyricsService;
 import com.findlyrics.ui.controller.ListController;
 import com.findlyrics.ui.mediator.IMediator;
 import com.findlyrics.ui.mediator.buttons.impl.SearchButton;

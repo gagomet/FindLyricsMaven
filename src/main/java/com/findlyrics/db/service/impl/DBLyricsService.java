@@ -8,6 +8,8 @@ import com.findlyrics.db.model.Song;
 import com.findlyrics.db.service.ILyricService;
 import com.findlyrics.db.service.IServiceFactory;
 import com.findlyrics.exceptions.DataConnectionException;
+import com.findlyrics.db.hibernate.impl.HibernateArtistDAO;
+import com.findlyrics.db.hibernate.impl.HibernateSongDAO;
 import com.findlyrics.ui.model.LyricItemDTO;
 import com.findlyrics.ui.model.LyricsDTO;
 import org.apache.log4j.Logger;
@@ -23,11 +25,15 @@ public class DBLyricsService implements ILyricService {
     private ArtistDAO artistDAO;
     private SongDAO songDAO;
     private PartialSongDAO partialSongDAO;
+    private HibernateArtistDAO hibernateArtistDAO;
+    private HibernateSongDAO hibernateSongDAO;
 
     private DBLyricsService() {
         this.artistDAO = new ArtistDAO();
         this.songDAO = new SongDAO();
         this.partialSongDAO = new PartialSongDAO();
+        this.hibernateArtistDAO = new HibernateArtistDAO();
+        this.hibernateSongDAO = new HibernateSongDAO();
     }
 
     public static final IServiceFactory factory = new IServiceFactory() {
@@ -52,6 +58,14 @@ public class DBLyricsService implements ILyricService {
         LyricsDTO dto = new LyricsDTO();
         List<Song> songsList = songDAO.getSongs(lyrics);
         dto.setSearchResults(mapArtistToSongs(songsList));
+        return dto;
+    }
+
+    @Override
+    public LyricsDTO hibernateGetFullDto(String lyrics) throws DataConnectionException {
+        LyricsDTO dto = new LyricsDTO();
+        List<Song> songsList = hibernateSongDAO.getSong(lyrics);
+        dto.setSearchResults(hibernateMapArtistsToSongs(songsList));
         return dto;
     }
 
@@ -91,6 +105,17 @@ public class DBLyricsService implements ILyricService {
         List<LyricItemDTO> result = new LinkedList<LyricItemDTO>();
         for (Song currentSong : songList) {
             Artist tempArtist = artistDAO.getArtist(currentSong.getArtistId());
+            LyricItemDTO itemDTO = new LyricItemDTO(tempArtist, currentSong);
+            result.add(itemDTO);
+        }
+        return result;
+    }
+
+    private List<LyricItemDTO> hibernateMapArtistsToSongs(List<Song> songsPojoList) throws DataConnectionException {
+        List<LyricItemDTO> result = new LinkedList<LyricItemDTO>();
+
+        for (Song currentSong : songsPojoList) {
+            Artist tempArtist = hibernateArtistDAO.getArtist(currentSong.getArtistId());
             LyricItemDTO itemDTO = new LyricItemDTO(tempArtist, currentSong);
             result.add(itemDTO);
         }

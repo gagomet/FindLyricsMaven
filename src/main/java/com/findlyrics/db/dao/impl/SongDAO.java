@@ -81,7 +81,7 @@ public class SongDAO implements ISongDAO {
         while (resultSet.next()) {
             Song currentSong = new Song(resultSet.getString("song_name"), resultSet.getString("lyrics"));
             currentSong.setArtistId(resultSet.getLong("artist_id"));
-            currentSong.setId(resultSet.getLong("id"));
+            currentSong.setSongId(resultSet.getLong("id"));
             result.add(currentSong);
         }
         return result;

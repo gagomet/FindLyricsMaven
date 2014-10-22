@@ -71,6 +71,11 @@ public class RestLyricsService implements ILyricService {
     }
 
     @Override
+    public LyricsDTO hibernateGetFullDto(String lyrics) {
+        return null;
+    }
+
+    @Override
     public int getNumberOfRecords() {
         return numberOfRecords;
     }

@@ -1,15 +1,34 @@
 package com.findlyrics.db.model;
 
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Padonag on 04.08.2014.
  */
+
+@Entity
+@Table(name = "artists")
 public class Artist {
+    @Id
+    @GeneratedValue
+    @Column(name = "id")
     Long id;
+    @Column(name = "artist_name")
     private String name;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "artist_id")
     private List<Song> repertoir = new ArrayList<Song>();
+
 
     public Artist() {
     }

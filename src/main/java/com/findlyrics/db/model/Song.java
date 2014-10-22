@@ -1,16 +1,35 @@
 package com.findlyrics.db.model;
 
-import com.findlyrics.db.dao.impl.SongDAO;
 import org.apache.log4j.Logger;
+import org.hibernate.annotations.Type;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 /**
  * Created by Padonag on 04.08.2014.
  */
+
+@Entity
+@Table(name = "songs")
 public class Song {
-    private static final Logger log = Logger.getLogger(SongDAO.class);
-    private Long id;
+    private static final Logger log = Logger.getLogger(Song.class);
+    @Id
+    @GeneratedValue
+    @Column(name = "id")
+    private Long songId;
+    @ManyToOne(targetEntity = Artist.class)
+    @JoinColumn(name = "artist_id")
     private Long artistId;
+    @Column(name = "song_name")
     private String title;
+    @Column(name = "lyrics")
+    @Type(type = "text")
     private String lyrics;
 
     public Song() {
@@ -37,12 +56,12 @@ public class Song {
         this.lyrics = lyrics;
     }
 
-    public Long getId() {
-        return id;
+    public Long getSongId() {
+        return songId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setSongId(Long songId) {
+        this.songId = songId;
     }
 
     public void setArtistId(Long artistId) {
@@ -62,7 +81,7 @@ public class Song {
 
 
         if (!artistId.equals(song.artistId)) return false;
-        if (!id.equals(song.id)) return false;
+        if (!songId.equals(song.songId)) return false;
         if (!lyrics.equals(song.lyrics)) return false;
         if (!title.equals(song.title)) return false;
 
@@ -71,7 +90,7 @@ public class Song {
 
     @Override
     public int hashCode() {
-        int result = id.hashCode();
+        int result = songId.hashCode();
         result = 31 * result + artistId.hashCode();
         result = 31 * result + title.hashCode();
         result = 31 * result + lyrics.hashCode();

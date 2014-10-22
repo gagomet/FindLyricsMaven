@@ -49,7 +49,8 @@ public class SearchButtonListener implements IButtonListener {
 
     private void searchInDb() throws DataConnectionException {
         ILyricService dbService = DBLyricsService.factory.getInstance();
-        LyricsDTO fullDto = dbService.getFullDto(controller.getView().getQueryPanel().getQueryField().getText());
+//        LyricsDTO fullDto = dbService.getFullDto(controller.getView().getQueryPanel().getQueryField().getText());
+        LyricsDTO fullDto = dbService.hibernateGetFullDto(controller.getView().getQueryPanel().getQueryField().getText());
         controller.getModel().getListModel().setList(convertToOutputList(fullDto, true));
         controller.getView().getContentPanel().setVisible(true);
         controller.getView().getNextSearchPanel().setVisible(true);

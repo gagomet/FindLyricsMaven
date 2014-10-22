@@ -15,4 +15,6 @@ public interface ILyricService {
     public void setQuery(String query);
 
     public LyricsDTO getFullDto(String query) throws DataConnectionException;
+
+    public LyricsDTO hibernateGetFullDto(String lyrics) throws DataConnectionException;
 }
