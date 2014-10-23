@@ -1,14 +1,14 @@
-package com.findlyrics.ui.view.listeners.impl;
+package com.findlyrics.ui.controller.listeners.impl;
 
 import com.findlyrics.db.service.ILyricService;
 import com.findlyrics.db.service.impl.DBLyricsService;
 import com.findlyrics.exceptions.DataConnectionException;
-import com.findlyrics.rest.service.RestLyricsService;
+import com.findlyrics.rest.service.ProxyRestLyricsService;
 import com.findlyrics.ui.controller.ListController;
+import com.findlyrics.ui.controller.listeners.IButtonListener;
 import com.findlyrics.ui.model.LyricItemDTO;
 import com.findlyrics.ui.model.LyricsDTO;
 import com.findlyrics.ui.model.listmodel.ListItem;
-import com.findlyrics.ui.view.listeners.IButtonListener;
 import org.apache.log4j.Logger;
 
 import java.awt.event.ActionEvent;
@@ -54,13 +54,16 @@ public class SearchButtonListener implements IButtonListener {
         controller.getModel().getListModel().setList(convertToOutputList(fullDto, true));
         controller.getView().getContentPanel().setVisible(true);
         controller.getView().getNextSearchPanel().setVisible(true);
+        controller.getView().getContentPanel().setNumberOfFound();
         controller.setDbSearch(false);
     }
 
     private void searchInRest() throws DataConnectionException {
-        ILyricService restService = RestLyricsService.factory.getInstance();
+//        ILyricService restService = RestLyricsService.factory.getInstance();
+        ILyricService restService = ProxyRestLyricsService.factory.getInstance();
         LyricsDTO fullDto = restService.getFullDto(controller.getView().getQueryPanel().getQueryField().getText());
         controller.getModel().getListModel().addAll(convertToOutputList(fullDto, false));
+        controller.getView().getContentPanel().setNumberOfFound();
         controller.setDbSearch(true);
     }
 
