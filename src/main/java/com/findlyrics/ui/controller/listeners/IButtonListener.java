@@ -1,4 +1,4 @@
-package com.findlyrics.ui.view.listeners;
+package com.findlyrics.ui.controller.listeners;
 
 import java.awt.event.ActionListener;
 

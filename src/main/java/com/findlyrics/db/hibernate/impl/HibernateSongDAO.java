@@ -1,15 +1,12 @@
 package com.findlyrics.db.hibernate.impl;
 
-import com.findlyrics.db.model.Song;
 import com.findlyrics.db.hibernate.IHibernateSongDAO;
+import com.findlyrics.db.model.Song;
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -18,16 +15,13 @@ import java.util.List;
 /**
  * Created by Padonag on 21.10.2014.
  */
-public class HibernateSongDAO implements IHibernateSongDAO {
+public class HibernateSongDAO extends HibernateDAO implements IHibernateSongDAO {
     private static final Logger log = Logger.getLogger(HibernateSongDAO.class);
     private static final String getSongsFromDBQuery = "SELECT * FROM songs WHERE songs.lyrics LIKE :searchKey";
-    private static SessionFactory sessionFactory;
+    private static final String checkSongByName = "SELECT * FROM songs WHERE songs.song_name = :songName";
 
     public HibernateSongDAO() {
-        Configuration configuration = new Configuration().configure();
-        StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().
-                applySettings(configuration.getProperties());
-        sessionFactory = configuration.buildSessionFactory(builder.build());
+        super();
     }
 
     @Override
@@ -37,9 +31,7 @@ public class HibernateSongDAO implements IHibernateSongDAO {
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
-            StringBuilder builder = new StringBuilder();
-            builder.append(getSongsFromDBQuery);
-            Query query = session.createSQLQuery(builder.toString()).setParameter("searchKey", "%" + lyrics + "%");
+            Query query = session.createSQLQuery(getSongsFromDBQuery).setParameter("searchKey", "%" + lyrics + "%");
             List results = query.list();
 
             Iterator iterator = results.iterator();
@@ -52,7 +44,6 @@ public class HibernateSongDAO implements IHibernateSongDAO {
                 tempSong.setLyrics(String.valueOf(obj[3]));
                 output.add(tempSong);
             }
-
             transaction.commit();
         } catch (HibernateException ex) {
             if (transaction != null) transaction.rollback();
@@ -65,6 +56,39 @@ public class HibernateSongDAO implements IHibernateSongDAO {
 
     @Override
     public boolean addSong(Song song) {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = null;
+        try {
+            transaction = session.beginTransaction();
+            session.save(song);
+            transaction.commit();
+            return true;
+        } catch (HibernateException ex) {
+            if (transaction != null) transaction.rollback();
+            log.debug("Transaction rolled back! Throwing exception ", ex);
+            return false;
+        } finally {
+            session.close();
+        }
+    }
+
+    public boolean isSongAlreadyInDB(Song song) {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = null;
+        try {
+            transaction = session.beginTransaction();
+            Query query = session.createSQLQuery(checkSongByName).setParameter("songName", song.getTitle());
+            List results = query.list();
+            if (results.iterator().hasNext()) {
+                return true;
+            }
+            transaction.commit();
+        } catch (HibernateException ex) {
+            if (transaction != null) transaction.rollback();
+            log.debug("Transaction rolled back! Throwing exception ", ex);
+        } finally {
+            session.close();
+        }
         return false;
     }
 

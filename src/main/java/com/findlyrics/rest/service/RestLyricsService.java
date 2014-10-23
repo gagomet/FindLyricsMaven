@@ -72,7 +72,8 @@ public class RestLyricsService implements ILyricService {
 
     @Override
     public LyricsDTO hibernateGetFullDto(String lyrics) {
-        return null;
+        log.debug("Trying to use hibernate with REST-service");
+        return new LyricsDTO();
     }
 
     @Override

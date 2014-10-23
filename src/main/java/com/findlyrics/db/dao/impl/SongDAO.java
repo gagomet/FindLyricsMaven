@@ -46,7 +46,6 @@ public class SongDAO implements ISongDAO {
             SqlCloser.closeResultSet(resultSet);
             SqlCloser.closePreparedStatement(preparedStatement);
         }
-//        log.info("Creating List<Song> object" + result.toString());
         return result;
     }
 

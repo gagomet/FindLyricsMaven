@@ -4,6 +4,7 @@ import com.findlyrics.ui.model.listmodel.ArrayListModel;
 import com.findlyrics.ui.model.listmodel.ListItem;
 import com.findlyrics.ui.model.listmodel.SongListRenderer;
 
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -18,13 +19,14 @@ import java.awt.event.MouseEvent;
  */
 public class ListContentPanel extends JPanel {
 
-    //    private JList<LyricItemDTO> contentList;
     private JList<ListItem> contentList;
+    private JLabel numberOfFound;
     private JScrollPane scrollPane;
 
     public ListContentPanel() {
         setLayout(new FlowLayout());
-//        contentList = new JList<LyricItemDTO>();
+        numberOfFound = new JLabel();
+        add(numberOfFound);
         contentList = new JList<ListItem>();
         contentList.setCellRenderer(new SongListRenderer());
         contentList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -44,6 +46,19 @@ public class ListContentPanel extends JPanel {
         item.getButton().doClick();
     }
 
+    private String getNumber() {
+        StringBuilder builder = new StringBuilder();
+        if (contentList.getModel().getSize() == 0) {
+            builder.append("Sorry, there is no songs which relevant to your query :( ");
+            return builder.toString();
+        } else {
+            builder.append("We found ");
+            builder.append(contentList.getModel().getSize());
+            builder.append(" songs for your query");
+            return builder.toString();
+        }
+    }
+
 
     public void setListModel(ArrayListModel model) {
         contentList.setModel(model);
@@ -51,6 +66,10 @@ public class ListContentPanel extends JPanel {
 
     public JScrollPane getScrollPane() {
         return scrollPane;
+    }
+
+    public void setNumberOfFound() {
+        numberOfFound.setText(getNumber());
     }
 
 }

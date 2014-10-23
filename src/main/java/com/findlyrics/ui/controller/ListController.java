@@ -1,8 +1,8 @@
 package com.findlyrics.ui.controller;
 
+import com.findlyrics.ui.controller.listeners.impl.SearchButtonListener;
 import com.findlyrics.ui.model.UiModel;
 import com.findlyrics.ui.view.ListModelView;
-import com.findlyrics.ui.view.listeners.impl.SearchButtonListener;
 
 /**
  * Created by Padonag on 15.10.2014.

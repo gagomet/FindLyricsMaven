@@ -3,13 +3,13 @@ package com.findlyrics.db.service.impl;
 import com.findlyrics.db.dao.PartialSongDAO;
 import com.findlyrics.db.dao.impl.ArtistDAO;
 import com.findlyrics.db.dao.impl.SongDAO;
+import com.findlyrics.db.hibernate.impl.HibernateArtistDAO;
+import com.findlyrics.db.hibernate.impl.HibernateSongDAO;
 import com.findlyrics.db.model.Artist;
 import com.findlyrics.db.model.Song;
 import com.findlyrics.db.service.ILyricService;
 import com.findlyrics.db.service.IServiceFactory;
 import com.findlyrics.exceptions.DataConnectionException;
-import com.findlyrics.db.hibernate.impl.HibernateArtistDAO;
-import com.findlyrics.db.hibernate.impl.HibernateSongDAO;
 import com.findlyrics.ui.model.LyricItemDTO;
 import com.findlyrics.ui.model.LyricsDTO;
 import org.apache.log4j.Logger;
@@ -85,6 +85,27 @@ public class DBLyricsService implements ILyricService {
             }
             song.setArtistId(artistID);
             songDAO.addSong(song);
+            log.info("Entry added to DB " + song.toString() + " into repertoir of existing artist with ID " + artistID);
+            return true;
+        }
+    }
+
+    public boolean hibernateAddSongToDB(LyricItemDTO dto) throws DataConnectionException {
+        Song song = new Song(dto.getSongName(), dto.getLyrics());
+        Long artistID = hibernateArtistDAO.isArtistExistInDB(dto.getArtistName());
+        if (artistID == null) {
+            Artist artist = new Artist(dto.getArtistName());
+            Long newArtistId = hibernateArtistDAO.addArtist(artist);
+            song.setArtistId(newArtistId);
+            artist.addSong(song);
+            hibernateSongDAO.addSong(song);
+            return true;
+        } else {
+            if (hibernateSongDAO.isSongAlreadyInDB(song)) {
+                return false;
+            }
+            song.setArtistId(artistID);
+            hibernateSongDAO.addSong(song);
             log.info("Entry added to DB " + song.toString() + " into repertoir of existing artist with ID " + artistID);
             return true;
         }
