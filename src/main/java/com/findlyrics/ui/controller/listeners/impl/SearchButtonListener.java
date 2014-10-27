@@ -12,6 +12,7 @@ import com.findlyrics.ui.model.listmodel.ListItem;
 import org.apache.log4j.Logger;
 
 import java.awt.event.ActionEvent;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -37,7 +38,7 @@ public class SearchButtonListener implements IButtonListener {
             controller.getView().showError(messages.getString("error.message"));
         } else {
             try {
-                if (controller.isDbSearch()) {
+                if (e.getSource() == controller.getView().getQueryPanel().getSearchButton()) {
                     searchInDb();
                 } else searchInRest();
             } catch (DataConnectionException ex) {
@@ -48,23 +49,21 @@ public class SearchButtonListener implements IButtonListener {
     }
 
     private void searchInDb() throws DataConnectionException {
+        controller.getModel().getListModel().clear();
         ILyricService dbService = DBLyricsService.factory.getInstance();
-//        LyricsDTO fullDto = dbService.getFullDto(controller.getView().getQueryPanel().getQueryField().getText());
         LyricsDTO fullDto = dbService.hibernateGetFullDto(controller.getView().getQueryPanel().getQueryField().getText());
         controller.getModel().getListModel().setList(convertToOutputList(fullDto, true));
         controller.getView().getContentPanel().setVisible(true);
         controller.getView().getNextSearchPanel().setVisible(true);
         controller.getView().getContentPanel().setNumberOfFound();
-        controller.setDbSearch(false);
     }
 
     private void searchInRest() throws DataConnectionException {
-//        ILyricService restService = RestLyricsService.factory.getInstance();
         ILyricService restService = ProxyRestLyricsService.factory.getInstance();
-        LyricsDTO fullDto = restService.getFullDto(controller.getView().getQueryPanel().getQueryField().getText());
-        controller.getModel().getListModel().addAll(convertToOutputList(fullDto, false));
+        LyricsDTO restDto = restService.getFullDto(controller.getView().getQueryPanel().getQueryField().getText());
+        List<ListItem> dataFromRest = checkItems(controller.getModel().getListModel().getList(), convertToOutputList(restDto, false));
+        controller.getModel().getListModel().addAll(dataFromRest);
         controller.getView().getContentPanel().setNumberOfFound();
-        controller.setDbSearch(true);
     }
 
     private List<ListItem> convertToOutputList(LyricsDTO fullDto, boolean isDataFromDb) {
@@ -76,5 +75,13 @@ public class SearchButtonListener implements IButtonListener {
         return itemList;
     }
 
+    private List<ListItem> checkItems(List<ListItem> dbItemList, List<ListItem> restItemList) {
+        for (ListItem itemFromDb : dbItemList) {
+            for(ListItem itemFromRest : restItemList){
+                if(itemFromDb.getDto().getSongName().equals(itemFromRest.getDto().getSongName()));
+            }
+        }
+        return restItemList;
+    }
 
 }

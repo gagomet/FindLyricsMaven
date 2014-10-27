@@ -50,6 +50,11 @@ public class ProxyRestLyricsService implements ILyricService {
     }
 
     @Override
+    public boolean hibernateAddSongToDB(LyricItemDTO dto) throws DataConnectionException {
+        return false;
+    }
+
+    @Override
     public int getNumberOfRecords() {
         return restLyricsService.getNumberOfRecords();
     }

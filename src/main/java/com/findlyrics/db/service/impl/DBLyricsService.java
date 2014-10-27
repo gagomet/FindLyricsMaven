@@ -13,7 +13,11 @@ import com.findlyrics.exceptions.DataConnectionException;
 import com.findlyrics.ui.model.LyricItemDTO;
 import com.findlyrics.ui.model.LyricsDTO;
 import org.apache.log4j.Logger;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -64,7 +68,7 @@ public class DBLyricsService implements ILyricService {
     @Override
     public LyricsDTO hibernateGetFullDto(String lyrics) throws DataConnectionException {
         LyricsDTO dto = new LyricsDTO();
-        List<Song> songsList = hibernateSongDAO.getSong(lyrics);
+        List<Song> songsList = hibernateSongDAO.getSongs(lyrics);
         dto.setSearchResults(hibernateMapArtistsToSongs(songsList));
         return dto;
     }
@@ -101,9 +105,6 @@ public class DBLyricsService implements ILyricService {
             hibernateSongDAO.addSong(song);
             return true;
         } else {
-            if (hibernateSongDAO.isSongAlreadyInDB(song)) {
-                return false;
-            }
             song.setArtistId(artistID);
             hibernateSongDAO.addSong(song);
             log.info("Entry added to DB " + song.toString() + " into repertoir of existing artist with ID " + artistID);
@@ -141,6 +142,12 @@ public class DBLyricsService implements ILyricService {
             result.add(itemDTO);
         }
         return result;
+    }
+
+    private String getLyricsFromUrl(String url) throws IOException {
+        Document document = Jsoup.connect(url).get();
+        Element lyrics = document.select("pre").get(0);
+        return lyrics.text();
     }
 
 

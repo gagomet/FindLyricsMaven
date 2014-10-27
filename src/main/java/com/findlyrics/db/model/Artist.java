@@ -4,7 +4,9 @@ package com.findlyrics.db.model;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
@@ -20,12 +22,12 @@ import java.util.List;
 @Table(name = "artists")
 public class Artist {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
-    Long id;
+    private Long id;
     @Column(name = "artist_name")
     private String name;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany
     @JoinColumn(name = "artist_id")
     private List<Song> repertoir = new ArrayList<Song>();
 
@@ -67,6 +69,10 @@ public class Artist {
 
     public List<Song> getRepertoir() {
         return repertoir;
+    }
+
+    public void setRepertoir(List<Song> repertoir) {
+        this.repertoir = repertoir;
     }
 
     @Override

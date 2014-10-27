@@ -59,6 +59,7 @@ public class RestLyricsService implements ILyricService {
         return dto;
     }
 
+    @Override
     public LyricsDTO getFullDto(String query) {
         if (query == null) {
             return new LyricsDTO();
@@ -74,6 +75,11 @@ public class RestLyricsService implements ILyricService {
     public LyricsDTO hibernateGetFullDto(String lyrics) {
         log.debug("Trying to use hibernate with REST-service");
         return new LyricsDTO();
+    }
+
+    @Override
+    public boolean hibernateAddSongToDB(LyricItemDTO dto) throws DataConnectionException {
+        return false;
     }
 
     @Override

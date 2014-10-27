@@ -1,25 +1,22 @@
 package com.findlyrics.db.hibernate.impl;
 
-import com.findlyrics.db.hibernate.IHibernateArtistDAO;
+import com.findlyrics.db.dao.IArtistDAO;
 import com.findlyrics.db.model.Artist;
 import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Restrictions;
 
 import java.math.BigInteger;
-import java.util.Iterator;
-import java.util.List;
 
 
 /**
  * Created by Padonag on 21.10.2014.
  */
-public class HibernateArtistDAO extends HibernateDAO implements IHibernateArtistDAO {
+public class HibernateArtistDAO extends HibernateDAO implements IArtistDAO {
     private static final Logger log = Logger.getLogger(HibernateArtistDAO.class);
-    private static final String getArtistFromDBQuery = "SELECT * FROM artists WHERE artists.id = :artistId";
-    private static final String checkArtistNameInDB = "SELECT * FROM artists WHERE artists.artist_name = :artistName";
     private static final String lastIdQuery = "SELECT LAST_INSERT_ID()";
 
     public HibernateArtistDAO() {
@@ -33,20 +30,11 @@ public class HibernateArtistDAO extends HibernateDAO implements IHibernateArtist
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
-            Query query = session.createSQLQuery(getArtistFromDBQuery).setParameter("artistId", id.toString());
-            List results = query.list();
-
-            Iterator iterator = results.iterator();
-            while (iterator.hasNext()) {
-                Object[] obj = (Object[]) iterator.next();
-                result.setId(Long.parseLong(String.valueOf(obj[0])));
-                result.setName(String.valueOf(obj[1]));
-            }
-
+            result = (Artist) session.get(Artist.class, id);
             transaction.commit();
         } catch (HibernateException ex) {
             if (transaction != null) transaction.rollback();
-            log.debug("Transaction rolled back! Throwing exception ", ex);
+            log.debug("Transaction rolled back! Throwing exception " + ex.getMessage(), ex);
         } finally {
             session.close();
         }
@@ -65,7 +53,7 @@ public class HibernateArtistDAO extends HibernateDAO implements IHibernateArtist
             transaction.commit();
         } catch (HibernateException ex) {
             if (transaction != null) transaction.rollback();
-            log.debug("Transaction rolled back! Throwing exception ", ex);
+            log.debug("Transaction rolled back! Throwing exception " + ex.getMessage(), ex);
         } finally {
             session.close();
         }
@@ -74,20 +62,21 @@ public class HibernateArtistDAO extends HibernateDAO implements IHibernateArtist
 
     public Long isArtistExistInDB(String artistName) {
         Long artistId = null;
+        Artist artist;
         Session session = sessionFactory.openSession();
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
-            Query query = session.createSQLQuery(checkArtistNameInDB).setParameter("artistName", artistName);
-            List results = query.list();
-            if (results.iterator().hasNext()) {
-                Object[] obj = (Object[]) results.iterator().next();
-                artistId = Long.parseLong(String.valueOf(obj[0]));
+            Criteria criteria = session.createCriteria(Artist.class, "artists");
+            criteria.add(Restrictions.eq("name", artistName));
+            if (criteria.list().size() > 0) {
+                artist = (Artist) criteria.list().get(0);
+                artistId = artist.getId();
             }
             transaction.commit();
         } catch (HibernateException ex) {
             if (transaction != null) transaction.rollback();
-            log.debug("Transaction rolled back! Throwing exception ", ex);
+            log.debug("Transaction rolled back! Throwing exception " + ex.getMessage(), ex);
         } finally {
             session.close();
         }

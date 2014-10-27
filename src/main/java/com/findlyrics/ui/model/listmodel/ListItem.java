@@ -1,5 +1,6 @@
 package com.findlyrics.ui.model.listmodel;
 
+import com.findlyrics.ui.controller.ListController;
 import com.findlyrics.ui.model.LyricItemDTO;
 import com.findlyrics.ui.view.ShowLyricsFrame;
 import org.apache.log4j.Logger;
@@ -29,6 +30,10 @@ public class ListItem {
         button.addActionListener(new LyricsListener());
     }
 
+    public boolean isFromDB() {
+        return isFromDB;
+    }
+
     public JButton getButton() {
         return button;
     }
@@ -49,6 +54,10 @@ public class ListItem {
         return buttonName.toString();
     }
 
+    public LyricItemDTO getDto() {
+        return dto;
+    }
+
     private class LyricsListener implements ActionListener {
 
         @Override
@@ -57,7 +66,9 @@ public class ListItem {
                 new ShowLyricsFrame(dto.getLyrics());
             } else {
                 try {
-                    new ShowLyricsFrame(getLyricsFromUrl(dto.getLyrics()));
+                    String url = dto.getLyrics();
+                    dto.setLyrics(getLyricsFromUrl(url));
+                    new ShowLyricsFrame(dto.getLyrics());
                 } catch (IOException e1) {
                     log.debug("Throwing exception ", e1);
                 }
@@ -69,6 +80,7 @@ public class ListItem {
             Element lyrics = document.select("pre").get(0);
             return lyrics.text();
         }
+
     }
 
 }

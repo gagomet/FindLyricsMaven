@@ -1,8 +1,10 @@
 package com.findlyrics.ui.view.panels;
 
+import com.findlyrics.ui.controller.listeners.ContentPaneMouseListener;
 import com.findlyrics.ui.model.listmodel.ArrayListModel;
 import com.findlyrics.ui.model.listmodel.ListItem;
 import com.findlyrics.ui.model.listmodel.SongListRenderer;
+import com.findlyrics.ui.view.ListModelView;
 
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -30,20 +32,12 @@ public class ListContentPanel extends JPanel {
         contentList = new JList<ListItem>();
         contentList.setCellRenderer(new SongListRenderer());
         contentList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        contentList.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                clickButtonAt(e.getPoint());
-            }
-        });
         scrollPane = new JScrollPane(contentList);
         add(scrollPane);
     }
 
-    private void clickButtonAt(Point point) {
-        int index = contentList.locationToIndex(point);
-        ListItem item = contentList.getModel().getElementAt(index);
-        item.getButton().doClick();
+    public void setMouseListener(MouseAdapter adapter){
+        this.contentList.addMouseListener(adapter);
     }
 
     private String getNumber() {
@@ -59,13 +53,16 @@ public class ListContentPanel extends JPanel {
         }
     }
 
-
     public void setListModel(ArrayListModel model) {
         contentList.setModel(model);
     }
 
     public JScrollPane getScrollPane() {
         return scrollPane;
+    }
+
+    public JList<ListItem> getContentList() {
+        return contentList;
     }
 
     public void setNumberOfFound() {

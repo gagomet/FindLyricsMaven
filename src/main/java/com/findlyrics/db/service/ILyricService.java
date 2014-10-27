@@ -1,6 +1,7 @@
 package com.findlyrics.db.service;
 
 import com.findlyrics.exceptions.DataConnectionException;
+import com.findlyrics.ui.model.LyricItemDTO;
 import com.findlyrics.ui.model.LyricsDTO;
 
 /**
@@ -17,4 +18,6 @@ public interface ILyricService {
     public LyricsDTO getFullDto(String query) throws DataConnectionException;
 
     public LyricsDTO hibernateGetFullDto(String lyrics) throws DataConnectionException;
+
+    public boolean hibernateAddSongToDB(LyricItemDTO dto) throws DataConnectionException;
 }
