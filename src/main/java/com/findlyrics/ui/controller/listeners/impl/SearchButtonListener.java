@@ -76,11 +76,16 @@ public class SearchButtonListener implements IButtonListener {
     }
 
     private List<ListItem> checkItems(List<ListItem> dbItemList, List<ListItem> restItemList) {
-        for (ListItem itemFromDb : dbItemList) {
-            for(ListItem itemFromRest : restItemList){
-                if(itemFromDb.getDto().getSongName().equals(itemFromRest.getDto().getSongName()));
+        Iterator iterator = restItemList.iterator();
+        while (iterator.hasNext()) {
+            ListItem itemFromRest = (ListItem) iterator.next();
+            for(ListItem itemFromDb : dbItemList){
+                if(itemFromDb.getDto().getSongName().equals(itemFromRest.getDto().getSongName())){
+                    iterator.remove();
+                }
             }
         }
+
         return restItemList;
     }
 
