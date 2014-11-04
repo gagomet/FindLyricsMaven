@@ -1,7 +1,9 @@
 package com.findlyrics.ui.controller;
 
+import com.findlyrics.ui.controller.listeners.SearchButtonListener;
 import com.findlyrics.ui.controller.listeners.ContentPaneMouseListener;
-import com.findlyrics.ui.controller.listeners.impl.SearchButtonListener;
+import com.findlyrics.ui.controller.listeners.SearchMoreButtonListener;
+import com.findlyrics.ui.controller.listeners.SubmitButtonListener;
 import com.findlyrics.ui.model.UiModel;
 import com.findlyrics.ui.model.listmodel.ListItem;
 import com.findlyrics.ui.view.ListModelView;
@@ -15,14 +17,15 @@ public class ListController {
 
     private UiModel model;
     private ListModelView view;
-    private SearchButtonListener searchButtonListener = new SearchButtonListener(this);
+    private SearchButtonListener searchButtonListener = new SubmitButtonListener(this);
+    private SearchButtonListener searchMoreButtonListener = new SearchMoreButtonListener(this);
     private ContentPaneMouseListener contentPaneMouseListener;
 
     public ListController(UiModel model, ListModelView view) {
         this.model = model;
         this.view = view;
         view.getQueryPanel().setSearchButtonListener(searchButtonListener);
-        view.getNextSearchPanel().setNextSearchButtonListener(searchButtonListener);
+        view.getNextSearchPanel().setNextSearchButtonListener(searchMoreButtonListener);
         view.getContentPanel().setListModel(model.getListModel());
         JList<ListItem> list = view.getContentPanel().getContentList();
         contentPaneMouseListener = new ContentPaneMouseListener(list);

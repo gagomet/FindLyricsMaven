@@ -1,6 +1,5 @@
 package com.findlyrics.db.service.impl;
 
-import com.findlyrics.db.dao.PartialSongDAO;
 import com.findlyrics.db.dao.impl.ArtistDAO;
 import com.findlyrics.db.dao.impl.SongDAO;
 import com.findlyrics.db.hibernate.impl.HibernateArtistDAO;
@@ -13,11 +12,7 @@ import com.findlyrics.exceptions.DataConnectionException;
 import com.findlyrics.ui.model.LyricItemDTO;
 import com.findlyrics.ui.model.LyricsDTO;
 import org.apache.log4j.Logger;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -28,14 +23,12 @@ public class DBLyricsService implements ILyricService {
     private static final Logger log = Logger.getLogger(ArtistDAO.class);
     private ArtistDAO artistDAO;
     private SongDAO songDAO;
-    private PartialSongDAO partialSongDAO;
     private HibernateArtistDAO hibernateArtistDAO;
     private HibernateSongDAO hibernateSongDAO;
 
     private DBLyricsService() {
         this.artistDAO = new ArtistDAO();
         this.songDAO = new SongDAO();
-        this.partialSongDAO = new PartialSongDAO();
         this.hibernateArtistDAO = new HibernateArtistDAO();
         this.hibernateSongDAO = new HibernateSongDAO();
     }
@@ -46,16 +39,6 @@ public class DBLyricsService implements ILyricService {
             return new DBLyricsService();
         }
     };
-
-    @Override
-    public LyricsDTO getPartDTO(int page, int recordsPerPage) throws DataConnectionException {
-        LyricsDTO dto = new LyricsDTO();
-        List<Song> list = partialSongDAO.getSongsPart(page * recordsPerPage,
-                recordsPerPage);
-        List<LyricItemDTO> lyricItemDTOs = mapArtistToSongs(list);
-        dto.setSearchResults(lyricItemDTOs);
-        return dto;
-    }
 
     @Override
     public LyricsDTO getFullDto(String lyrics) throws DataConnectionException {
@@ -112,17 +95,6 @@ public class DBLyricsService implements ILyricService {
         }
     }
 
-    @Override
-    public void setQuery(String query) {
-        partialSongDAO.setLyrics(query);
-    }
-
-    @Override
-    public int getNumberOfRecords() {
-        System.out.println(partialSongDAO.getNoOfRecords());
-        return partialSongDAO.getNoOfRecords();
-    }
-
     private List<LyricItemDTO> mapArtistToSongs(List<Song> songList) throws DataConnectionException {
         List<LyricItemDTO> result = new LinkedList<LyricItemDTO>();
         for (Song currentSong : songList) {
@@ -143,12 +115,5 @@ public class DBLyricsService implements ILyricService {
         }
         return result;
     }
-
-    private String getLyricsFromUrl(String url) throws IOException {
-        Document document = Jsoup.connect(url).get();
-        Element lyrics = document.select("pre").get(0);
-        return lyrics.text();
-    }
-
 
 }

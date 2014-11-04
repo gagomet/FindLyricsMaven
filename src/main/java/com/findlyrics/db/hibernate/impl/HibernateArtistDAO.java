@@ -69,7 +69,7 @@ public class HibernateArtistDAO extends HibernateDAO implements IArtistDAO {
             transaction = session.beginTransaction();
             Criteria criteria = session.createCriteria(Artist.class, "artists");
             criteria.add(Restrictions.eq("name", artistName));
-            if (criteria.list().size() > 0) {
+            if (criteria.list().isEmpty()) {
                 artist = (Artist) criteria.list().get(0);
                 artistId = artist.getId();
             }

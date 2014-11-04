@@ -47,19 +47,6 @@ public class RestLyricsService implements ILyricService {
     };
 
     @Override
-    public LyricsDTO getPartDTO(int page, int recordsPerPage) throws DataConnectionException {
-        if (query == null) {
-            return new LyricsDTO();
-        }
-        List<SongPojo> inputData = jsonToPojo(getJsonFromRest(query));
-        List<SongPojo> partialData = inputData.subList(page * recordsPerPage, Math.min((page + 1) * recordsPerPage, inputData.size()));
-        LyricsDTO dto = new LyricsDTO();
-        List<LyricItemDTO> entries = pojoToLyricItemDtoList(partialData);
-        dto.setSearchResults(entries);
-        return dto;
-    }
-
-    @Override
     public LyricsDTO getFullDto(String query) {
         if (query == null) {
             return new LyricsDTO();
@@ -80,16 +67,6 @@ public class RestLyricsService implements ILyricService {
     @Override
     public boolean hibernateAddSongToDB(LyricItemDTO dto) throws DataConnectionException {
         return false;
-    }
-
-    @Override
-    public int getNumberOfRecords() {
-        return numberOfRecords;
-    }
-
-    @Override
-    public void setQuery(String query) {
-        this.query = query;
     }
 
     private String queryToHttp(String query) {

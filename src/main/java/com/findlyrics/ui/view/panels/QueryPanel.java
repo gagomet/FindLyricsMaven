@@ -1,5 +1,6 @@
 package com.findlyrics.ui.view.panels;
 
+import com.findlyrics.ui.controller.listeners.SearchButtonListener;
 import com.findlyrics.ui.view.ListModelView;
 
 import javax.swing.JButton;
@@ -35,7 +36,6 @@ public class QueryPanel extends JPanel {
         add(queryField);
         add(xButton);
         add(searchButton);
-
     }
 
     public JTextField getQueryField() {
@@ -46,16 +46,15 @@ public class QueryPanel extends JPanel {
         return searchButton;
     }
 
-    public JButton getxButton() {
-        return xButton;
-    }
-
     public void clearText() {
         queryField.setText(EMPTY_STRING);
     }
 
-    public void setSearchButtonListener(ActionListener listener) {
+    public void setSearchButtonListener(SearchButtonListener listener) {
         searchButton.addActionListener(listener);
+        searchButton.addKeyListener(listener);
+        queryField.addActionListener(listener);
+        queryField.addKeyListener(listener);
     }
 
     private class XButtonListener implements ActionListener {
@@ -67,4 +66,5 @@ public class QueryPanel extends JPanel {
             view.getNextSearchPanel().setVisible(false);
         }
     }
+
 }

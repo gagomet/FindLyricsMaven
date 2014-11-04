@@ -29,11 +29,6 @@ public class ProxyRestLyricsService implements ILyricService {
         }
     };
 
-    @Override
-    public LyricsDTO getPartDTO(int page, int recordsPerPage) throws DataConnectionException {
-        return restLyricsService.getPartDTO(page, recordsPerPage);
-    }
-
     public LyricsDTO getFullDto(String query) {
         LyricsDTO result;
         try {
@@ -52,16 +47,6 @@ public class ProxyRestLyricsService implements ILyricService {
     @Override
     public boolean hibernateAddSongToDB(LyricItemDTO dto) throws DataConnectionException {
         return false;
-    }
-
-    @Override
-    public int getNumberOfRecords() {
-        return restLyricsService.getNumberOfRecords();
-    }
-
-    @Override
-    public void setQuery(String query) {
-        restLyricsService.setQuery(query);
     }
 
     private LyricsDTO stubResults() {

@@ -1,9 +1,10 @@
 package com.findlyrics.ui.view.panels;
 
+import com.findlyrics.ui.controller.listeners.SearchButtonListener;
+
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import java.awt.FlowLayout;
-import java.awt.event.ActionListener;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -24,7 +25,8 @@ public class NextSearchPanel extends JPanel {
         return nextSearchButton;
     }
 
-    public void setNextSearchButtonListener(ActionListener listener) {
+    public void setNextSearchButtonListener(SearchButtonListener listener){
         nextSearchButton.addActionListener(listener);
+        nextSearchButton.addKeyListener(listener);
     }
 }
